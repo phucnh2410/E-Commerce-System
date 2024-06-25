@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+body {
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+main {
+    /* background-color: #fff; */
+    background-color: #f4f4f4;
+    color: rgb(32, 32, 31);
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+main .container{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.profile{
+    margin: auto;
+    width: 70%;
+    background-color: #fff;
+    padding: 1rem 1.875rem 0.625rem;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    /*margin-top: 150px;*/
+}
+
+
+.profile .profile-detail .title{
+    font-weight: 600;
+    /* text-align: center; */
+    color: #415a80;
+    text-transform: uppercase;
+}
+
+.profile .profile-detail .horizontal-line{
+    margin-top: 10px;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 0.25rem;
+    background-color: #415a80;
+    transition: opacity 0.3s ease 0s;
+    margin-bottom: 15px;
+}
+.profile .profile-detail .profile-form .row{
+    margin-right: -5px;
+}
+.account-info-image{
+    margin: auto;
+    margin-left: 85px;
+}
+
+.account-info-image .account-image{
+    margin-bottom: 15px;
+}
+
+.account-info-image .account-image img{
+    border-radius: 50%;
+}
+
+.account-info-image .change-image-btn{
+    width: 110px;
+    /*border: 1px solid #808080;*/
+    background-color: #fff;
+    border-radius: 2px;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-left: -8px;
+}
+
+.account-info-image .change-image-btn input[type="file"]{
+   display: none;
+}
+.account-info-image .change-image-btn label {
+    font-weight: 400;
+    background-color: #fff;
+    color: rgb(110, 107, 107);
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.account-info-image .change-image-btn label:hover {
+    background-color: rgb(248, 240, 230);
+}
+
+.account-info-image .change-image-btn:hover{
+    background-color: rgb(248, 240, 230);
+}
+
+.account-info-image .change-image-btn a{
+    text-decoration: none;
+    color: rgb(110, 107, 107);
+}
+
+
+/*  */
+.account-info-detail{
+    width: 100%;
+    border: 1px solid #808080;
+    background-color: #fff;
+    border-radius: 2px;
+    padding: 10px;
+    margin-left: 35px;
+}
+
+.account-info-detail .col-md-9{
+    /* margin-left: -300px; */
+    width: 100%;
+}
+
+.account-info-detail label{
+    margin-right: 10px;
+    color: rgb(110, 107, 107);
+    /* width: 30%; */
+    text-align: right;
+}
+
+.account-info-detail input{
+    height: 35px;
+    font-size: 15px;
+    font-weight: 300;
+    color: rgb(110, 107, 107);
+    width: 100%;
+    margin-bottom: 10px;
+}
+.account-info-detail select{
+    height: 35px;
+    font-size: 15px;
+    font-weight: 300;
+    color: rgb(110, 107, 107);
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.profile .profile-detail .profile-form .save-btn{
+    margin-top: 15px;
+    margin-left: 1055px;
+}
+
+.profile-form .save-btn button{
+    width: 100px;
+    border: 1px solid #808080;
+    background-color: #fff;
+    border-radius: 2px;
+    color: rgb(110, 107, 107);
+}
+
+.profile-form .save-btn button:hover{
+    background-color: rgb(248, 240, 230);
+}
+
+
+
+@media (max-width: 600px){
+
+    .profile{
+        width: 100%;
+        margin-top: 0px;
+    }
+
+    .account-info-image{
+        margin: auto;
+        margin-left: 10px;
+    }
+
+    .account-info-image .account-image{
+        margin-bottom: 15px;
+    }
+
+    .account-info-image .account-image img{
+
+    }
+
+    .account-info-image .change-image-btn{
+
+    }
+
+    .account-info-detail{
+
+        margin-left: 12px;
+        margin-bottom: 15px;
+    }
+
+    .account-info-detail label{
+        text-align: left;
+        width: 100%;
+    }
+
+    .account-info-detail input{
+        width: 100%;
+    }
+
+    .profile-form .save-btn{
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+}
+
+

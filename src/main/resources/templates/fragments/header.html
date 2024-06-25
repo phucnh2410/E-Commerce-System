@@ -1,0 +1,230 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.com" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Header Example</title>
+<!--    <link rel="stylesheet" th:href="@{/css/header.css}">-->
+    <script src="/js/getErrorImage.js"></script>
+
+</head>
+
+<body>
+<header id="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <h4 class="logo">Blue Shopping</h4>
+            </div>
+
+            <div class="col-md-5">
+                <div class="search">
+                    <input class="search-input" type="text" placeholder="" />
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                <div class="cart-drawer-container">
+                    <a href="#">
+                        <div class="cart-number-badge" aria-hidden="true">9</div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+                             class="bi bi-cart2" viewBox="0 0 16 16">
+                            <path
+                                    d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <ul sec:authorize="!isAuthenticated()">
+                    <li >
+                        <a th:href="@{/login}">Login</a>
+                    </li>
+                </ul>
+
+                <ul id="username" sec:authorize="isAuthenticated()">
+                    <li >
+<!--                        <img class="img-avatar" id="avatar-header" th:src="@{ ${currentUser.avatarPath} }" alt="" width="25px" height="25px" onerror="onError(event)"/>-->
+                    </li>
+
+                    <li>
+<!--                        <a th:href="@{/profile}" th:text="${currentUser.fullName}"> </a>-->
+                    </li>
+
+                    <li class="logout">
+                        <a th:href="@{/logout}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="show-menu">
+        <ul>
+            <li onclick="showSidebar()">
+                <a href="#"><i class="bx bx-menu"></i></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- side bar -->
+    <div class="sidebar">
+        <div class="close-menu">
+            <ul>
+                <li onclick="hideSidebar()">
+                    <a href="#"><i class="bx bx-x"></i></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-search">
+            <input class="sidebar-search-input" type="text" placeholder="" />
+        </div>
+
+        <div class="menu">
+            <p>Menu</p>
+        </div>
+
+        <div class="icon_item">
+            <!-- li*10>a -->
+            <ul>
+                <li class="active">
+                    <i class="bx bxs-home"></i>
+                    <a th:href="@{/home}">Home</a>
+                </li>
+                <li class="category-item">
+                    <i class="bx bxs-category"></i>
+                    <a href="#">Categories</a>
+                    <i class="bx bx-chevron-right"></i>
+
+                    <div class="submenu">
+                        <ul>
+                            <li><i class="bx bx-laptop"></i> <a href="#">Laptops</a></li>
+                            <li>
+                                <i class="bx bxs-mobile"></i> <a href="#">Smart phones</a>
+                            </li>
+                            <li><i class="bx bx-tab"></i> <a href="#">Tablets</a></li>
+                            <li>
+                                <i class="bx bx-male"></i> <a href="#">Male Fashions</a>
+                            </li>
+                            <li>
+                                <i class="bx bx-female"></i> <a href="#">Female Fashions</a>
+                            </li>
+                            <li><i class="bx bxs-watch"></i> <a href="#">Watches</a></li>
+                            <li>
+                                <i class="bx bx-football"></i>
+                                <a href="#">Sports & Travels</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <i class="bx bxs-contact"></i>
+                    <a href="#">Contact</a>
+                </li>
+                <!-- <li>
+                    <i class='bx bxs-contact' ></i>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <i class='bx bxs-contact' ></i>
+                    <a href="#">Contact</a>
+                </li> -->
+                <li>
+                    <i class="bx bx-log-out"></i>
+                    <a href="#">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    window.addEventListener("scroll", function () {
+        var header = document.querySelector("header");
+        header.classList.toggle("sticky", window.scrollY > 0);
+    });
+</script>
+
+<!--  -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const categoryItem = document.querySelector(".category-item");
+        const submenu = categoryItem.querySelector(".submenu");
+
+        categoryItem.addEventListener("mouseover", function () {
+            submenu.style.display = "block";
+            submenu.style.left = "205px";
+            setTimeout(() => {
+                submenu.classList.add("visible");
+            }, 10);
+        });
+
+        categoryItem.addEventListener("mouseout", function () {
+            setTimeout(() => {
+                submenu.classList.remove("visible");
+            }, 5);
+        });
+    });
+</script>
+<!--  -->
+<script>
+    function showSidebar() {
+        const sidebar = document.querySelector(".sidebar");
+        sidebar.style.display = "block";
+        setTimeout(() => {
+            sidebar.classList.add("visible");
+        }, 10);
+    }
+
+    function hideSidebar() {
+        const sidebar = document.querySelector(".sidebar");
+        sidebar.classList.remove("visible");
+        sidebar.addEventListener(
+            "transitionend",
+            function handleTransitionEnd() {
+                sidebar.style.display = "none";
+                sidebar.removeEventListener("transitionend", handleTransitionEnd);
+            }
+        );
+    }
+</script>
+<!--  -->
+<script>
+    const carousel = document.getElementById("carousel");
+    const prevBtn = document.getElementById("previous-btn");
+    const nextBtn = document.getElementById("next-btn");
+
+    prevBtn.addEventListener("click", () => {
+        carousel.scrollBy({
+            left: -220,
+            behavior: "smooth",
+        });
+    });
+
+    nextBtn.addEventListener("click", () => {
+        carousel.scrollBy({
+            left: 220,
+            behavior: "smooth",
+        });
+    });
+    // Optionally, you can disable the buttons when reaching the start/end
+    carousel.addEventListener("scroll", () => {
+        prevBtn.disabled = carousel.scrollLeft === 0;
+        nextBtn.disabled =
+            carousel.scrollLeft + carousel.offsetWidth >= carousel.scrollWidth;
+    });
+</script>
+</body>
+
+</html>

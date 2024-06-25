@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+body {
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+main {
+    /* background-color: #fff; */
+    background-color: #f4f4f4;
+    color: rgb(32, 32, 31);
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+main .container{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.shop-info{
+    background: #fff;
+    padding: 1.25rem 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.shop{
+    margin-left: 15px;
+    font-weight: 500;
+}
+
+.shop img{
+    border-radius: 50%;
+}
+
+.shop div .shop-name{
+    font-size: 20px;
+}
+
+.shop div .btn{
+    display: flex;
+    margin-left: -12px;
+    margin-top: 10px
+}
+
+.shop div .btn .btn-follow{
+    width: 150px;
+    border: 1px solid #808080; /* Màu viền xám */
+    background-color: #fff;
+    border-radius: 2px;
+    margin-right: 15px;
+    /* margin-left: -10px; */
+}
+
+.shop div .btn .btn-chat{
+    width: 150px;
+    border: 1px solid #808080; /* Màu viền xám */
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+.shop div .btn .add-new-btn{
+    margin-left: 15px;
+
+}
+
+.shop div .btn .add-new-btn button{
+    font-weight: 300;
+    width: 150px;
+    border: 1px solid #808080; /* Màu viền xám */
+    background-color: #fff;
+    border-radius: 2px;
+    color: rgb(110, 107, 107);
+}
+
+.shop div .btn .btn-follow:hover{
+    background-color: rgb(248, 240, 230);
+}
+
+.shop div .btn .btn-chat:hover{
+    background-color: rgb(248, 240, 230);
+}
+
+.shop div div a{
+    text-decoration: none;
+    color: rgb(110, 107, 107);
+}
+
+.info {
+    /* margin-left: 15px; */
+    font-weight: 300;
+}
+
+/* Shop menu */
+.shop-menu{
+    width: 100%;
+    background-color: #fff;
+    padding: 1.25rem 10px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    margin-top: 15px;
+}
+
+.menu{
+    /* display: flex; */
+}
+
+.menu .submenu{
+    display: flex;
+    justify-content: space-around;
+}
+
+.menu .submenu .btn-submenu{
+    text-align: center;
+}
+
+.menu .submenu .btn-submenu a{
+    text-decoration: none;
+    color: rgb(110, 107, 107);
+}
+
+.menu .submenu .btn-submenu a:hover{
+    color: rgb(32, 32, 31);
+}
+
+/* Products */
+.products{
+    width: 100%;
+    background-color: #fff;
+    padding: 1.25rem 10px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    margin-top: 15px;
+}
+
+
+.products .product-item .title{
+    font-weight: 600;
+    text-align: center;
+    color: #415a80;
+    text-transform: uppercase;
+}
+
+.products .product-item .horizontal-line{
+    margin-top: 10px;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 0.25rem;
+    background-color: #415a80;
+    transition: opacity 0.3s ease 0s;
+}
+
+
+.row a{
+    text-decoration: none;
+    font-weight: 300;
+    color: #000000;
+}
+
+/*
+font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 20px; */
+
+.row a .card-item{
+    /* padding-bottom: 30px; */
+    flex: 0 0 auto;
+    width: 100%;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    scroll-snap-align: start;
+    margin-bottom: 15px;
+}
+
+.row a .card-item:hover{
+    border: 1px;
+    border-color: orangered;
+    box-shadow: 0 4px 8px rgba(243, 5, 5, 0.335);
+}
+
+.row a .card-item .card-body .name{
+    font-size: 16px;
+}
+
+.row a .card-item .card-body .price{
+    margin-top: 15px;
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+
+
