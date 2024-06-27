@@ -18,6 +18,12 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
+    @Transient
+    public String getAvatarPath(){
+        if (this.id == null || this.avatar == null) return null;
+        return "/userAvatar/" + this.id + "/" + this.avatar;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

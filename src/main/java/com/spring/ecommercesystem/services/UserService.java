@@ -12,4 +12,6 @@ public interface UserService extends UserDetailsService{
     public User findByEmail(String email);
     public void saveAndUpdate(User user);
     public void deleteById(Long id);
+
+    public User getCurrentUser();
 }

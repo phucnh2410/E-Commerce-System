@@ -80,6 +80,11 @@
             <input type="text" name="username" placeholder="Email">
             <input type="text" name="password" placeholder="Password">
 
+            <div th:if="${param.error}">
+                <span style="color: red">Email or password incorrect!!!</span>
+            </div>
+
+
             <a href="#">Forgot your password? </a>
 
             <button>Sign in</button>

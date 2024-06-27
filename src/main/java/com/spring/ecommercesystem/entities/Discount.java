@@ -31,7 +31,7 @@ public class Discount {
     @Column(name = "end_date")
     private Date endDate;
 
-    @OneToMany(mappedBy = "discount", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH})
-    private List<Product> products;
+//    @OneToMany(mappedBy = "discount", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+//            CascadeType.REFRESH})
+//    private List<Product> products;
 }

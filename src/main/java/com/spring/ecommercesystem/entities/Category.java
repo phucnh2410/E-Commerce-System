@@ -26,7 +26,7 @@ public class Category {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.REMOVE})
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.REFRESH)
     private List<Product> products;
 }

@@ -49,11 +49,11 @@
 
                 <ul id="username" sec:authorize="isAuthenticated()">
                     <li >
-<!--                        <img class="img-avatar" id="avatar-header" th:src="@{ ${currentUser.avatarPath} }" alt="" width="25px" height="25px" onerror="onError(event)"/>-->
+                        <img class="img-avatar" id="avatar-header" th:src="@{ ${currentUser.avatarPath} }" alt="" width="25px" height="25px" onerror="onError(event)"/>
                     </li>
 
                     <li>
-<!--                        <a th:href="@{/profile}" th:text="${currentUser.fullName}"> </a>-->
+                        <a th:href="@{/profile}" th:text="${currentUser.fullName}"> </a>
                     </li>
 
                     <li class="logout">

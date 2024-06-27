@@ -49,7 +49,7 @@ public class SecurityConfiguration {
         httpSecurity.authorizeHttpRequests(configurer -> configurer
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/home").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/icons/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/icons/**", "/src/main/resources/static/userAvatar/**").permitAll()
 //                        .requestMatchers("/home/login").permitAll()
                         .requestMatchers("/logout").permitAll()
                         .anyRequest().authenticated()

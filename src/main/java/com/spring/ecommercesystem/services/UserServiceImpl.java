@@ -75,6 +75,14 @@ public class UserServiceImpl implements UserService {
         this.userRepository.deleteById(id);
     }
 
+    @Override
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = this.userRepository.findByEmail(email);
+
+        return user;
+    }
 
 
 }

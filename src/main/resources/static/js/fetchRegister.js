@@ -65,10 +65,10 @@ async function register(event){
         role: { id: roleId}
     };
 
-    console.log("Form data: "+formData.fullName);
-    console.log("Form data: "+formData.email);
-    console.log("Form data: "+formData.password);
-    console.log("Form data: "+formData.role);
+    // console.log("Form data: "+formData.fullName);
+    // console.log("Form data: "+formData.email);
+    // console.log("Form data: "+formData.password);
+    console.log("Form data + role: "+formData.role);
 
     try{
         const response = await fetch("/api/register", {

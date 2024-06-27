@@ -13,21 +13,21 @@ public class ShowImageOnView implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
-
-
-        exposeUserDirectory(registry);
+        registry.addResourceHandler("/userAvatar/**")
+                .addResourceLocations("classpath:/static/userAvatar/")
+                .setCacheControl(CacheControl.noCache().mustRevalidate());
     }
 
-    private void exposeUserDirectory(ResourceHandlerRegistry registry) {
-        String dirName = "src/main/resources/static/userAvatar";
-
-        Path uploadDir = Paths.get(dirName);
-        String uploadPath = uploadDir.toFile().getAbsolutePath();
-
-//        if (dirName.startsWith("../")) dirName = dirName.replace("../", "");
-
-        registry.addResourceHandler("/" + dirName + "/**")
-                .addResourceLocations("file:/"+ uploadPath + "/")
-                .setCacheControl(CacheControl.noCache().mustRevalidate()); //Disable caching
-    }
+//    private void exposeUserDirectory(ResourceHandlerRegistry registry) {
+//        String dirName = "/userAvatar";
+//
+//        Path uploadDir = Paths.get(dirName);
+//        String uploadPath = uploadDir.toFile().getAbsolutePath();
+//
+////        if (dirName.startsWith("../")) dirName = dirName.replace("../", "");
+//
+//        registry.addResourceHandler("/" + dirName + "/**")
+//                .addResourceLocations("file:/"+ uploadPath + "/")
+//                .setCacheControl(CacheControl.noCache().mustRevalidate()); //Disable caching
+//    }
 }
