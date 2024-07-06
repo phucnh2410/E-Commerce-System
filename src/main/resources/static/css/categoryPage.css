@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+body {
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+main {
+    /* background-color: #fff; */
+    background-color: #f4f4f4;
+    color: black;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+main .container{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+/* Flash sale */
+.border-sale{
+    margin-top: 20px;
+    padding-top: 20px;
+    background-color: #fff;
+}
+
+
+.border-sale .title .x2txed{
+    display: flex;
+    flex-direction: row;
+}
+
+.border-sale .title .x2txed .category{
+    font-size: 18px;
+    color: #415a80;
+    background-size: contain;
+    height: 40px;
+    line-height: 30px;
+    text-transform: uppercase;
+    margin-left: 20px;
+}
+
+
+
+.carousel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+}
+
+.carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+}
+
+.card-scroll {
+    flex: 0 0 auto;
+    width: 100px;
+    border: 0.5px solid #efefef;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    scroll-snap-align: start;
+}
+
+.card-scroll a{
+    text-decoration: none;
+    /* font-weight: 500; */
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #000000;
+}
+
+.card-scroll a img{
+    margin-left: 9px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+/* .card-img-top {
+  width: 100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+} */
+
+.card-scroll .card-body {
+    padding: 15px;
+    text-align: center;
+}
+
+.btn-primary {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+
+
+.carousel-button {
+    background-color: #fff;
+    box-shadow: -10px 0 10px rgba(0, 0, 0, 0.08);
+    width: 25px;
+    height: 25px;
+    border: 1px solid transparent;
+    border-radius: 100%;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    z-index: 999;
+}
+
+.carousel-button i {
+    font-size: 16px;
+    color: rgb(110, 107, 107);
+    transition: transform 0.2s;
+}
+
+.carousel-button:hover {
+    transform: scale(2);
+}
+
+.carousel-button:hover i {
+    transform: scale(2);
+}
+
+#previous-btn{
+    margin-left: -13px;
+}
+
+#next-btn{
+    margin-right: -13px;
+}
+
+/* Products */
+.products{
+    width: 100%;
+    background-color: #fff;
+    padding: 1.25rem 10px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    margin-top: 15px;
+}
+
+.products .product-item .title{
+    font-weight: 600;
+    text-align: center;
+    color: #415a80;
+    text-transform: uppercase;
+}
+
+.products .product-item .horizontal-line{
+    margin-top: 10px;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 0.25rem;
+    background-color: #415a80;
+    transition: opacity 0.3s ease 0s;
+}
+
+
+.row a{
+    text-decoration: none;
+    font-weight: 300;
+    color: rgb(32, 32, 31);
+}
+
+/*
+font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 20px; */
+
+.row a .card-item{
+    /* padding-bottom: 30px; */
+    flex: 0 0 auto;
+    width: 100%;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    scroll-snap-align: start;
+    margin-bottom: 15px;
+}
+
+.row a .card-item:hover{
+    border: 1px;
+    border-color: orangered;
+    box-shadow: 0 4px 8px rgba(243, 5, 5, 0.335);
+}
+
+.row a .card-item .card-body .name{
+    font-size: 16px;
+}
+
+.row a .card-item .card-body .price{
+    margin-top: 15px;
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+}

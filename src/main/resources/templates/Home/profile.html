@@ -20,7 +20,7 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 
 <!--    <script src="/js/fetchUserAuthentication.js"></script>-->
-    <script src="/js/getErrorImage.js"></script>
+
 </head>
 
 <body>
@@ -41,7 +41,7 @@
                         <div class="form-group row col-md-3">
                             <div class="account-info-image">
                                 <div class="account-image">
-                                    <img id="avatar-profile"  th:src="@{ ${user.avatarPath} }" width="100px" height="100px" alt="" onerror="onError(event)">
+                                    <img id="avatar-profile" th:data-user-id="${user.id}" th:data-file-name="${user.avatar}"  width="100px" height="100px" alt="" onerror="onError(event)">
                                 </div>
                                 <div class="change-image-btn">
                                     <input type="hidden" th:field="*{avatar}">
@@ -134,7 +134,9 @@
                     </div>
 
                     <!-- Save Button -->
-
+                    <div>
+                        <a th:href="@{/shop(id=${user.id})}" sec:authorize="hasAnyRole('SELLER')">Manage Your Shop</a>
+                    </div>
                     <button class="save-btn">Save</button>
 
                 </form>
@@ -147,7 +149,11 @@
 
 <footer th:include="fragments/footer :: footer"></footer>
 
-
+<!--Image (Product and Avatar)-->
+<script src="/js/getErrorImage.js"></script>
+<script src="/js/fetchImageToView.js"></script>
+<!--Header and Navbar-->
+<script src="/js/fetchCategoryInNavbar.js"></script>
 <script src="/js/scrollHeader.js"></script>
 <script src="/js/showMenu.js"></script>
 <script src="/js/submenu.js"></script>

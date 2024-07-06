@@ -1,0 +1,386 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+}
+
+.border-title{
+    align-items: center;
+    background: #fff;
+    border-radius: .125rem;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .05);
+    color: #888;
+    display: flex;
+    font-size: 16px;
+    height: 55px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    /* padding: 0 20px; */
+}
+
+.border-title .title-price {
+    margin-left: 5px;
+}
+
+.border-title .title-quantity {
+    margin-left: 5px;
+}
+
+.border-title .title-total {
+    margin-left: 4px;
+}
+
+.border-title .title-action {
+    margin-left: 15px;
+}
+
+
+.shop-checkbox{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row-reverse;
+    min-width: 58px;
+    padding: 0 12px 0 20px;
+}
+
+.shop-checkbox .stardust-checkbox{
+    align-items: center;
+    color: rgba(0, 0, 0, .54);
+    cursor: default;
+    display: flex;
+    font-family: -apple-system, HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Roboto, Droid Sans, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    max-width: 400px;
+    position: relative;
+}
+
+
+input{
+    box-sizing: border-box;
+    padding: 0;
+}
+
+section{
+    display: block;
+    unicode-bidi: isolate;
+    background: #fff;
+    border-radius: .125rem;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .05);
+    overflow: hidden;
+    overflow: visible;
+    margin-bottom: 1rem;
+}
+
+
+
+.shop{
+    border-bottom: 1px solid rgba(0, 0, 0, .09);
+    box-sizing: border-box;
+    height: 3.75rem;
+    padding: 0 20px;
+    align-items: center;
+    display: flex;
+}
+
+.shop-info{
+    align-items: center;
+    display: flex;
+    flex: 1;
+}
+
+
+.shop-name{
+    align-items: center;
+    color: rgba(0, 0, 0, .87);
+    display: flex;
+    font-weight: 500;
+    min-width: 50px;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+}
+
+.product-checkbox{
+    box-sizing: border-box;
+    display: flex;
+    min-width: 58px;
+    padding: 0 12px 0 20px;
+    margin-left: 7px;
+}
+
+
+
+.product{
+    margin-top: 1px;
+    margin-bottom: 20px;
+    padding: 25px;
+}
+
+
+.product-img{
+    margin-left: -52px;
+}
+
+.product-name{
+    /* justify-content: start;
+    margin-left: 80px;
+    position: relative;
+    top: -99px; */
+}
+
+.product-price{
+    margin-left: -10px;
+    color: orangered;
+}
+
+.product-quantity{
+    /* margin-left: -12px; */
+
+}
+
+.quantity-input{
+    width: 70px;
+    text-align: center;
+    /* border: 1px solid #ddd;
+    margin: 0 5px;
+    height: 30px;
+    line-height: 1.2; */
+}
+
+.product-total{
+    margin-left: 5px;
+    color: orangered;
+}
+
+.product-action{
+    margin-left: 25px;
+}
+
+.product-action a {
+    text-decoration: none;
+    color: rgba(0, 0, 0, .54);
+}
+.product-action a i{
+    font-size: 26px;
+}
+
+.product-action a:hover {
+    color: #ff445c;
+}
+
+.border-checkout {
+    align-items: center;
+    background: #fff;
+    border-radius: .125rem;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .05);
+    color: black;
+    display: flex;
+    font-size: 20px;
+    height: 55px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.checkout-checkbox {
+    box-sizing: border-box;
+    display: flex;
+    min-width: 58px;
+    padding: 0 12px 0 20px;
+    margin-left: -75px;
+}
+
+.checkout-checkbox .stardust-checkbox{
+    align-items: center;
+    color: rgba(0, 0, 0, .54);
+    cursor: default;
+    display: flex;
+    font-family: -apple-system, HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Roboto, Droid Sans, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    max-width: 400px;
+    position: relative;
+    top: 16px;
+}
+.title-select {
+    display: flex;
+    position: relative;
+    top: -6px;
+}
+
+.number-of-money {
+    color: orangered;
+}
+
+.border-checkout a {
+    text-decoration: none;
+    color: black;
+}
+.border-checkout a:hover {
+    color: #ff445c;
+}
+
+.btn-purchase {
+    box-sizing: border-box;
+    background-color: #ff445c;
+    border-radius: 2px;
+    text-align: center;
+}
+
+.btn-purchase:hover {
+    background-color: #e6d5d7;
+}
+
+
+
+
+
+
+
+
+
+@media (max-width: 1000px) {
+    .border-title {
+        display: none;
+    }
+
+    .shop{
+        /* padding: 0 1px; */
+        /* padding-left: 200px; */
+        margin-left: -50px;
+    }
+
+    .product{
+        margin-left: -50px;
+        height: 200px;
+    }
+
+    .product-img{
+        /* display: flex; */
+        margin-left: -20px;
+    }
+
+    .product-name{
+        margin-left: -50px;
+    }
+
+    .product-price{
+        /* margin-left: 0px; */
+        margin-left: 163px;
+        color: orangered;
+        position: relative;
+        top: -40px;
+    }
+
+    .product-quantity{
+        margin-left: 163px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        top: 1px;
+
+    }
+
+    .quantity-input{
+        width: 70px;
+        text-align: center;
+        border: 1px solid #ddd;
+        margin: 0 5px;
+        height: 30px;
+        line-height: 1.2;
+    }
+
+    .product-total{
+        /* margin-left: -15px;
+         */
+        display: none;
+    }
+
+    .product-action{
+        margin-left: 400px;
+        position: relative;
+        top: -120px;
+        /* display: none;    */
+    }
+
+
+    .border-checkout {
+        font-size: 17px;
+    }
+
+    .checkout-checkbox {
+        box-sizing: border-box;
+        display: flex;
+        min-width: 58px;
+        padding: 0 12px 0 20px;
+        margin-left: -52px;
+    }
+
+    .checkout-checkbox .stardust-checkbox{
+        align-items: center;
+        color: rgba(0, 0, 0, .54);
+        cursor: default;
+        display: flex;
+        font-family: -apple-system, HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Roboto, Droid Sans, Arial, sans-serif;
+        font-size: 12px;
+        font-weight: 300;
+        max-width: 400px;
+        position: relative;
+        top: 13px;
+    }
+    .title-select {
+        display: flex;
+        position: relative;
+        top: -6px;
+        left: -10px;
+    }
+
+    .btn-remove {
+        display: none;
+    }
+
+    .checkout-quantity{
+        display: none;
+    }
+    .number-of-product{
+        display: none;
+    }
+
+
+    .number-of-money {
+        color: orangered;
+        display: flex;
+        position: relative;
+        left: 30px;
+    }
+
+
+
+    .btn-purchase button{
+        border-radius: 5px;
+        border: none;
+
+        background-color: #fff;
+    }
+
+
+}
+
+

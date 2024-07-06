@@ -1,11 +1,10 @@
 package com.spring.ecommercesystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -43,11 +42,13 @@ public class Product {
 //    @JsonIgnore
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "category_id")
+    @JsonBackReference("category-products")
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
+    @JsonBackReference("user-products")
     private User user;
 
 //    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
@@ -58,6 +59,7 @@ public class Product {
     //One to many
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH, CascadeType.REMOVE})
+    @JsonManagedReference("product-feedbacks")
     private List<Feedback> feedbacks;
 
     //many to many
@@ -69,6 +71,7 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "order_id")
     )
     private List<Order> orders;
+
 
 
 }

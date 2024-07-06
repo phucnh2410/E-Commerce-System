@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<html lang="en" xmlns:th="http://www.thymeleaf.com" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8" />
@@ -18,14 +18,10 @@
     <!-- Icons link -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 
-<!--    <script src="/js/fetchUserAuthentication.js"></script>-->
-    <script src="/js/getErrorImage.js"></script>
-
 </head>
 
 <body>
 <header th:replace="fragments/header :: header"></header>
-
 
 <main>
     <div class="container">
@@ -161,119 +157,17 @@
                     </div>
                     <div class="horizontal-line"></div>
                     <div class="row">
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
-
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
-
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
-                        <div class="col-6 col-md-2">
-                            <a href="#">
+                        <div class="col-6 col-md-2" th:each="product : ${products}">
+                            <a th:href="@{/product_detail(id=${product.id})}">
                                 <div class="card-item">
-                                    <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
+                                    <img class="card-img-top" th:data-product-id="${product.id}" th:data-file-name="${product.productImg}" alt="Product Image" >
                                     <div class="card-body">
-                                        <div class="name">Product name</div>
-                                        <div class="price" style="color: orangered;">10000</div>
+                                        <div class="name" th:text="${product.name}"></div>
+                                        <div class="price" style="color: orangered;" th:text="'&#36;' +${product.price}"></div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
-                        <div class="col-6 col-md-2"><a href="#">
-                            <div class="card-item">
-                                <img src="./goku150x150.jpeg" class="card-img-top" alt="Product Image" />
-                                <div class="card-body">
-                                    <div class="name">Product name</div>
-                                    <div class="price" style="color: orangered;">10000</div>
-                                </div>
-                            </div>
-                        </a></div>
                     </div>
                 </div>
             </div>
@@ -283,12 +177,17 @@
 
 <footer th:include="fragments/footer :: footer"></footer>
 
-
- <script src="/js/scrollFlashSale.js"></script>
+<!--Image (Product and Avatar)-->
+ <script src="/js/getErrorImage.js"></script>
+ <script src="/js/fetchImageToView.js"></script>
+<!--Header and Navbar-->
+ <script src="/js/fetchCategoryInNavbar.js"></script>
  <script src="/js/scrollHeader.js"></script>
  <script src="/js/showMenu.js"></script>
  <script src="/js/submenu.js"></script>
  <script src="/js/getCsrfToken.js"></script>
+<!--Home page-->
+ <script src="/js/scrollFlashSale.js"></script>
  <script src="/js/autoScrollBanner.js"></script>
 
 </body>

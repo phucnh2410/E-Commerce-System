@@ -32,6 +32,53 @@ main {
     transition: opacity 0.3s ease 0s;
 }
 
+.btn-nav{
+    margin: 20px;
+    /*padding-top: 80px;*/
+}
+
+.btn-nav a {
+    color: #415a80;
+}
+.btn-nav a i {
+    font-size: 26px;
+}
+.btn-nav a i:hover {
+    color: #0056b3;
+}
+
+.btn-add{
+    width: 80px;
+    border: 1px solid #808080; /* Màu viền xám */
+    background-color: #fff;
+    border-radius: 2px;
+    text-align: center;
+    font-weight: 400;
+    margin-top: 5px;
+}
+.btn-add a {
+    color: rgb(110, 107, 107);
+    text-align: center;
+    text-decoration: none;
+}
+.btn-add a i {
+    font-size: 26px;
+    text-align: center;
+}
+.btn-add:hover {
+    background-color: rgb(248, 240, 230);
+}
+
+td a {
+    color: rgba(0, 0, 0, .54);
+}
+td a i{
+    font-size: 26px;
+}
+td a:hover{
+    color: #ff445c;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -41,12 +88,22 @@ table {
 
 th, td {
     width: 16.66%;
-    /* 100% chia cho 6 cột */
+    /* 100% chia cho 7 cột - vì cột đầu tiên sẽ chiếm 2 cột */
     text-align: left;
     padding: 8px;
     word-wrap: break-word;
     border: none;
     /* Đảm bảo rằng nội dung sẽ được ngắt dòng */
+}
+
+th:first-child, td:first-child {
+    width: 50%;
+    /* Cột đầu tiên chiếm 2 phần của 7 phần */
+}
+
+th:last-child, td:last-child {
+    width: 8.33%;
+    /* Cột đầu tiên chiếm 2 phần của 7 phần */
 }
 
 thead {

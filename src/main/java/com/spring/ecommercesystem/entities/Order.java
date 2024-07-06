@@ -1,5 +1,8 @@
 package com.spring.ecommercesystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,12 +49,14 @@ public class Order {
     //One to many
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH, CascadeType.REMOVE})
+    @JsonManagedReference("order-vourchers")
     private List<Vourcher> vourchers;
 
     //many to One
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
             CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
+    @JsonBackReference("user-orders")
     private User user;
 
     //One to one

@@ -29,7 +29,17 @@ public class ProductController {
         User currentUser = this.userService.getCurrentUser();
         List<Product> products = currentUser.getProducts();
         model.addAttribute("products", products);
+        model.addAttribute("user", currentUser);
 
         return "Product/productManagement";
+    }
+
+    @GetMapping("/fragment")
+    public String productFragment(Model model){
+        User currentUser = this.userService.getCurrentUser();
+        List<Product> products = currentUser.getProducts();
+        model.addAttribute("products", products);
+
+        return "Product/productManagement :: productManagementFrag";
     }
 }

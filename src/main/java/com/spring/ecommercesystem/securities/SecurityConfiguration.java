@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -13,6 +14,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfiguration {
 
     @Bean
@@ -48,7 +50,8 @@ public class SecurityConfiguration {
         //Configure Security
         httpSecurity.authorizeHttpRequests(configurer -> configurer
                         .requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/home").permitAll()
+//                        .requestMatchers("/").permitAll()  /product_detail ?id=24   /shop ?id=
+                        .requestMatchers( "/", "/product_detail/**", "/shop/**", "/categories/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/icons/**", "/src/main/resources/static/userAvatar/**").permitAll()
 //                        .requestMatchers("/home/login").permitAll()
                         .requestMatchers("/logout").permitAll()
@@ -56,12 +59,12 @@ public class SecurityConfiguration {
         ).formLogin(
                 form -> form.loginPage("/login")
                         .loginProcessingUrl("/authenticateTheUser")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
         ).logout(
                 logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/home")
+                        .logoutSuccessUrl("/")
                         .permitAll()
         ).exceptionHandling(
                 configurer -> configurer

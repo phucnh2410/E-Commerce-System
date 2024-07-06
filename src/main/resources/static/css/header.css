@@ -15,6 +15,7 @@ header {
     transition: all 0.3s ease;
 }
 header .container{
+    background-color: #415a80;
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
     font-style: normal;

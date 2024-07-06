@@ -13,23 +13,38 @@
     <title>Product Management</title>
     <!-- <link rel="stylesheet" th:href="@{/css/shopProfile.css}" /> -->
     <link rel="stylesheet" th:href="@{/css/productManagement.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
 
     <!-- Icons link -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+<!--    Show popup link-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
 <!--    <script defer src="/js/getErrorImage.js"></script>-->
     <script th:src="@{/js/fetchMangeProduct.js}"></script>
 </head>
 
 <body>
+<header th:replace="fragments/header :: header"></header>
+
 <main>
     <div class="container">
-        <button class="btn btn-info" id="add-new-btn">Add New</button>
+
         <section class="shop-info">
-            <div class="title">
-                Product Management
+            <div class="header-management">
+                <div class="btn-nav">
+                    <a class="btn-back" id="" th:href="@{/shop(id=${user.id}) }"><i class='bx bx-arrow-back'></i></a>
+                </div>
+                <div class="title">
+                    Product Management
+                </div>
             </div>
             <div class="horizontal-line"></div>
+            <div class="btn-add">
+                <a class="" id="add-new-btn">Add New</a>
+            </div>
             <table>
                 <thead>
                 <tr>
@@ -38,21 +53,21 @@
                     <th>Brand</th>
                     <th>Price</th>
                     <th>Stock</th>
-                    <th>Image</th>
                     <th>Action</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>Sample Name</td>
-                    <td>Sample Category</td>
-                    <td>Sample Brand</td>
-                    <td>Sample Price</td>
-                    <td>Sample Stock</td>
-                    <td>Sample Image</td>
+                <tbody id="productTable" th:fragment="productManagementFrag">
+                <tr th:if="${products}" th:each="product : ${products}">
+
+                    <td th:text="${product.name}"></td>
+                    <td th:text="${product.category.name}"></td>
+                    <td th:text="${product.brand}"></td>
+                    <td th:text="'&#36;' +${product.price}"></td>
+                    <td th:text="${product.stock}"></td>
+<!--                    <td th:text="${product.}">Sample Image</td>-->
                     <td>
-                        <button class="btn btn-info">Update</button>
-                        <button class="btn btn-danger">Delete</button>
+                        <a class="btn-edit" href="javascript:void(0);" th:onclick="|showFormUpdate(${product.id});|"><i class='bx bxs-edit' ></i></a>
+                        <a class="btn-delete" href="javascript:void(0);" th:onclick="|showDeleteConfirmation(${product.id});|"><i class='bx bx-trash'></i></a>
                     </td>
                 </tr>
                 </tbody>
@@ -68,6 +83,8 @@
                     <form id="product-form" action="#" method="post">
                         <div class="row">
                             <div class="form-group row col-md-6">
+                                <input type="hidden" id="product-id">
+
                                 <div class="form-group">
                                     <input type="text" id="product-name" placeholder="Product Name">
                                 </div>
@@ -81,7 +98,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="number" id="product-stock" placeholder="Number of product">
+                                    <input type="number" min="1" max="999" id="product-stock" placeholder="Number of product">
                                 </div>
 
                                 <div class="form-group">
@@ -92,9 +109,9 @@
                                     </select>
                                 </div>
 
-<!--                                <div class="form-group">-->
-<!--                                    <input type="file" id="product-file">-->
-<!--                                </div>-->
+                                <div class="form-group">
+                                    <input type="file" id="product-file">
+                                </div>
                             </div>
                             <div class="form-group row col-md-6">
                                 <div class="form-group">
@@ -111,7 +128,7 @@
                         </div>
 
                         <div class="form-btn">
-                            <button id="btn-save" type="button" onclick="addProduct(event)">Save</button>
+                            <button id="btn-save" type="button" onclick="saveProduct(event)">Save</button>
                             <button class="btn-done" type="button">Done</button>
                         </div>
 
@@ -124,28 +141,36 @@
     </div>
 
 </main>
+<!--CDN to accept or reject an action -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var addButton = document.getElementById("add-new-btn");
+        var editButtons = document.querySelectorAll(".btn-edit");
         var modal = document.getElementById("myModal");
         var done = document.getElementsByClassName("btn-done")[0];
-        var studentForm = document.getElementById("studentForm");
+        // var studentForm = document.getElementById("studentForm");
 
-        // Hiển thị modal khi click vào nút "Add New"
-        addButton.addEventListener("click", function () {
-            modal.style.display = "block";
-            setTimeout(function () {
-                modal.classList.add("show");
-            }, 10); // Đảm bảo rằng lớp 'show' được thêm sau khi display được áp dụng
-        });
+        if (addButton) {
+            // Hiển thị modal khi click vào nút "Add New"
+            addButton.addEventListener("click", function () {
+                console.log("Add New button clicked");
+                modal.style.display = "block";
+                setTimeout(function () {
+                    modal.classList.add("show");
+                }, 10); // Đảm bảo rằng lớp 'show' được thêm sau khi display được áp dụng
+            });
+        } else {
+            console.error("Add New button not found");
+        }
 
-        // Ẩn modal khi click vào nút "x"
+        // Ẩn modal khi click vào nút "done"
         done.addEventListener("click", function () {
             modal.classList.remove("show");
             setTimeout(function () {
                 modal.style.display = "none";
-                studentForm.reset();
+                // studentForm.reset();
             }, 500); // Khớp với thời gian của transition
         });
 
@@ -155,12 +180,24 @@
                 modal.classList.remove("show");
                 setTimeout(function () {
                     modal.style.display = "none";
-                    studentForm.reset();
+                    // studentForm.reset();
                 }, 500); // Khớp với thời gian của transition
             }
         });
     });
 </script>
+
+<!--<footer th:include="fragments/footer :: footer"></footer>-->
+
+<!--Image (Product and Avatar)-->
+<script src="/js/getErrorImage.js"></script>
+<script src="/js/fetchImageToView.js"></script>
+<!--Header and Navbar-->
+<script src="/js/fetchCategoryInNavbar.js"></script>
+<script src="/js/scrollHeader.js"></script>
+<script src="/js/showMenu.js"></script>
+<script src="/js/submenu.js"></script>
+<script src="/js/getCsrfToken.js"></script>
 
 </body>
 

@@ -7,18 +7,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <title>Header Example</title>
-<!--    <link rel="stylesheet" th:href="@{/css/header.css}">-->
-    <script src="/js/getErrorImage.js"></script>
+    <title>Header</title>
+
 
 </head>
 
 <body>
-<header id="header">
+<header id="header" class="header">
     <div class="container">
         <div class="row">
             <div class="col-md-2">
-                <h4 class="logo">Blue Shopping</h4>
+                <h4 class="logo">Hispaniola</h4>
             </div>
 
             <div class="col-md-5">
@@ -29,7 +28,7 @@
 
             <div class="col-md-1">
                 <div class="cart-drawer-container">
-                    <a href="#">
+                    <a th:href="@{/shopping_cart}">
                         <div class="cart-number-badge" aria-hidden="true">9</div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
                              class="bi bi-cart2" viewBox="0 0 16 16">
@@ -49,7 +48,7 @@
 
                 <ul id="username" sec:authorize="isAuthenticated()">
                     <li >
-                        <img class="img-avatar" id="avatar-header" th:src="@{ ${currentUser.avatarPath} }" alt="" width="25px" height="25px" onerror="onError(event)"/>
+                        <img class="img-avatar" id="avatar-header" th:data-user-id="${currentUser.id}" th:data-file-name="${currentUser.avatar}" alt="" width="25px" height="25px" onerror="onError(event)"/>
                     </li>
 
                     <li>
@@ -95,7 +94,7 @@
             <ul>
                 <li class="active">
                     <i class="bx bxs-home"></i>
-                    <a th:href="@{/home}">Home</a>
+                    <a th:href="@{/}">Home</a>
                 </li>
                 <li class="category-item">
                     <i class="bx bxs-category"></i>
@@ -103,23 +102,23 @@
                     <i class="bx bx-chevron-right"></i>
 
                     <div class="submenu">
-                        <ul>
-                            <li><i class="bx bx-laptop"></i> <a href="#">Laptops</a></li>
-                            <li>
-                                <i class="bx bxs-mobile"></i> <a href="#">Smart phones</a>
-                            </li>
-                            <li><i class="bx bx-tab"></i> <a href="#">Tablets</a></li>
-                            <li>
-                                <i class="bx bx-male"></i> <a href="#">Male Fashions</a>
-                            </li>
-                            <li>
-                                <i class="bx bx-female"></i> <a href="#">Female Fashions</a>
-                            </li>
-                            <li><i class="bx bxs-watch"></i> <a href="#">Watches</a></li>
-                            <li>
-                                <i class="bx bx-football"></i>
-                                <a href="#">Sports & Travels</a>
-                            </li>
+                        <ul id="category-list">
+<!--                            <li><i class="bx bx-laptop"></i> <a href="#">Laptops</a></li>-->
+<!--                            <li>-->
+<!--                                <i class="bx bxs-mobile"></i> <a href="#">Smart phones</a>-->
+<!--                            </li>-->
+<!--                            <li><i class="bx bx-tab"></i> <a href="#">Tablets</a></li>-->
+<!--                            <li>-->
+<!--                                <i class="bx bx-male"></i> <a href="#">Male Fashions</a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <i class="bx bx-female"></i> <a href="#">Female Fashions</a>-->
+<!--                            </li>-->
+<!--                            <li><i class="bx bxs-watch"></i> <a href="#">Watches</a></li>-->
+<!--                            <li>-->
+<!--                                <i class="bx bx-football"></i>-->
+<!--                                <a href="#">Sports & Travels</a>-->
+<!--                            </li>-->
                         </ul>
                     </div>
                 </li>
@@ -143,88 +142,6 @@
         </div>
     </div>
 </header>
-
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    window.addEventListener("scroll", function () {
-        var header = document.querySelector("header");
-        header.classList.toggle("sticky", window.scrollY > 0);
-    });
-</script>
-
-<!--  -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const categoryItem = document.querySelector(".category-item");
-        const submenu = categoryItem.querySelector(".submenu");
-
-        categoryItem.addEventListener("mouseover", function () {
-            submenu.style.display = "block";
-            submenu.style.left = "205px";
-            setTimeout(() => {
-                submenu.classList.add("visible");
-            }, 10);
-        });
-
-        categoryItem.addEventListener("mouseout", function () {
-            setTimeout(() => {
-                submenu.classList.remove("visible");
-            }, 5);
-        });
-    });
-</script>
-<!--  -->
-<script>
-    function showSidebar() {
-        const sidebar = document.querySelector(".sidebar");
-        sidebar.style.display = "block";
-        setTimeout(() => {
-            sidebar.classList.add("visible");
-        }, 10);
-    }
-
-    function hideSidebar() {
-        const sidebar = document.querySelector(".sidebar");
-        sidebar.classList.remove("visible");
-        sidebar.addEventListener(
-            "transitionend",
-            function handleTransitionEnd() {
-                sidebar.style.display = "none";
-                sidebar.removeEventListener("transitionend", handleTransitionEnd);
-            }
-        );
-    }
-</script>
-<!--  -->
-<script>
-    const carousel = document.getElementById("carousel");
-    const prevBtn = document.getElementById("previous-btn");
-    const nextBtn = document.getElementById("next-btn");
-
-    prevBtn.addEventListener("click", () => {
-        carousel.scrollBy({
-            left: -220,
-            behavior: "smooth",
-        });
-    });
-
-    nextBtn.addEventListener("click", () => {
-        carousel.scrollBy({
-            left: 220,
-            behavior: "smooth",
-        });
-    });
-    // Optionally, you can disable the buttons when reaching the start/end
-    carousel.addEventListener("scroll", () => {
-        prevBtn.disabled = carousel.scrollLeft === 0;
-        nextBtn.disabled =
-            carousel.scrollLeft + carousel.offsetWidth >= carousel.scrollWidth;
-    });
-</script>
 </body>
 
 </html>

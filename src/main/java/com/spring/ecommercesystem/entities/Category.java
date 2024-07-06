@@ -1,10 +1,8 @@
 package com.spring.ecommercesystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -28,5 +26,6 @@ public class Category {
 
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.REFRESH)
+    @JsonManagedReference("category-products")
     private List<Product> products;
 }
