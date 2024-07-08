@@ -104,24 +104,6 @@ public class HomeController {
 
     @GetMapping("/shop")
     public String showShopping(Model model, @RequestParam("id") Long id){
-        //get authorize
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
-//        if (userAuth == null){
-//            System.out.println("User does not authenticate!!!");
-//        }
-//        Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
-//
-//        boolean isSeller = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_SELLER"));
-//
-//
-//        if (isSeller){
-//            User user = this.userService.findById(id);
-//            List<Product> products = user.getProducts();
-//            model.addAttribute("products", products);
-//            model.addAttribute("user", user);
-//        }
-
         User user = this.userService.findById(id);
         List<Product> products = user.getProducts();
         model.addAttribute("products", products);
