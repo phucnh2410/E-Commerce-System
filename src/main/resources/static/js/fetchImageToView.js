@@ -33,6 +33,7 @@ $(document).ready(function() {
 
     const productInShop = document.querySelectorAll('.card-img-top');
     const productDetailImg = document.getElementById('product-detail-img');
+    const productCartImg = document.querySelectorAll(".product-cart-image");
 
     if (productInShop){
         productInShop.forEach(async (productImg) =>{
@@ -50,6 +51,21 @@ $(document).ready(function() {
         const productId = productDetailImg.getAttribute("data-product-id");
         const fileName = productDetailImg.getAttribute("data-file-name");
         getProductImage(productId, fileName, productDetailImg).then(r => {});
+    }
+
+    if (productCartImg){
+        productCartImg.forEach(async (productCart) =>{
+            const productId = productCart.getAttribute("data-product-id");
+            const fileName = productCart.getAttribute("data-file-name");
+
+            try {
+                await getProductImage(productId, fileName, productCart);
+            } catch (error) {
+                console.error(`There was a problem with the get product cart image operation for product ID ${productId}:`, error);
+            }
+        });
+    }else {
+        console.log("class 'product-cart-image' does not exist!!!");
     }
 
 

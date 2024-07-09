@@ -19,19 +19,14 @@ public class RedisConfig {
 //    @Value("${spring.data.redis.port}")
 //    private int redisPort;
 
-    @Bean
-    public LettuceConnectionFactory redisConnectionFactory(){
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration());
-    }
 //    @Bean
-//    public RedisConnectionFactory redisConnectionFactory() {
-//        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-//        jedisConnectionFactory.setHostName("localhost");
-//        jedisConnectionFactory.setPort(6379);
-//        jedisConnectionFactory.setAutoStartup(true);
-////        jedisConnectionFactory.setPassword("your_password"); // Nếu có password
-//        return jedisConnectionFactory;
+//    public LettuceConnectionFactory redisConnectionFactory(){
+//        return new LettuceConnectionFactory(new RedisStandaloneConfiguration());
 //    }
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new JedisConnectionFactory();
+    }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {

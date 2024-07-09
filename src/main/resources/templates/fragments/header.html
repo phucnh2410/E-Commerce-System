@@ -26,10 +26,10 @@
                 </div>
             </div>
 
-            <div class="col-md-1">
+            <div class="col-md-1" sec:authorize="isAuthenticated()">
                 <div class="cart-drawer-container">
                     <a th:href="@{/shopping_cart}">
-                        <div class="cart-number-badge" aria-hidden="true">9</div>
+                        <div id="cart-number-badge" class="cart-number-badge" aria-hidden="true"></div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
                              class="bi bi-cart2" viewBox="0 0 16 16">
                             <path

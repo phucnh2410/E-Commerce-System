@@ -73,6 +73,16 @@ public class Product implements Serializable {
     )
     private List<Order> orders;
 
-
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", stock=" + stock +
+                ", brand='" + brand + '\'' +
+                ", productImg='" + productImg + '\''+
+                '}';
+    }
 }

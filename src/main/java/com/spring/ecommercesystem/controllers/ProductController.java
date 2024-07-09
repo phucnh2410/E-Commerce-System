@@ -39,6 +39,7 @@ public class ProductController {
         User currentUser = this.userService.getCurrentUser();
         List<Product> products = currentUser.getProducts();
         model.addAttribute("products", products);
+        model.addAttribute("user", currentUser);
 
         return "Product/productManagement :: productManagementFrag";
     }

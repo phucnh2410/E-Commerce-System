@@ -108,7 +108,6 @@ public class ProductRestController {
             response.put("product", product);
         }
 
-
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

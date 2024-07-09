@@ -44,6 +44,10 @@ public class CartService {
 
     public Long getUserIdAuthenticate (){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            System.out.println("User is not authenticated!");
+            return null;
+        }
         UserDetails userAuth = (UserDetails) authentication.getPrincipal();
         if (userAuth == null){
             System.out.println("User does not authenticate!!!");
@@ -87,7 +91,6 @@ public class CartService {
 
         //Get a cart id from Redis cache
         String cartId = (String) redisTemplate.opsForHash().get(key, "cartId");
-        System.out.println("Cart id from getCartId() method is: "+cartId);
         return cartId;
     }
 
@@ -160,7 +163,7 @@ public class CartService {
 
 
     //Get data of shopping cart
-    public Map<Long, Cart> getCart(){
+    public List<Cart> getCart(){
         String cartId = getCartId();
         if (cartId == null){
             System.out.println("Cart ID is null in the getCart() method");
@@ -169,7 +172,25 @@ public class CartService {
         String key = CART_PREFIX + cartId;
 
         //Get cart form the Redis cache
-        return (Map<Long, Cart>) redisTemplate.opsForHash().get(key, "items");
+        Map<Long, Cart> cartItems = (Map<Long, Cart>) redisTemplate.opsForHash().get(key, "items");
+        if (cartItems == null) {
+            System.out.println("No items found in the cart");
+            return null;
+        }
+        List<Cart> items = new ArrayList<>();
+        for (Map.Entry<Long, Cart> entry : cartItems.entrySet()){
+//            Long productId = entry.getKey();
+            Cart cartEntry = entry.getValue();
+            int quantity = cartEntry.getQuantity();
+            Product product = cartEntry.getProduct();
+
+            Cart cart = new Cart()
+                    .setQuantity(quantity)
+                    .setProduct(product);
+
+            items.add(cart);
+        }
+        return items;
     }
 
     //Get total money of all products in the shopping cart

@@ -138,6 +138,11 @@ section{
     margin-left: -52px;
 }
 
+.product-img img{
+    width: 80px;
+    height: 80px;
+}
+
 .product-name{
     /* justify-content: start;
     margin-left: 80px;
