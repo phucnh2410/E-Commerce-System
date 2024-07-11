@@ -3,6 +3,7 @@ package com.spring.ecommercesystem.services;
 import com.spring.ecommercesystem.entities.Cart;
 import com.spring.ecommercesystem.entities.Product;
 import com.spring.ecommercesystem.entities.User;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
@@ -17,30 +18,16 @@ import java.util.*;
 public class CartService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final UserService userService;
+
+    private final ProductService productService;
     private static final String CART_PREFIX = "cart:";
 
     @Autowired
-    public CartService(RedisTemplate<String, Object> redisTemplate, UserService userService) {
+    public CartService(RedisTemplate<String, Object> redisTemplate, UserService userService, ProductService productService) {
         this.redisTemplate = redisTemplate;
         this.userService = userService;
+        this.productService = productService;
     }
-
-//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
-//        if (userAuth == null){
-//            System.out.println("User does not authenticate!!!");
-//        }
-//        Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
-//
-//        boolean isCustomer = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_CUSTOMER"));
-//
-//        if (isCustomer) {
-//            User user = this.userService.getCurrentUser();
-//            //get or generate cartId by session
-//            String cartId = this.cartService.getCartId(user.getId());
-//            if (cartId == null) {
-//                System.out.println("Cart ID is null!!!");
-//            }
 
     public Long getUserIdAuthenticate (){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -94,16 +81,19 @@ public class CartService {
         return cartId;
     }
 
-    //Get the number of already products in the cart of the user
-    public Long getTotalItemsInCart(){
+    public String getKey(){
         String cartId = getCartId();
         if (cartId == null){
-            System.out.println("Cart ID is null in the getTotalItemsInCart() method");
-            return 0L;
+            throw new IllegalStateException("Cart ID is null in the addProductToCart() method");
         }
-
-        //Using the cart id to get a shopping cart
         String key = CART_PREFIX + cartId;
+
+        return key;
+    }
+
+    //Get the number of already products in the cart of the user
+    public Long getTotalItemsInCart(){
+        String key = getKey();
 
         //Get cart from the Redis cache
         Map<Long, Cart> cartItems = (Map<Long, Cart>) redisTemplate.opsForHash().get(key, "items");
@@ -115,13 +105,14 @@ public class CartService {
         return (long) cartItems.size();
     }
 
-    public void addProductToCart(Product product, int quantity){
-        String cartId = getCartId();
-        if (cartId == null){
-            System.out.println("Cart ID is null in the addProductToCart() method");
-            return;
+    public void addProductToCart(Long productId, int quantity){
+        //get Product from DB
+        Product product = this.productService.findById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found for id: " + productId);
         }
-        String key = CART_PREFIX + cartId;
+
+        String key = getKey();
         //Get cart from the Redis cache
         Map<Long, Cart> cartItems = (Map<Long, Cart>) redisTemplate.opsForHash().get(key, "items");
 
@@ -130,10 +121,11 @@ public class CartService {
         }
 
         //Check if the product exists in the shopping cart?
-        Cart cart = cartItems.get(product.getId());
+        Cart cart = cartItems.get(productId);
         if (cart == null){
             cart = new Cart();
             cart.setProduct(product);
+            cart.setSellerName(product.getUser().getFullName());
             cart.setQuantity(quantity);
         }else {
             cart.setQuantity(cart.getQuantity() + quantity);
@@ -142,16 +134,52 @@ public class CartService {
         cartItems.put(product.getId(), cart);
         //Store or update the shopping cart data into Redis cache
         redisTemplate.opsForHash().put(key, "items", cartItems);
-        System.out.println("Add product to cart successfully!!!");
+        // Log success message
+        LoggerFactory.getLogger(CartService.class).info("Product added to cart successfully!!!: {}", cart);
     }
 
-    public void removeProductFromCart(Long productId){
-        String cartId = getCartId();
-        if (cartId == null){
-            System.out.println("Cart ID is null in the removeProductFromCart() method");
-            return;
+    public void updateQuantity(Long id, int quantity){
+
+        String key = getKey();
+
+        //Get cart from the Redis cache
+        Map<Long, Cart> cartItems = (Map<Long, Cart>) redisTemplate.opsForHash().get(key, "items");
+
+        if (cartItems == null){
+            cartItems = new HashMap<>();
         }
-        String key = CART_PREFIX + cartId;
+
+        Cart product = cartItems.get(id);
+        if (product == null){
+            System.out.println("The product dose not exist to update quantity");
+             return;
+        }
+        //plus more quantity
+        product.setQuantity(quantity);
+
+        //update into Map
+        cartItems.put(id, product);
+        //update into Redis cache
+        redisTemplate.opsForHash().put(key, "items", cartItems);
+    }
+
+    public Cart getCartByProductId(Long id){
+        String key = getKey();
+        //Get cart from the Redis cache
+        Map<Long, Cart> cartItems;
+        cartItems = (Map<Long, Cart>) redisTemplate.opsForHash().get(key, "items");
+
+        if (cartItems == null){
+            cartItems = new HashMap<>();
+        }
+
+        Cart cart = cartItems.get(id);
+        return cart;
+    }
+
+
+    public void removeProductFromCart(Long productId){
+        String key = getKey();
         Map<Long, Cart> cartItems = (Map<Long, Cart>) redisTemplate.opsForHash().get(key, "items");
 
         if (cartItems != null){
@@ -164,12 +192,7 @@ public class CartService {
 
     //Get data of shopping cart
     public List<Cart> getCart(){
-        String cartId = getCartId();
-        if (cartId == null){
-            System.out.println("Cart ID is null in the getCart() method");
-            return null;
-        }
-        String key = CART_PREFIX + cartId;
+        String key = getKey();
 
         //Get cart form the Redis cache
         Map<Long, Cart> cartItems = (Map<Long, Cart>) redisTemplate.opsForHash().get(key, "items");
@@ -195,12 +218,7 @@ public class CartService {
 
     //Get total money of all products in the shopping cart
     public double getTotalAllItems(){
-        String cartId = getCartId();
-        if (cartId == null){
-            System.out.println("Cart ID is null in the getTotalAllItems() method");
-            return 0.0;
-        }
-        String key = CART_PREFIX + cartId;
+        String key = getKey();
         Map<Long, Cart> cartItems = (Map<Long, Cart>) redisTemplate.opsForHash().get(key, "items");
 
         if (cartItems == null){
@@ -225,12 +243,7 @@ public class CartService {
 //    }
 
     public void cleanCart(){
-        String cartId = getCartId();
-        if (cartId == null){
-            System.out.println("Cart ID is null in the cleanCart() method");
-            return;
-        }
-        String key = CART_PREFIX + cartId;
+        String key = getKey();
         redisTemplate.delete(key);
     }
 

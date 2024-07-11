@@ -17,6 +17,8 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
+//    private static final long serialVersionUID = 3032430709415055160L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

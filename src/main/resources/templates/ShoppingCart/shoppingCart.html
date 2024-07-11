@@ -21,7 +21,7 @@
 </head>
 
 <body>
-<footer th:replace="fragments/header :: header"></footer>
+<header th:replace="fragments/header :: header"></header>
 
 <main>
     <div class="container">
@@ -58,7 +58,7 @@
 
         <!-- product -->
         <div id="cartBody" class="cartBody" th:fragment="cartBodyFrag">
-            <div class="row"  th:if="${cartItems}" th:each="cart : ${cartItems}">
+            <div  class="row"  th:if="${cartItems}" th:each="cart : ${cartItems}" th:id="|cartItem-${cart.product.id}|" th:fragment="cartItemFrag">
                 <section>
                     <div class="shop">
                         <div class="shop-info">
@@ -67,24 +67,24 @@
                                     <input type="checkbox" class="stardust-checkbox-input" name="">
                                 </label>
                             </div>
-    <!--                        <a href="" class="shop-name" th:text="${cart.product.user.fullName}">Huynh Phuc Store</a>-->
+<!--                            <a href="" class="shop-name" th:text="${cart.sellerName != null ? cart.sellerName : 'No User'}">Huynh Phuc Store</a>-->
                         </div>
                     </div>
                     <section class="product">
                         <div class="row">
-                            <div class="col-2 col-md-1">
-                                <div class="product-checkbox">
-                                    <label class="stardust-checkbox">
-                                        <input type="checkbox" class="stardust-checkbox-input" name="">
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-4 col-md-1">
+<!--                            <div class="col-2 col-md-1">-->
+<!--                                <div class="product-checkbox">-->
+<!--&lt;!&ndash;                                    <label class="stardust-checkbox">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <input type="checkbox" class="stardust-checkbox-input" name="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </label>&ndash;&gt;-->
+<!--                                </div>-->
+<!--                            </div>-->
+                            <div class="col-6 col-md-1">
                                 <div class="product-img">
                                     <img class="product-cart-image" th:data-product-id="${cart.product.id}" th:data-file-name="${cart.product.productImg}" alt="Product Image">
                                 </div>
                             </div>
-                            <div class="col-6 col-md-4">
+                            <div class="col-6 col-md-5">
                                 <div class="product-name" th:text="${cart.product.name}">Product name</div>
                             </div>
                             <div class="col-12 col-md-2">
@@ -92,11 +92,11 @@
                             </div>
                             <div class="col-12 col-md-2">
                                 <div class="product-quantity">
-                                    <input type="number" th:value="${cart.quantity}" min="1" class="quantity-input">
+                                    <input type="number" th:value="${cart.quantity}" min="1" th:id="|quantity-input-cart-${cart.product.id}|" th:oninput="|updateQuantity(${cart.product.id}, this.value);|" class="quantity-input">
                                 </div>
                             </div>
                             <div class="col-12 col-md-1">
-                                <div class="product-total">20</div>
+                                <div class="product-total" th:text="'&#36;' +${cart.product.price}*${cart.quantity}"></div>
                             </div>
                             <div class="col-12 col-md-1">
                                 <div class="product-action"> <a href="javascript:void(0);" th:onclick="|deleteProductFromCart(${cart.product.id});|" ><i class='bx bx-trash'></i></a></div>
@@ -146,7 +146,7 @@
                 </div>
 
                 <div class="col-1 col-md-1">
-                    <div class="btn-purchase"><a href="#">Purchase</a></div>
+                    <div class="btn-purchase"><a th:href="@{/shopping_cart/checkout}">Purchase</a></div>
                 </div>
             </div>
         </div>

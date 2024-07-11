@@ -6,14 +6,9 @@ import com.spring.ecommercesystem.entities.User;
 import com.spring.ecommercesystem.services.CartService;
 import com.spring.ecommercesystem.services.ProductService;
 import com.spring.ecommercesystem.services.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -56,18 +51,24 @@ public class CartRestController {
         return ResponseEntity.ok().body(totalNumberOfProduct);
     }
 
+    @PostMapping("/quantity/{productId}")
+    public ResponseEntity<?> updateQuantity(@PathVariable("productId") Long productId, @RequestParam("quantity") int quantity){
+        try {
+            this.cartService.updateQuantity(productId, quantity);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+
     @PostMapping("/add/{id}")
     public ResponseEntity<String> addProductToCart(@PathVariable("id") Long productId, @RequestParam("quantity") int quantity){
         //Create Cart with an ID
-        String cartId = this.cartService.createCartId();
-        //Get product by ID
-        Product product = this.productService.findById(productId);
-        if (product == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
-        }
+        this.cartService.createCartId();
 
         //Add product to cart
-        this.cartService.addProductToCart(product, quantity);
+        this.cartService.addProductToCart(productId, quantity);
         return ResponseEntity.ok().body("Product added to cart successfully");
     }
 

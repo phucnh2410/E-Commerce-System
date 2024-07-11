@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.com">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <title>Checkout</title>
+    <link rel="stylesheet" th:href="@{/css/checkoutPage.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+    <!-- Icons link -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+</head>
+
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div class="container">
+    <h1>Checkout</h1>
+
+    <div class="row">
+        <div class="address">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-1 col-md-1">
+                        <svg class="position" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
+                             viewBox="0 0 384 512">
+                            <path
+                                    d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                        </svg>
+                    </div>
+                    <div class="col-11 col-md-11 mb-3">
+                        Payment Address
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 col-md-3">Ngo Huynh Khang</div>
+                    <div class="col-1 col-md-9" id="current-address">Thanh Phuoc, Giong Rieng, Kien Giang</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="address-change"><a href="" id="change-address" onclick="changeAddress(event)">Change</a></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="title">
+            <div class="col-md-7">
+                <div>Product</div>
+            </div>
+            <div class="col-md-2">
+                <div class="title-price">Price</div>
+            </div>
+            <div class="col-md-1">
+                <div class="title-quantity">Quantity</div>
+            </div>
+            <div class="col-md-2">
+                <div class="title-total">Total</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products -->
+    <div class="row">
+        <section class="shop-product-info">
+            <div class="shop">
+                <div class="shop-info">
+                    <a href="" class="shop-name">Ohana Official Store</a>
+                </div>
+            </div>
+            <section class="product">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="product-img"><img width="60px" height="60px"
+                                                              src="https://via.placeholder.com/100" alt="Product Image"></div>
+                            </div>
+                            <div class="col-md-9">
+                                <div>Lăn khử mùi, ngăn tiết mồ hôi Old Spice USA (73g/85g)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div style="color: orangered;">10000</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div>19</div>
+                    </div>
+                    <div class="col-md-2">
+                        <div style="color: orangered;">190000</div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <div class="row">
+        <section class="shop-product-info">
+            <div class="shop">
+                <div class="shop-info">
+                    <a href="" class="shop-name">Phuc Ngo Store</a>
+                </div>
+            </div>
+            <section class="product">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="product-img"><img width="60px" height="60px"
+                                                              src="https://via.placeholder.com/100" alt="Product Image"></div>
+                            </div>
+                            <div class="col-md-9">
+                                <div>Lăn nách Old Spice USA (73g/85g)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div style="color: orangered;">12000</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div>19</div>
+                    </div>
+                    <div class="col-md-2">
+                        <div style="color: orangered;">228000</div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <div class="row">
+        <section class="payment">
+            <div class="payment-methods">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div>Payment Methods</div>
+                    </div>
+                    <div class="col-9 col-md-3">
+                        <div id="selected-payment-method">Thanh Toan Khi Nhan Hang</div>
+                    </div>
+                    <div class="col-3 col-md-2">
+                        <div class="payment-change"><a href="#" id="change-payment-method" onclick="changePaymentMethod()">Change</a></div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="payment-info">
+                <div class="row">
+                    <div class="col-6 col-md-2">
+                        <div>Total of product: </div>
+                        <div>Shipping fee: </div>
+                        <div>Payment total: </div>
+                    </div>
+                    <div class="col-6 col-md-6">
+                        <div>179000</div>
+                        <div>66000</div>
+                        <div class="payment-total">245000</div>
+                    </div>
+                </div>
+            </section>
+            <div class="payment-btn">
+                <div class="row">
+                    <div class="btn-checkout"><button><a href="">Checkout</a></button></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+
+<!-- SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="/js/fetchPaymentMethodAndAction.js"></script>
+<script src="/js/fetchAddressAndAction.js"></script>
+<!--Image (Product and Avatar)-->
+<script src="/js/getErrorImage.js"></script>
+<script src="/js/fetchImageToView.js"></script>
+<!--Header and Navbar-->
+<script src="/js/fetchCategoryInNavbar.js"></script>
+<script src="/js/scrollHeader.js"></script>
+<script src="/js/showMenu.js"></script>
+<script src="/js/submenu.js"></script>
+<script src="/js/getCsrfToken.js"></script>
+
+</body>
+
+</html>

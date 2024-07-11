@@ -1,11 +1,17 @@
 package com.spring.ecommercesystem.controllers;
 
+import com.spring.ecommercesystem.entities.Address;
 import com.spring.ecommercesystem.entities.Cart;
+import com.spring.ecommercesystem.entities.PaymentMethod;
+import com.spring.ecommercesystem.entities.User;
 import com.spring.ecommercesystem.services.CartService;
+import com.spring.ecommercesystem.services.PaymentMethodService;
+import com.spring.ecommercesystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -14,10 +20,15 @@ import java.util.List;
 @RequestMapping("/shopping_cart")
 public class CartController {
     private final CartService cartService;
+    private final PaymentMethodService paymentService;
+
+    private final UserService userService;
 
     @Autowired
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, PaymentMethodService paymentService, UserService userService) {
         this.cartService = cartService;
+        this.paymentService = paymentService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -47,4 +58,44 @@ public class CartController {
         model.addAttribute("totalNumberOfProduct", numberOfItem);
         return "ShoppingCart/shoppingCart :: cartBodyFrag";
     }
+
+    @GetMapping("/fragment/{productId}")
+    public String getCartFragmentByProductId(@PathVariable("productId") Long productId, Model model){
+        Cart cart = this.cartService.getCartByProductId(productId);
+
+        model.addAttribute("cartItems",cart);
+        return "ShoppingCart/shoppingCart :: cartItemFrag";
+    }
+
+
+    @GetMapping("/checkout")
+    public String showCheckout(Model model){
+        User currentUser = this.userService.getCurrentUser();
+        List<Address> addresses = currentUser.getAddresses();
+        List<PaymentMethod> paymentMethods = this.paymentService.findAll();
+
+        model.addAttribute("addresses", addresses);
+        model.addAttribute("payments", paymentMethods);
+        return "Checkout/checkoutPage";
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

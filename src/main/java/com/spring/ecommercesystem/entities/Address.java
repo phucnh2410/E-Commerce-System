@@ -35,8 +35,8 @@ public class Address {
     @Column(name = "city")
     private String city;
 
-    @Column(name = "zip")
-    private String zip;
+    @Column(name = "ward_and_commune")
+    private String wardAndCommune;
 
     @Column(name = "country")
     private String country;

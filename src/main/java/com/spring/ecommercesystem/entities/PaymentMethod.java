@@ -1,10 +1,13 @@
 package com.spring.ecommercesystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -23,9 +26,9 @@ public class PaymentMethod {
     private String name;
 
     //One to One
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+    @OneToMany(mappedBy = "paymentMethod", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH})
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @JsonManagedReference("payment-order")
+    private List<Order> orders;
 
 }

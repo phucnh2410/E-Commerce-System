@@ -25,6 +25,26 @@ async function getCart(){
     }
 }
 
+async function getCartByProductId(productId){
+    const cartItem = document.querySelector("#cartItem-"+productId);
+    try {
+        const response = await fetch("/shopping_cart/fragment/"+productId);
+        if (!response.ok){
+            throw new Error(response.statusText);
+        }
+
+        const cart = await response.text();
+        if (!cartItem){
+            console.log('Element #cartItem not found in the response');
+        }
+
+        cartItem.innerHTML = "";
+        cartItem.innerHTML = cart;
+    }catch (error) {
+        console.error(`There was a problem with the update quantity in cart operation:`, error);
+    }
+}
+
 async function addProductToCart(productId){
     const productQuantity = document.getElementById("product-quantity");
     try{
@@ -64,6 +84,49 @@ async function addProductToCart(productId){
     }
 }
 
+async function updateQuantity(productId, quantity) {
+    try {
+        console.log("Quantity: "+quantity);
+        console.log("Product id: "+productId);
+
+        const response = await fetch("/api/cart/quantity/" + productId +"?quantity="+quantity, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok){
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+            return;
+        }
+
+        await getCartByProductId(productId);
+        const productCartImg = document.querySelectorAll(".product-cart-image");
+
+        if (productCartImg){
+            for (const productCart of productCartImg) {
+                const productId = productCart.getAttribute("data-product-id");
+                const fileName = productCart.getAttribute("data-file-name");
+
+                try {
+                    await getProductImage(productId, fileName, productCart);
+                } catch (error) {
+                    console.error(`There was a problem with the update quantity operation for product ID ${productId}:`, error);
+                }
+            }
+        }else {
+            console.log("class 'product-cart-image' does not exist!!!");
+        }
+
+    } catch (error) {
+        console.error(`There was a problem with the update quantity from cart operation:`, error);
+    }
+
+
+}
+
 async function deleteProductFromCart(productId){
     try {
         const response = await fetch("/api/cart/"+productId, {
@@ -88,7 +151,7 @@ async function deleteProductFromCart(productId){
                 try {
                     await getProductImage(productId, fileName, productCart);
                 } catch (error) {
-                    console.error(`There was a problem with the get product cart image operation for product ID ${productId}:`, error);
+                    console.error(`There was a problem with the delete product from cart operation for product ID ${productId}:`, error);
                 }
             }
         }else {

@@ -1,7 +1,6 @@
 package com.spring.ecommercesystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,9 +21,12 @@ import java.util.List;
 public class Order {
 
     public enum Status{
+        pending_confirmation,
+        confirmed,
         preparing,
         delivering,
-        received
+        received,
+        canceled
     }
 
     @Id
@@ -59,9 +61,10 @@ public class Order {
     @JsonBackReference("user-orders")
     private User user;
 
-    //One to one
-    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
             CascadeType.REFRESH})
+    @JoinColumn(name = "paymentMethod_id")
+    @JsonBackReference("payment-order")
     private PaymentMethod paymentMethod;
 
     //Many to many
