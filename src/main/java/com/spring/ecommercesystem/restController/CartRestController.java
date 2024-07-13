@@ -68,12 +68,12 @@ public class CartRestController {
 
     @PostMapping("/add/{id}")
     public ResponseEntity<String> addProductToCart(@PathVariable("id") Long productId, @RequestParam("quantity") int quantity){
-        //Get cart id to check cart existed
-        String cartId = this.cartService.getCartId();
-        if (cartId == null){
-            //Create Cart with an ID
-            this.cartService.createCartId();
-        }
+//        //Get cart id to check cart existed
+//        String cartId = this.cartService.getCartId();
+//        if (cartId == null){
+//            //Create Cart with an ID
+//            this.cartService.createCartId();
+//        }
 
         //Add product to cart
         this.cartService.addProductToCart(productId, quantity);
