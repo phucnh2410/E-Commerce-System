@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -42,12 +43,17 @@ public class CartController {
         List<CartTemp> cartTempList = new ArrayList<>();
 
         cartItems.stream().forEach(cart -> {
-            Product product = this.productService.findById(cart.getProduct().getId());
+            try {
+                Product product = this.productService.findById(cart.getProduct().getId());
 
-            CartTemp cartTemp = new CartTemp()
-                    .setProduct(product)
-                    .setQuantity(cart.getQuantity());
-            cartTempList.add(cartTemp);
+                CartTemp cartTemp = new CartTemp()
+                        .setProduct(product)
+                        .setQuantity(cart.getQuantity());
+                cartTempList.add(cartTemp);
+            }catch (NoSuchElementException e) {
+                // Xử lý khi sản phẩm không tồn tại
+                System.out.println("Product not found: ");
+            }
         });
 
         //Get user list from already product in the cart
