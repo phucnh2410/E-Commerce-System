@@ -56,55 +56,56 @@
             </div>
         </div>
 
-        <!-- product -->
-        <div id="cartBody" class="cartBody" th:fragment="cartBodyFrag">
-            <div  class="row"  th:if="${cartItems}" th:each="cart : ${cartItems}" th:id="|cartItem-${cart.product.id}|" th:fragment="cartItemFrag">
-                <section>
-                    <div class="shop">
-                        <div class="shop-info">
-                            <div class="shop-checkbox">
+<!--            Seller-->
+        <div  class="row" id="seller" th:fragment="sellerFrag">
+            <section th:if="${userCarts}" th:each="seller : ${userCarts}">
+                <div class="shop">
+                    <div class="shop-info">
+                        <div class="shop-checkbox">
+                            <label class="stardust-checkbox">
+                                <input type="checkbox" class="stardust-checkbox-input" name="">
+                            </label>
+                        </div>
+                        <a th:href="@{/shop(id=${seller.user.id}) }" class="shop-name" th:text="${seller.user.fullName}"></a>
+                    </div>
+                </div>
+<!--                    Products of seller-->
+                <section class="product">
+                    <div class="row" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}" th:id="|item-${item.product.id}|" th:fragment="productFrag">
+                        <div class="col-2 col-md-1">
+                            <div class="product-checkbox">
                                 <label class="stardust-checkbox">
                                     <input type="checkbox" class="stardust-checkbox-input" name="">
                                 </label>
                             </div>
-<!--                            <a href="" class="shop-name" th:text="${cart.sellerName != null ? cart.sellerName : 'No User'}">Huynh Phuc Store</a>-->
+                        </div>
+                        <div class="col-6 col-md-1">
+                            <div class="product-img">
+                                <img class="product-cart-image" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}" alt="Product Image">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <a th:href="@{/product_detail(id=${item.product.id})}" class="product-name">
+                                <div  th:text="${item.product.name}">Product name</div>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <div class="product-price" th:text="'&#36;' +${item.product.price}">10000</div>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <div class="product-quantity">
+                                <input type="number" th:value="${item.quantity}" min="1" th:id="|quantity-input-product-${item.product.id}|" th:oninput="|updateQuantity(${item.product.id}, this.value);|" class="quantity-input">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-1">
+                            <div class="product-total" th:id="|total-amount-product-${item.product.id}|" th:text="'&#36;' +${item.product.price}*${item.quantity}"></div>
+                        </div>
+                        <div class="col-12 col-md-1">
+                            <div class="product-action"> <a href="javascript:void(0);" th:onclick="|deleteProductFromCart(${item.product.id});|" ><i class='bx bx-trash'></i></a></div>
                         </div>
                     </div>
-                    <section class="product">
-                        <div class="row">
-<!--                            <div class="col-2 col-md-1">-->
-<!--                                <div class="product-checkbox">-->
-<!--&lt;!&ndash;                                    <label class="stardust-checkbox">&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <input type="checkbox" class="stardust-checkbox-input" name="">&ndash;&gt;-->
-<!--&lt;!&ndash;                                    </label>&ndash;&gt;-->
-<!--                                </div>-->
-<!--                            </div>-->
-                            <div class="col-6 col-md-1">
-                                <div class="product-img">
-                                    <img class="product-cart-image" th:data-product-id="${cart.product.id}" th:data-file-name="${cart.product.productImg}" alt="Product Image">
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-5">
-                                <div class="product-name" th:text="${cart.product.name}">Product name</div>
-                            </div>
-                            <div class="col-12 col-md-2">
-                                <div class="product-price" th:text="'&#36;' +${cart.product.price}">10000</div>
-                            </div>
-                            <div class="col-12 col-md-2">
-                                <div class="product-quantity">
-                                    <input type="number" th:value="${cart.quantity}" min="1" th:id="|quantity-input-cart-${cart.product.id}|" th:oninput="|updateQuantity(${cart.product.id}, this.value);|" class="quantity-input">
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-1">
-                                <div class="product-total" th:text="'&#36;' +${cart.product.price}*${cart.quantity}"></div>
-                            </div>
-                            <div class="col-12 col-md-1">
-                                <div class="product-action"> <a href="javascript:void(0);" th:onclick="|deleteProductFromCart(${cart.product.id});|" ><i class='bx bx-trash'></i></a></div>
-                            </div>
-                        </div>
-                    </section>
                 </section>
-            </div>
+            </section>
         </div>
 
 

@@ -107,15 +107,19 @@ section{
 }
 
 
-/*.shop-name{*/
-/*    align-items: center;*/
-/*    color: rgba(0, 0, 0, .87);*/
-/*    display: flex;*/
-/*    font-weight: 500;*/
-/*    min-width: 50px;*/
-/*    -webkit-text-decoration: none;*/
-/*    text-decoration: none;*/
-/*}*/
+.shop-name{
+    align-items: center;
+    color: rgba(0, 0, 0, .87);
+    display: flex;
+    font-weight: 500;
+    min-width: 50px;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+}
+
+.shop-name:hover{
+    color: #888;
+}
 
 .product-checkbox{
     box-sizing: border-box;
@@ -144,10 +148,12 @@ section{
 }
 
 .product-name{
-    /* justify-content: start;
-    margin-left: 80px;
-    position: relative;
-    top: -99px; */
+    text-decoration: none;
+    color: rgba(0, 0, 0, .87);
+}
+
+.product-name:hover{
+    color: #888;
 }
 
 .product-price{

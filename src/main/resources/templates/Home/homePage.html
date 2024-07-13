@@ -158,7 +158,7 @@
                     <div class="horizontal-line"></div>
                     <div class="row">
                         <div class="col-6 col-md-2" th:each="product : ${products}">
-                            <a th:href="@{/product_detail(id=${product.id})}">
+                            <a th:href="@{/product_detail(id=${product.id}) }">
                                 <div class="card-item">
                                     <img class="card-img-top" th:data-product-id="${product.id}" th:data-file-name="${product.productImg}" alt="Product Image" >
                                     <div class="card-body">

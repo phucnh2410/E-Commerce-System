@@ -3,11 +3,9 @@ $(document).ready(function() {
 });
 
 async function getCart(){
-    const cartBody = document.querySelector("#cartBody");
-    const totalMoney  = document.querySelector("#totalMoney");
-    const totalProduct  = document.querySelector("#totalProduct");
+    const cartBody = document.querySelector("#seller");
     try {
-        const response = await fetch("/shopping_cart/fragment");
+        const response = await fetch("/shopping_cart/seller_fragment");
 
         if (!response.ok){
             throw new Error(response.statusText);
@@ -21,27 +19,7 @@ async function getCart(){
         cartBody.innerHTML = "";
         cartBody.innerHTML = carts;
     }catch (error) {
-        console.error(`There was a problem with the add product to cart operation:`, error);
-    }
-}
-
-async function getCartByProductId(productId){
-    const cartItem = document.querySelector("#cartItem-"+productId);
-    try {
-        const response = await fetch("/shopping_cart/fragment/"+productId);
-        if (!response.ok){
-            throw new Error(response.statusText);
-        }
-
-        const cart = await response.text();
-        if (!cartItem){
-            console.log('Element #cartItem not found in the response');
-        }
-
-        cartItem.innerHTML = "";
-        cartItem.innerHTML = cart;
-    }catch (error) {
-        console.error(`There was a problem with the update quantity in cart operation:`, error);
+        console.error(`There was a problem with the get cart operation:`, error);
     }
 }
 
@@ -85,6 +63,8 @@ async function addProductToCart(productId){
 }
 
 async function updateQuantity(productId, quantity) {
+    const quantityInput = document.getElementById("quantity-input-product-"+productId);
+    const totalAmount = document.getElementById("total-amount-product-"+productId);
     try {
         console.log("Quantity: "+quantity);
         console.log("Product id: "+productId);
@@ -102,7 +82,13 @@ async function updateQuantity(productId, quantity) {
             return;
         }
 
-        await getCartByProductId(productId);
+        const data = await response.json();
+
+        //update data into view
+        quantityInput.value = data.quantity;
+        totalAmount.innerText = '$' + (data.price * data.quantity);
+
+        // await getCart();
         const productCartImg = document.querySelectorAll(".product-cart-image");
 
         if (productCartImg){

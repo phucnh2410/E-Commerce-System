@@ -1,8 +1,6 @@
 package com.spring.ecommercesystem.restController;
 
 import com.spring.ecommercesystem.entities.Cart;
-import com.spring.ecommercesystem.entities.Product;
-import com.spring.ecommercesystem.entities.User;
 import com.spring.ecommercesystem.services.CartService;
 import com.spring.ecommercesystem.services.ProductService;
 import com.spring.ecommercesystem.services.UserService;
@@ -52,20 +50,30 @@ public class CartRestController {
     }
 
     @PostMapping("/quantity/{productId}")
-    public ResponseEntity<?> updateQuantity(@PathVariable("productId") Long productId, @RequestParam("quantity") int quantity){
+    public ResponseEntity<Map<String, Object>> updateQuantity(@PathVariable("productId") Long productId, @RequestParam("quantity") int quantity){
+        Map<String, Object> response = new HashMap<>();
         try {
             this.cartService.updateQuantity(productId, quantity);
-            return ResponseEntity.ok().build();
+            Cart cart = this.cartService.getCartByProductId(productId);
+
+            response.put("quantity", cart.getQuantity());
+            response.put("price", cart.getProduct().getPrice());
+            return ResponseEntity.ok().body(response);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
 
     @PostMapping("/add/{id}")
     public ResponseEntity<String> addProductToCart(@PathVariable("id") Long productId, @RequestParam("quantity") int quantity){
-        //Create Cart with an ID
-        this.cartService.createCartId();
+        //Get cart id to check cart existed
+        String cartId = this.cartService.getCartId();
+        if (cartId == null){
+            //Create Cart with an ID
+            this.cartService.createCartId();
+        }
 
         //Add product to cart
         this.cartService.addProductToCart(productId, quantity);
