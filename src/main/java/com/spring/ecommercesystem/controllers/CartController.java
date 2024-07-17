@@ -1,5 +1,7 @@
 package com.spring.ecommercesystem.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.ecommercesystem.temp.CartTemp;
 import com.spring.ecommercesystem.temp.UserCart;
 import com.spring.ecommercesystem.entities.*;
@@ -10,13 +12,12 @@ import com.spring.ecommercesystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Controller
@@ -73,12 +74,12 @@ public class CartController {
             userCarts.add(userCart);
         });
 
-        double totalMoney = this.cartService.getTotalAllItems();
-        Long numberOfItem = this.cartService.getTotalItemsInCart();
+//        double totalMoney = this.cartService.getTotalAllItems();
+//        Long numberOfItem = this.cartService.getTotalItemsInCart();
 
         model.addAttribute("userCarts", userCarts);
-        model.addAttribute("total", totalMoney);
-        model.addAttribute("totalNumberOfProduct", numberOfItem);
+//        model.addAttribute("total", totalMoney);
+//        model.addAttribute("totalNumberOfProduct", numberOfItem);
         return "ShoppingCart/shoppingCart";
     }
 
@@ -117,37 +118,60 @@ public class CartController {
         });
 
         model.addAttribute("userCarts", userCarts);
-        model.addAttribute("total", this.cartService.getTotalAllItems());
-        model.addAttribute("totalNumberOfProduct", this.cartService.getTotalItemsInCart());
+//        model.addAttribute("total", this.cartService.getTotalAllItems());
+//        model.addAttribute("totalNumberOfProduct", this.cartService.getTotalItemsInCart());
         return "ShoppingCart/shoppingCart :: sellerFrag";
     }
 
 
     @GetMapping("/checkout")
-    public String showCheckout(Model model){
-//        List<Cart> cartList = this.cartService.getCart();
-//        //Transfer data object
-//        List<CartTemp> cartTempList = new ArrayList<>();
-//
-//        cartList.stream().forEach(cart -> {
-//            Product product = this.productService.findById(cart.getProduct().getId());
-//
-//            CartTemp cartTemp = new CartTemp()
-//                    .setProduct(product)
-//                    .setUser(product.getUser())
-//                    .setQuantity(cart.getQuantity());
-//
-//            cartTempList.add(cartTemp);
-//        });
+    public String showCheckout(@RequestParam("data") String data, Model model) {
+        //Giải mã JSON thành object userCarts
+        ObjectMapper mapper = new ObjectMapper();
 
-        User currentUser = this.userService.getCurrentUser();
-        List<Address> addresses = currentUser.getAddresses();
-        List<PaymentMethod> paymentMethods = this.paymentService.findAll();
+        try {
+            List<UserCart> userCartsResponse = mapper.readValue(data, new TypeReference<List<UserCart>>() {});
 
-//        model.addAttribute("addresses", addresses);
-//        model.addAttribute("cartList", cartTempList);
-//        model.addAttribute("payments", paymentMethods);
-//        System.out.println("Cart list: "+cartTempList);
+            List<UserCart> userCarts = new ArrayList<>();
+
+            userCartsResponse.stream().forEach(userCart -> {
+                //Get Useer from the UserCart response
+                User user = this.userService.findById(userCart.getUser().getId());
+                List<CartTemp> cartTemps = new ArrayList<>();
+
+                userCart.getCartTemps().stream().forEach(cartTemp -> {
+                    //Get product from the cartTemp response
+                    Product product = this.productService.findById(cartTemp.getProduct().getId());
+                    int quantity = cartTemp.getQuantity();
+                    Double total = cartTemp.getTotal();
+                    //Set Product and ... into CartTemp
+                    CartTemp cartTempObject = new CartTemp()
+                            .setProduct(product)
+                            .setQuantity(quantity)
+                            .setTotal(total);
+                    //Add CartTemp Object into List
+                    cartTemps.add(cartTempObject);
+                });
+
+                //set User and CartTemp into UserCart
+                UserCart userCartObject = new UserCart()
+                        .setUser(user)
+                        .setCartTemps(cartTemps);
+                //Add UserCart into List
+                userCarts.add(userCartObject);
+            });
+
+            AtomicReference<Double> totalAmount = new AtomicReference<>(0.0);
+            userCarts.forEach(userCart -> {
+                userCart.getCartTemps().forEach(cartTemp -> {
+                    totalAmount.updateAndGet(v -> v + cartTemp.getTotal());
+                });
+            });
+            model.addAttribute("userCarts", userCarts);
+            model.addAttribute("totalAmount", totalAmount);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "Checkout/checkoutPage";
     }
 }

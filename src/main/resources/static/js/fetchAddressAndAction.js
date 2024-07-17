@@ -11,7 +11,7 @@ async function changeAddress(event){
 
         const addressOptions = addresses.reduce((options, address) => {
             options[address.id] =
-                address.phoneNumber+", "+address.street +" street, "+ address.wardAndCommune +" ward, "+ address.district +" district, "+ address.city +" city, "+address.country +" country";
+                address.phoneNumber+", "+address.street +" street, "+ address.wardAndCommune +" ward, "+ address.district +" district, "+ address.city +" city, "+address.country;
             return options;
         }, {});
 
@@ -19,7 +19,7 @@ async function changeAddress(event){
             title: 'Select Address',
             input: 'select',
             inputOptions: addressOptions,
-            inputPlaceholder: 'Select an address',
+            // inputPlaceholder: 'Select an address',
             showCancelButton: true,
             showDenyButton: true,
             denyButtonText: 'Add New Address',

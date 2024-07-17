@@ -63,7 +63,7 @@
                     <div class="shop-info">
                         <div class="shop-checkbox">
                             <label class="stardust-checkbox">
-                                <input type="checkbox" class="stardust-checkbox-input" name="">
+                                <input type="checkbox" class="stardust-checkbox-input seller-checkbox" th:data-seller-id="${seller.user.id}" name="">
                             </label>
                         </div>
                         <a th:href="@{/shop(id=${seller.user.id}) }" class="shop-name" th:text="${seller.user.fullName}"></a>
@@ -75,7 +75,7 @@
                         <div class="col-2 col-md-1">
                             <div class="product-checkbox">
                                 <label class="stardust-checkbox">
-                                    <input type="checkbox" class="stardust-checkbox-input" name="">
+                                    <input type="checkbox" class="stardust-checkbox-input product-checkbox" th:data-seller-id="${seller.user.id}" th:data-product-id="${item.product.id}" name="">
                                 </label>
                             </div>
                         </div>
@@ -94,11 +94,11 @@
                         </div>
                         <div class="col-12 col-md-2">
                             <div class="product-quantity">
-                                <input type="number" th:value="${item.quantity}" min="1" th:id="|quantity-input-product-${item.product.id}|" th:oninput="|updateQuantity(${item.product.id}, this.value);|" class="quantity-input">
+                                <input type="number"  th:value="${item.quantity}" min="1" th:id="|quantity-input-product-${item.product.id}|" th:oninput="|updateQuantity(${item.product.id}, this.value);|" class="quantity-input" th:data-product-id="${item.product.id}">
                             </div>
                         </div>
                         <div class="col-12 col-md-1">
-                            <div class="product-total" th:id="|total-amount-product-${item.product.id}|" th:text="'&#36;' +${item.product.price}*${item.quantity}"></div>
+                            <div class="product-total" th:data-product-id="${item.product.id}" th:id="|total-amount-product-${item.product.id}|" th:text="'&#36;' +${item.product.price}*${item.quantity}"></div>
                         </div>
                         <div class="col-12 col-md-1">
                             <div class="product-action"> <a href="javascript:void(0);" th:onclick="|deleteProductFromCart(${item.product.id});|" ><i class='bx bx-trash'></i></a></div>
@@ -109,55 +109,75 @@
         </div>
 
 
-        <!-- Checkout -->
-        <div class="row">
-            <div class="border-checkout">
-                <div class="col-1 col-md-1">
-                    <!-- <div><input type="checkbox" name="" id=""></div> -->
-                </div>
-
-                <div class="col-3 col-md-2">
-                    <div class="checkout-checkbox">
-                        <label class="stardust-checkbox">
-                            <input type="checkbox" class="stardust-checkbox-input" name="" id="">
-                            <span class="checkmark"></span>
-                        </label>
+<!--        <div class="checkout-container">-->
+            <!-- Checkout -->
+            <div class="row checkout-row">
+                <div class="border-checkout">
+                    <div class="col-1 col-md-1">
+                        <!-- <div><input type="checkbox" name="" id=""></div> -->
                     </div>
-                    <div class="title-select">Select Alls</div>
-                </div>
 
-                <div class=" col-md-2">
-                    <div class="btn-remove"><a href="">Remove</a></div>
-                </div>
+                    <div class="col-3 col-md-2">
+                        <div class="checkout-checkbox">
+                            <label class="stardust-checkbox">
+                                <input type="checkbox" class="stardust-checkbox-input" name="" id="">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="title-select">Select Alls</div>
+                    </div>
 
-                <div class=" col-md-2">
-                    <div class="checkout-quantity">Quantity of products: </div>
-                </div>
+                    <div class=" col-md-2">
+                        <div class="btn-remove"><a href="">Remove</a></div>
+                    </div>
 
-                <div class=" col-md-1">
-                    <div id="totalProduct" class="number-of-product" th:text="${totalNumberOfProduct}">19</div>
-                </div>
+                    <div class=" col-md-2">
+                        <div class="checkout-quantity">Quantity of products: </div>
+                    </div>
 
-                <div class="col-1 col-md-1">
-                    <div class="checkout-total">Totals:</div>
-                </div>
+                    <div class=" col-md-1">
+                        <div id="totalProduct" class="number-of-product">0</div>
+                    </div>
 
-                <div class="col-4 col-md-2">
-                    <div id="totalMoney" class="number-of-money" th:text="'&#36;' +${total}">1000000</div>
-                </div>
+                    <div class="col-1 col-md-1">
+                        <div class="checkout-total">Totals:</div>
+                    </div>
 
-                <div class="col-1 col-md-1">
-                    <div class="btn-purchase"><a th:href="@{/shopping_cart/checkout}">Purchase</a></div>
+                    <div class="col-4 col-md-2">
+                        <div id="totalMoney" class="number-of-money">0</div>
+                    </div>
+
+                    <div class="col-1 col-md-1">
+                        <div class="btn-purchase"><a id="purchase-link" href="#" onclick="checkoutAction()">Purchase</a></div>
+                    </div>
                 </div>
             </div>
-        </div>
+<!--        </div>-->
     </div>
 </main>
 
 <footer th:replace="fragments/footer :: footer"></footer>
 
+<script type="application/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        var checkoutRow = document.querySelector(".checkout-row");
+        var container = document.querySelector(".container");
+        var observer = new IntersectionObserver(function(entries) {
+            if (entries[0].intersectionRatio === 0) {
+                checkoutRow.classList.add("sticky-stop");
+            } else {
+                checkoutRow.classList.remove("sticky-stop");
+            }
+        }, { threshold: [0] });
+
+        observer.observe(container);
+    });
+</script>
+
 <!--Manage cart-->
 <script src="/js/fetchManageCart.js"></script>
+<!--fetch Checkout-->
+<script src="/js/fetchCheckout.js"></script>
 <!--Image (Product and Avatar)-->
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>

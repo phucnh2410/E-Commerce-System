@@ -1,6 +1,134 @@
 $(document).ready(function() {
+    var selectedSellers = {}; // an object to store seller info
+    //Lắng nghe sự kiện thay đổi trên tất cả các checkbox của seller
+    document.querySelectorAll('.seller-checkbox').forEach(function (sellerCheckbox){
+
+        var sellerId = sellerCheckbox.getAttribute('data-seller-id');
+        selectedSellers[sellerId] = {}; //init the array to store for each seller
+
+
+        sellerCheckbox.addEventListener('change', function (){
+            var isChecked = this.checked;
+
+            // Tìm tất cả các checkbox của sản phẩm tương ứng với seller
+            document.querySelectorAll('.product-checkbox[data-seller-id="'+sellerId+'"]').forEach(function (productCheckbox){
+                productCheckbox.checked = isChecked;
+            });
+
+            if (isChecked){
+                // Nếu checkbox của seller được chọn
+                selectedSellers[sellerId] = getSelectedProducts(sellerId);
+                console.log('Selected products for seller:', selectedSellers[sellerId]);
+                // updateTotalAmount();
+            }else {
+                // Nếu checkbox của seller bị bỏ chọn
+                selectedSellers[sellerId] = {};
+                console.log('No products selected for seller ' + sellerId);
+            }
+
+            updateTotalAmount()
+
+        });
+    });
+
+    // Lắng nghe sự kiện thay đổi trên tất cả các checkbox của sản phẩm
+    document.querySelectorAll('.product-checkbox').forEach(function (productCheckbox){
+        productCheckbox.addEventListener('change', function (){
+            var sellerId = this.getAttribute('data-seller-id');
+            selectedSellers[sellerId] = getSelectedProducts(sellerId);
+            console.log('Selected products for seller:', selectedSellers[sellerId]);
+
+            updateTotalAmount()
+        });
+    });
+
+
+
 
 });
+
+
+// Hàm để lấy thông tin các sản phẩm được chọn
+function getSelectedProducts(sellerId) {
+    var selectedSellers = [];
+
+    document.querySelectorAll('.seller-checkbox:checked').forEach(function (sellerCheckbox) {
+        var sellerId = sellerCheckbox.getAttribute('data-seller-id');
+        var selectedProducts = {};
+
+        document.querySelectorAll('.product-checkbox[data-seller-id="' + sellerId + '"]:checked').forEach(function (productCheckbox) {
+            var productId = productCheckbox.getAttribute('data-product-id');
+            var getQuantityInput = document.querySelector('.quantity-input[data-product-id="' + productId + '"]');
+            var getTotal = document.querySelector('.product-total[data-product-id="' + productId + '"]');
+
+            var productTotal = getTotal ? parseFloat(getTotal.textContent.trim().replace('$', '')) : 0;
+            var productQuantity = getQuantityInput ? parseInt(getQuantityInput.value) : 1;
+            selectedProducts[productId] = {
+                productId: productId,
+                quantity: productQuantity,
+                total: productTotal
+            };
+
+        });
+
+    });
+
+    // Nếu không tích vào seller mà chỉ tích vào sản phẩm, lấy seller của các sản phẩm đã tích
+    if (selectedSellers.length === 0) {
+        var selectedProducts = {};
+
+        // Lặp qua tất cả các sản phẩm được tích chọn
+        document.querySelectorAll('.product-checkbox:checked').forEach(function (productCheckbox) {
+            var sellerId = productCheckbox.getAttribute('data-seller-id');
+            var productId = productCheckbox.getAttribute('data-product-id');
+            var getQuantityInput = document.querySelector('.quantity-input[data-product-id="' + productId + '"]');
+            var getTotal = document.querySelector('.product-total[data-product-id="' + productId + '"]');
+
+            var productTotal = getTotal ? parseFloat(getTotal.textContent.trim().replace('$', '')) : 0;
+            var productQuantity = getQuantityInput ? parseInt(getQuantityInput.value) : 1;
+
+            if (!selectedProducts[sellerId]) {
+                selectedProducts[sellerId] = {};
+            }
+
+            selectedProducts[sellerId][productId] = {
+                productId: productId,
+                quantity: productQuantity,
+                total: productTotal
+            };
+        });
+
+        // Chuyển đổi selectedProducts thành dạng mảng selectedSellers để trả về
+        Object.keys(selectedProducts).forEach(function (sellerId) {
+            selectedSellers.push({
+                sellerId: sellerId,
+                products: selectedProducts[sellerId]
+            });
+        });
+    }
+
+    return selectedSellers;
+}
+
+function updateTotalAmount(){
+    var selectedSellers = getSelectedProducts();
+    var total = 0;
+    var numberOfProduct = 0;
+
+
+    // Duyệt qua từng seller trong mảng selectedSellers để tính tổng số tiền và số lượng sản phẩm
+    selectedSellers.forEach(function (seller) {
+        Object.keys(seller.products).forEach(function (productId) {
+            var product = seller.products[productId];
+            total += product.total;
+            numberOfProduct ++;
+        });
+    });
+    document.getElementById("totalProduct").innerText = numberOfProduct.toString();
+    document.getElementById("totalMoney").innerText = '$'+total.toFixed(1).toString();
+
+    return total;
+}
 
 async function getCart(){
     const cartBody = document.querySelector("#seller");
@@ -86,7 +214,7 @@ async function updateQuantity(productId, quantity) {
 
         //update data into view
         quantityInput.value = data.quantity;
-        totalAmount.innerText = '$' + (data.price * data.quantity);
+        totalAmount.innerText = '$' + (data.price * data.quantity).toFixed(1);
 
         // await getCart();
         const productCartImg = document.querySelectorAll(".product-cart-image");

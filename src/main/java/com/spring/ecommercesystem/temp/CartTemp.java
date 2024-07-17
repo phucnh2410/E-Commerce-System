@@ -7,6 +7,8 @@ public class CartTemp{
 
     private int quantity;
 
+    private Double total;
+
     public CartTemp() {
     }
 
@@ -30,6 +32,15 @@ public class CartTemp{
 
     public CartTemp setQuantity(int quantity) {
         this.quantity = quantity;
+        return this;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public CartTemp setTotal(Double total) {
+        this.total = total;
         return this;
     }
 

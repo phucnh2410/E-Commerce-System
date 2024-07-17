@@ -39,7 +39,7 @@ public class DownloadFile {
         // Chuyển đường dẫn sang dạng tuyệt đối.
         Path absolutePath = filePath.toAbsolutePath().normalize();
 
-        System.out.println(absolutePath);
+//        System.out.println(absolutePath);
 
         if (!Files.exists(absolutePath)){
             throw new FileNotFoundException(fileName + " was not found on the server");

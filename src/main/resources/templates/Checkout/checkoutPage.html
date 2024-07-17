@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6 col-md-3">Ngo Huynh Khang</div>
+                    <div class="col-6 col-md-3" th:text="${currentUser.fullName}"></div>
                     <div class="col-1 col-md-9" id="current-address">Thanh Phuoc, Giong Rieng, Kien Giang</div>
                 </div>
             </div>
@@ -70,67 +70,34 @@
 
     <!-- Products -->
     <div class="row">
-        <section class="shop-product-info">
+        <section class="shop-product-info" th:if="${userCarts}" th:each="seller : ${userCarts}">
             <div class="shop">
                 <div class="shop-info">
-                    <a href="" class="shop-name">Ohana Official Store</a>
+                    <a href="" class="shop-name" th:text="${seller.user.fullName}"></a>
                 </div>
             </div>
             <section class="product">
-                <div class="row">
+                <div class="row" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}">
                     <div class="col-md-7">
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="product-img"><img width="60px" height="60px"
-                                                              src="https://via.placeholder.com/100" alt="Product Image"></div>
+                                <div class="product-img">
+                                    <img class="product-checkout-image" width="60px" height="60px" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}" alt="Product Image">
+                                </div>
                             </div>
                             <div class="col-md-9">
-                                <div>Lăn khử mùi, ngăn tiết mồ hôi Old Spice USA (73g/85g)</div>
+                                <div th:text="${item.product.name}"></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <div style="color: orangered;">10000</div>
+                        <div style="color: orangered;" th:text="'&#36;' +${item.product.price}">10000</div>
                     </div>
                     <div class="col-md-1">
-                        <div>19</div>
+                        <div th:text="${item.quantity}">19</div>
                     </div>
                     <div class="col-md-2">
-                        <div style="color: orangered;">190000</div>
-                    </div>
-                </div>
-            </section>
-        </section>
-    </div>
-
-    <div class="row">
-        <section class="shop-product-info">
-            <div class="shop">
-                <div class="shop-info">
-                    <a href="" class="shop-name">Phuc Ngo Store</a>
-                </div>
-            </div>
-            <section class="product">
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="product-img"><img width="60px" height="60px"
-                                                              src="https://via.placeholder.com/100" alt="Product Image"></div>
-                            </div>
-                            <div class="col-md-9">
-                                <div>Lăn nách Old Spice USA (73g/85g)</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div style="color: orangered;">12000</div>
-                    </div>
-                    <div class="col-md-1">
-                        <div>19</div>
-                    </div>
-                    <div class="col-md-2">
-                        <div style="color: orangered;">228000</div>
+                        <div style="color: orangered;" th:text="'&#36;' +${item.total}">190000</div>
                     </div>
                 </div>
             </section>
@@ -161,8 +128,8 @@
                         <div>Payment total: </div>
                     </div>
                     <div class="col-6 col-md-6">
-                        <div>179000</div>
-                        <div>66000</div>
+                        <div style="color: orangered;" th:text="'&#36;' +${totalAmount}">179000</div>
+                        <div style="color: orangered;">66000</div>
                         <div class="payment-total">245000</div>
                     </div>
                 </div>
@@ -182,6 +149,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script src="/js/fetchPaymentMethodAndAction.js"></script>
 <script src="/js/fetchAddressAndAction.js"></script>
+<!--fetch checkout-->
+<script src="/js/fetchCheckout.js"></script>
 <!--Image (Product and Avatar)-->
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>

@@ -36,7 +36,7 @@ async function getRole(event){
         const roles = await response.json();
         const selectElement = document.getElementById('role');
         selectElement.innerHTML = '';
-        console.log(roles);
+        // console.log(roles);
 
         roles.forEach(role => {
             const option = document.createElement('option');

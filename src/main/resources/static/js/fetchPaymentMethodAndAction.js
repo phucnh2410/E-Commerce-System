@@ -17,7 +17,7 @@ async function changePaymentMethod(){
             title: 'Select Payment Method',
             input: 'select',
             inputOptions: inputOptions,
-            inputPlaceholder: 'Select a payment method',
+            // inputPlaceholder: 'Select a payment method',
             showCancelButton: true,
             inputValidator: (value) => {
                 return new Promise((resolve, reject) => {
