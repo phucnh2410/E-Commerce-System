@@ -167,6 +167,8 @@ public class CartController {
                     totalAmount.updateAndGet(v -> v + cartTemp.getTotal());
                 });
             });
+
+
             model.addAttribute("userCarts", userCarts);
             model.addAttribute("totalAmount", totalAmount);
         }catch (Exception e){

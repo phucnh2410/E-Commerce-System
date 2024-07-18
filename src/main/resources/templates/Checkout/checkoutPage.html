@@ -21,134 +21,224 @@
 
 <body>
 <header th:replace="fragments/header :: header"></header>
-<div class="container">
-    <h1>Checkout</h1>
 
-    <div class="row">
-        <div class="address">
-            <div class="col-md-10">
-                <div class="row">
-                    <div class="col-1 col-md-1">
-                        <svg class="position" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
-                             viewBox="0 0 384 512">
-                            <path
-                                    d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-                        </svg>
-                    </div>
-                    <div class="col-11 col-md-11 mb-3">
-                        Payment Address
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 col-md-3" th:text="${currentUser.fullName}"></div>
-                    <div class="col-1 col-md-9" id="current-address">Thanh Phuoc, Giong Rieng, Kien Giang</div>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="address-change"><a href="" id="change-address" onclick="changeAddress(event)">Change</a></div>
-            </div>
-        </div>
-    </div>
+<main>
+    <div class="container">
+        <h1>Checkout</h1>
 
-
-    <div class="row">
-        <div class="title">
-            <div class="col-md-7">
-                <div>Product</div>
-            </div>
-            <div class="col-md-2">
-                <div class="title-price">Price</div>
-            </div>
-            <div class="col-md-1">
-                <div class="title-quantity">Quantity</div>
-            </div>
-            <div class="col-md-2">
-                <div class="title-total">Total</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Products -->
-    <div class="row">
-        <section class="shop-product-info" th:if="${userCarts}" th:each="seller : ${userCarts}">
-            <div class="shop">
-                <div class="shop-info">
-                    <a href="" class="shop-name" th:text="${seller.user.fullName}"></a>
-                </div>
-            </div>
-            <section class="product">
-                <div class="row" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}">
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="product-img">
-                                    <img class="product-checkout-image" width="60px" height="60px" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}" alt="Product Image">
-                                </div>
-                            </div>
-                            <div class="col-md-9">
-                                <div th:text="${item.product.name}"></div>
-                            </div>
+        <div class="row">
+            <div class="address">
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-1 col-md-1">
+                            <svg class="position" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
+                                 viewBox="0 0 384 512">
+                                <path
+                                        d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                            </svg>
+                        </div>
+                        <div class="col-11 col-md-11 mb-3">
+                            Payment Address
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div style="color: orangered;" th:text="'&#36;' +${item.product.price}">10000</div>
+                    <div class="row">
+                        <div class="col-6 col-md-3" th:text="${currentUser.fullName}"></div>
+                        <div class="col-1 col-md-9" id="current-address">Thanh Phuoc, Giong Rieng, Kien Giang</div>
                     </div>
-                    <div class="col-md-1">
-                        <div th:text="${item.quantity}">19</div>
+                </div>
+                <div class="col-md-2">
+                    <div class="address-change"><a href="" id="change-address" onclick="changeAddress(event)">Change</a></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="title">
+                <div class="col-md-7">
+                    <div>Product</div>
+                </div>
+                <div class="col-md-2">
+                    <div class="title-price">Price</div>
+                </div>
+                <div class="col-md-1">
+                    <div class="title-quantity">Quantity</div>
+                </div>
+                <div class="col-md-2">
+                    <div class="title-total">Total</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div class="row" th:attr="data-user-carts=${userCarts}">
+            <section class="shop-product-info" th:if="${userCarts}" th:each="seller : ${userCarts}" >
+                <div class="shop">
+                    <div class="shop-info">
+                        <a href="" class="shop-name" th:text="${seller.user.fullName}"></a>
                     </div>
-                    <div class="col-md-2">
-                        <div style="color: orangered;" th:text="'&#36;' +${item.total}">190000</div>
+                </div>
+                <section class="product">
+                    <div class="row" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}">
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="product-img">
+                                        <img class="product-checkout-image" width="60px" height="60px" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}" alt="Product Image">
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div th:text="${item.product.name}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div style="color: orangered;" th:text="'&#36;' +${item.product.price}">10000</div>
+                        </div>
+                        <div class="col-md-1">
+                            <div th:text="${item.quantity}">19</div>
+                        </div>
+                        <div class="col-md-2">
+                            <div style="color: orangered;" th:text="'&#36;' +${item.total}">190000</div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </div>
+
+
+        <div class="row">
+            <section >
+                <div class="voucher">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div>Vouchers</div>
+                        </div>
+                        <div class="col-9 col-md-3">
+                            <div id="selected-voucher" style="color: orangered;"></div>
+                        </div>
+                        <div class="col-3 col-md-2">
+                            <div class="voucher-option-btn"><a href="#" id="voucher-option-btn" onclick="chooseVoucher()">Choose</a></div>
+                        </div>
                     </div>
                 </div>
             </section>
-        </section>
-    </div>
+        </div>
 
-    <div class="row">
-        <section class="payment">
-            <div class="payment-methods">
-                <div class="row">
-                    <div class="col-md-7">
-                        <div>Payment Methods</div>
-                    </div>
-                    <div class="col-9 col-md-3">
-                        <div id="selected-payment-method">Thanh Toan Khi Nhan Hang</div>
-                    </div>
-                    <div class="col-3 col-md-2">
-                        <div class="payment-change"><a href="#" id="change-payment-method" onclick="changePaymentMethod()">Change</a></div>
+        <div class="row">
+            <section class="payment">
+                <div class="payment-methods">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div>Payment Methods</div>
+                        </div>
+                        <div class="col-9 col-md-3">
+                            <div id="selected-payment-method">Thanh Toan Khi Nhan Hang</div>
+                        </div>
+                        <div class="col-3 col-md-2">
+                            <div class="payment-change"><a href="#" id="change-payment-method" onclick="changePaymentMethod()">Change</a></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <section class="payment-info">
-                <div class="row">
-                    <div class="col-6 col-md-2">
-                        <div>Total of product: </div>
-                        <div>Shipping fee: </div>
-                        <div>Payment total: </div>
+                <section class="payment-info">
+                    <div class="row">
+                        <div class="col-6 col-md-2">
+                            <div>Total of product: </div>
+                            <div>Vouchers: </div>
+                            <div>Shipping fee: </div>
+                            <div>Payment total: </div>
+                        </div>
+                        <div class="col-6 col-md-6">
+                            <div id="total-amount" style="color: orangered;" th:text="'&#36;' +${totalAmount}">179000</div>
+                            <div id="discount-amount" style="color: orangered;">0.0</div>
+                            <div style="color: orangered;">66000</div>
+                            <div id="payment-total" class="payment-total"></div>
+                        </div>
                     </div>
-                    <div class="col-6 col-md-6">
-                        <div style="color: orangered;" th:text="'&#36;' +${totalAmount}">179000</div>
-                        <div style="color: orangered;">66000</div>
-                        <div class="payment-total">245000</div>
+                </section>
+                <div class="payment-btn">
+                    <div class="row">
+                        <div class="btn-checkout"><button><a href="#" onclick="paymentAction()">Checkout</a></button></div>
                     </div>
                 </div>
             </section>
-            <div class="payment-btn">
-                <div class="row">
-                    <div class="btn-checkout"><button><a href="">Checkout</a></button></div>
+        </div>
+
+
+        <!-- popup section -->
+        <section>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <!-- <span class="close">&times;</span> -->
+                    <h5>Add New</h5>
+                    <form id="product-form" action="#" method="post">
+                        <div class="row">
+                            <div class="form-group row col-md-6">
+                                <input type="hidden" id="product-id">
+
+                                <div class="form-group">
+                                    <input type="text" id="product-name" placeholder="Product Name">
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="text" id="product-brand" placeholder="Product Brand">
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="text" id="product-price" placeholder="Product Price">
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="number" min="1" max="999" id="product-stock" placeholder="Number of product">
+                                </div>
+
+                                <div class="form-group">
+                                    <select id="category">
+                                        <!--                                        <option value="">Choose category</option>-->
+                                        <!--                                        <option value="">Choose category</option>-->
+                                        <!--                                        <option value="">Choose category</option>-->
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="file" id="product-file">
+                                </div>
+                            </div>
+                            <div class="form-group row col-md-6">
+                                <div class="form-group">
+                                    <!-- <label for="">Product Description</label> -->
+                                    <input name="" id="product-description" placeholder="Product Description">
+
+                                    </input>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p id="product-message" class="message"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-btn">
+                            <button id="btn-save" type="button" onclick="saveProduct(event)">Save</button>
+                            <button class="btn-done" type="button">Done</button>
+                        </div>
+
+                    </form>
+
                 </div>
             </div>
         </section>
-    </div>
 
-</div>
+    </div>
+</main>
 <footer th:replace="fragments/footer :: footer"></footer>
 
 <!-- SweetAlert2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script src="/js/fetchPaymentMethodAndAction.js"></script>
 <script src="/js/fetchAddressAndAction.js"></script>
+<script src="/js/fetchVoucher.js"></script>
 <!--fetch checkout-->
 <script src="/js/fetchCheckout.js"></script>
 <!--Image (Product and Avatar)-->

@@ -2,38 +2,21 @@ $(document).ready(function() {
 
 });
 
-function transferObject(){
-    const datas = getSelectedProducts();
+function paymentAction(){
+    const userCartElement = document.querySelector('.row[data-user-carts]');
+    const userCartData = userCartElement.getAttribute('data-user-carts');
 
-    return datas.map(data => ({
-        user: {id: data.sellerId},
-        cartTemps: Object.values(data.products).map(cartTemp => ({
-            product: {id: cartTemp.productId},
-            quantity: cartTemp.quantity,
-            total: cartTemp.total
-        }))
-    }));
-}
-
-
-
-function checkoutAction(event){
     try {
-        const data = transferObject();
+        const userCartObject = JSON.parse(userCartData);
 
-        const purchaseLink = document.getElementById("purchase-link");
-        if (purchaseLink){
-            const queryString = new URLSearchParams({ data: JSON.stringify(data) }).toString();
-            purchaseLink.setAttribute('href', `/shopping_cart/checkout?${queryString}`);
-
-            window.location.href = purchaseLink.href;
-            //redirect to url = /shopping_cart/checkout?data=..........
-        }
-
-    }catch (error) {
-        console.error('An error with the checkout action operation:', error);
+        console.log(userCartObject);
+    }catch (e){
+        console.error("Cannot parse the data!!!")
     }
 }
+
+
+
 
 
 

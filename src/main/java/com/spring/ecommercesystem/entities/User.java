@@ -1,6 +1,5 @@
 package com.spring.ecommercesystem.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +20,8 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User implements Serializable{
+    //-1240413865622714963
+    private static final long serialVersionUID = -1240413865622714963L;
     @Transient
     public String getAvatarPath(){
         if (this.id == null || this.avatar == null) return null;
@@ -74,10 +75,5 @@ public class User implements Serializable{
             CascadeType.REFRESH, CascadeType.REMOVE})
     @JsonManagedReference("user-orders")
     private List<Order> orders;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.REMOVE})
-    @JsonManagedReference("user-deliveryInfos")
-    private List<DeliveryInfo> deliveryInfos;
 
 }
