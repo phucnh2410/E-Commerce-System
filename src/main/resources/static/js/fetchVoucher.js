@@ -40,7 +40,8 @@ async function chooseVoucher(){
         if (optionResult.isConfirmed) {
             const selectedVoucher = voucherMap[optionResult.value];
             document.getElementById('selected-voucher').innerText = "-"+selectedVoucher+"%";
-            // document.getElementById('selected-voucher').innerText = "-"+selectedVoucher+"%";
+            document.getElementById('data-voucher-id').value = optionResult.value;
+            // console.log("voucher id: "+optionResult.value);
 
             selectedVoucherPercentage = selectedVoucher;
         }

@@ -33,6 +33,7 @@ async function changePaymentMethod(){
         if (result.isConfirmed) {
             const selectedMethod = inputOptions[result.value];
             document.getElementById('selected-payment-method').innerText = selectedMethod;
+            document.getElementById('data-payment-id').value = result.value;
         }
     }catch (error) {
         console.error('Error fetching payment methods:', error);

@@ -37,6 +37,7 @@ async function changeAddress(event){
         if (isConfirmed && selectedAddressId) {
             const selectedAddress = addressOptions[selectedAddressId];
             document.getElementById('current-address').innerText = selectedAddress;
+            document.getElementById('data-address-id').value = selectedAddressId;
         } else if (isDenied){
             await addNewAddress();
         }else {
@@ -160,7 +161,7 @@ async function addNewAddress(){
 
         const addedAddress = await response.json();
         Swal.fire('Success', 'New address added successfully!', 'success');
-        document.getElementById('current-address').innerText = addedAddress.phoneNumber+", "+addedAddress.street +", "+ addedAddress.wardAndCommune +", "+ addedAddress.district +", "+ addedAddress.city +", "+addedAddress.country;;
+        document.getElementById('current-address').innerText = addedAddress.phoneNumber+", "+addedAddress.street +", "+ addedAddress.wardAndCommune +", "+ addedAddress.district +", "+ addedAddress.city +", "+addedAddress.country;
 
 
     } catch (error) {

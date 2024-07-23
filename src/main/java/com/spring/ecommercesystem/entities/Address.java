@@ -52,7 +52,7 @@ public class Address {
     //one to many
     @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH, CascadeType.REMOVE})
-    @JsonManagedReference("address-orders")
+    @JsonBackReference("address-orders")
     private List<Order> orders;
 
 

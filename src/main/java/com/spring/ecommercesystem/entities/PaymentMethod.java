@@ -1,5 +1,6 @@
 package com.spring.ecommercesystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class PaymentMethod {
     //One to One
     @OneToMany(mappedBy = "paymentMethod", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH})
-    @JsonManagedReference("payment-order")
+    @JsonBackReference("payment-orders")
     private List<Order> orders;
 
 }

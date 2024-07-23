@@ -131,9 +131,9 @@ function updateTotalAmount(){
 }
 
 function transferObject(){
-    const datas = getSelectedProducts();
+    const data = getSelectedProducts();
 
-    return datas.map(data => ({
+    return data.map(data => ({
         user: {id: data.sellerId},
         cartTemps: Object.values(data.products).map(cartTemp => ({
             product: {id: cartTemp.productId},

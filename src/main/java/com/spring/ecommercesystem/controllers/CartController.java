@@ -132,34 +132,34 @@ public class CartController {
         try {
             List<UserCart> userCartsResponse = mapper.readValue(data, new TypeReference<List<UserCart>>() {});
 
-            List<UserCart> userCarts = new ArrayList<>();
+            List<UserCart> userCarts = transferJSONtoObject(userCartsResponse);
 
-            userCartsResponse.stream().forEach(userCart -> {
-                //Get Useer from the UserCart response
-                User user = this.userService.findById(userCart.getUser().getId());
-                List<CartTemp> cartTemps = new ArrayList<>();
-
-                userCart.getCartTemps().stream().forEach(cartTemp -> {
-                    //Get product from the cartTemp response
-                    Product product = this.productService.findById(cartTemp.getProduct().getId());
-                    int quantity = cartTemp.getQuantity();
-                    Double total = cartTemp.getTotal();
-                    //Set Product and ... into CartTemp
-                    CartTemp cartTempObject = new CartTemp()
-                            .setProduct(product)
-                            .setQuantity(quantity)
-                            .setTotal(total);
-                    //Add CartTemp Object into List
-                    cartTemps.add(cartTempObject);
-                });
-
-                //set User and CartTemp into UserCart
-                UserCart userCartObject = new UserCart()
-                        .setUser(user)
-                        .setCartTemps(cartTemps);
-                //Add UserCart into List
-                userCarts.add(userCartObject);
-            });
+//            userCartsResponse.stream().forEach(userCart -> {
+//                //Get Useer from the UserCart response
+//                User user = this.userService.findById(userCart.getUser().getId());
+//                List<CartTemp> cartTemps = new ArrayList<>();
+//
+//                userCart.getCartTemps().stream().forEach(cartTemp -> {
+//                    //Get product from the cartTemp response
+//                    Product product = this.productService.findById(cartTemp.getProduct().getId());
+//                    int quantity = cartTemp.getQuantity();
+//                    Double total = cartTemp.getTotal();
+//                    //Set Product and ... into CartTemp
+//                    CartTemp cartTempObject = new CartTemp()
+//                            .setProduct(product)
+//                            .setQuantity(quantity)
+//                            .setTotal(total);
+//                    //Add CartTemp Object into List
+//                    cartTemps.add(cartTempObject);
+//                });
+//
+//                //set User and CartTemp into UserCart
+//                UserCart userCartObject = new UserCart()
+//                        .setUser(user)
+//                        .setCartTemps(cartTemps);
+//                //Add UserCart into List
+//                userCarts.add(userCartObject);
+//            });
 
             AtomicReference<Double> totalAmount = new AtomicReference<>(0.0);
             userCarts.forEach(userCart -> {
@@ -175,6 +175,41 @@ public class CartController {
             e.printStackTrace();
         }
         return "Checkout/checkoutPage";
+    }
+
+
+
+    public List<UserCart> transferJSONtoObject(List<UserCart> userCartsResponse){
+        List<UserCart> userCarts = new ArrayList<>();
+
+        userCartsResponse.stream().forEach(userCart -> {
+            //Get Useer from the UserCart response
+            User user = this.userService.findById(userCart.getUser().getId());
+            List<CartTemp> cartTemps = new ArrayList<>();
+
+            userCart.getCartTemps().stream().forEach(cartTemp -> {
+                //Get product from the cartTemp response
+                Product product = this.productService.findById(cartTemp.getProduct().getId());
+                int quantity = cartTemp.getQuantity();
+                Double total = cartTemp.getTotal();
+                //Set Product and ... into CartTemp
+                CartTemp cartTempObject = new CartTemp()
+                        .setProduct(product)
+                        .setQuantity(quantity)
+                        .setTotal(total);
+                //Add CartTemp Object into List
+                cartTemps.add(cartTempObject);
+            });
+
+            //set User and CartTemp into UserCart
+            UserCart userCartObject = new UserCart()
+                    .setUser(user)
+                    .setCartTemps(cartTemps);
+            //Add UserCart into List
+            userCarts.add(userCartObject);
+        });
+
+        return userCarts;
     }
 }
 

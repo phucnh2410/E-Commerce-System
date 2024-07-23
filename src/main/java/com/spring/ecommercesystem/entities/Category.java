@@ -1,5 +1,7 @@
 package com.spring.ecommercesystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +29,7 @@ public class Category implements Serializable {
 
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.REFRESH)
-    @JsonManagedReference("category-products")
+    @JsonBackReference("category-products")
+//    @JsonIgnoreProperties({"category"})
     private List<Product> products;
 }

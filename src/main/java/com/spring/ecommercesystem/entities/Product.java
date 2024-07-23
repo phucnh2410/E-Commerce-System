@@ -2,6 +2,7 @@ package com.spring.ecommercesystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +18,7 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
-//    private static final long serialVersionUID = 3032430709415055160L;
+    private static final long serialVersionUID = 3032430709415055160L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +46,9 @@ public class Product implements Serializable {
 //    @JsonIgnore
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "category_id")
+//    @JsonManagedReference("category-products")
     @JsonBackReference("category-products")
+//    @JsonIgnoreProperties({"products"})
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
@@ -65,26 +68,7 @@ public class Product implements Serializable {
     @JsonManagedReference("product-feedbacks")
     private List<Feedback> feedbacks;
 
-    //many to many
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.REMOVE})
-    @JoinTable(
-            name = "order_detail",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
-    )
-    private List<Order> orders;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails;
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", stock=" + stock +
-                ", brand='" + brand + '\'' +
-                ", productImg='" + productImg + '\''+
-                '}';
-    }
 }

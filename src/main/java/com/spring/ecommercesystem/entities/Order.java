@@ -1,6 +1,7 @@
 package com.spring.ecommercesystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.util.List;
-
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 
 @Entity
 @Table(name = "orders")
@@ -47,42 +43,149 @@ public class Order {
     @Column(name = "total_amount")
     private Double totalAmount;
 
+    //One to many
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST,
+            CascadeType.REFRESH}, orphanRemoval = true)
+    private List<OrderDetail> orderDetails;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH})
+    //many to One
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "address_id")
     @JsonBackReference("address-orders")
     private Address address;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "voucher_id")
     @JsonBackReference("voucher-orders")
     private Voucher voucher;
 
-    //many to One
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
-            CascadeType.REFRESH})
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     @JsonBackReference("user-orders")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
-            CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "paymentMethod_id")
-    @JsonBackReference("payment-order")
+    @JsonBackReference("payment-orders")
     private PaymentMethod paymentMethod;
 
-    //Many to many
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.REMOVE})
-    @JoinTable(
-            name = "order_detail",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products;
 
 
+    public Order(Long id, Date orderedDate, Date deliveredDate, Date receivedDate, Status status, Double totalAmount, List<OrderDetail> orderDetails, Address address, Voucher voucher, User user, PaymentMethod paymentMethod) {
+        this.id = id;
+        this.orderedDate = orderedDate;
+        this.deliveredDate = deliveredDate;
+        this.receivedDate = receivedDate;
+        this.status = status;
+        this.totalAmount = totalAmount;
+        this.orderDetails = orderDetails;
+        this.address = address;
+        this.voucher = voucher;
+        this.user = user;
+        this.paymentMethod = paymentMethod;
+    }
+
+    public Order() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Order setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public Date getOrderedDate() {
+        return orderedDate;
+    }
+
+    public Order setOrderedDate(Date orderedDate) {
+        this.orderedDate = orderedDate;
+        return this;
+    }
+
+    public Date getDeliveredDate() {
+        return deliveredDate;
+    }
+
+    public Order setDeliveredDate(Date deliveredDate) {
+        this.deliveredDate = deliveredDate;
+        return this;
+    }
+
+    public Date getReceivedDate() {
+        return receivedDate;
+    }
+
+    public Order setReceivedDate(Date receivedDate) {
+        this.receivedDate = receivedDate;
+        return this;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Order setStatus(Status status) {
+        this.status = status;
+        return this;
+    }
+
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public Order setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
+        return this;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public Order setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+        return this;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public Order setAddress(Address address) {
+        this.address = address;
+        return this;
+    }
+
+    public Voucher getVoucher() {
+        return voucher;
+    }
+
+    public Order setVoucher(Voucher voucher) {
+        this.voucher = voucher;
+        return this;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Order setUser(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public Order setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+        return this;
+    }
 }
 
