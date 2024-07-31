@@ -36,7 +36,7 @@ public class CartTemp{
     }
 
     public Double getTotal() {
-        return total;
+        return (product.getPrice()*quantity);
     }
 
     public CartTemp setTotal(Double total) {

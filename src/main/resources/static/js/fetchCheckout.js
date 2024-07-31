@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    showPopUpNotice();
 });
 
 async function paymentAction(){
@@ -74,23 +74,65 @@ async function paymentAction(){
                 body: JSON.stringify(orderTemp)
             });
 
-
             if (!response.ok) {
-                const result = await response.text();
+                const result = await response.json();
                 console.log(result.message);
+                showPopUpNotice(result.message);
+                return;
             }
-
+            const result = await response.json();
+            showPopUpNotice(result);
             await showNumberOfProductInCartIcon();
-
 
         }catch (error) {
             console.error('An error with the ordered operation:', error);
         }
 
-
     }catch (e){
         console.error("Cannot parse the data!!!")
     }
+}
+
+function showPopUpNotice(result){
+    // result = "You ordered successful";
+    const modal = document.getElementById("myModal");
+    const done = document.getElementsByClassName("btn-done")[0];
+    const viewOrderDetail = document.getElementById('btn-view');
+
+    if (result && result.order) {
+        modal.style.display = "block";
+        setTimeout(function () {
+            modal.classList.add("show");
+        }, 10);
+        document.getElementById('order-message').innerText = result.message;
+        document.getElementById('order-id').innerText = result.order.id;
+        document.getElementById('final-total-amount').innerText = "$"+result.order.totalAmount;
+        document.getElementById('address').innerText = result.address.street+", "
+            +result.address.wardAndCommune+", "
+            +result.address.district+", "
+            +result.address.city;
+        document.getElementById('payment-method').innerText = result.payment.name;
+    }
+
+    viewOrderDetail.addEventListener("click", function (){
+        if (result && result.order && result.order.id) {
+            const orderId = result.order.id;
+            // Update href attribute of the a tag
+            viewOrderDetail.setAttribute('href', `/order?id=${orderId}`);
+            // Execute direction
+            window.location.href = viewOrderDetail.href;
+        }else {
+            console.error('Order ID does not exist in the result variable');
+        }
+    });
+
+    done.addEventListener("click", function () {
+        modal.classList.remove("show");
+        setTimeout(function () {
+            modal.style.display = "none";
+        }, 500);
+    });
+
 }
 
 

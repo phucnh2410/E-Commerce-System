@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.com">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <title>Order Management</title>
+    <link rel="stylesheet" th:href="@{/css/orderManagement.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+    <!-- Icons link -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+</head>
+
+<body>
+<!--<header th:replace="fragments/header :: header"></header>-->
+
+<main>
+    <div class="container">
+        <h1>Order Management</h1>
+        <div class="btn-back">
+            <a th:href="@{/}"><button><i class='bx bx-arrow-back'></i> Back</button></a>
+        </div>
+
+
+        <div class="order-cover" th:if="${orderTemps}" th:each="order : ${orderTemps}">
+            <a th:href="@{/order(id=${order.id}) }">
+                <!-- Order Info -->
+                <div class="row">
+                    <div class="order-infomation">
+                        <div class="order-code">
+                            <span>Order ID: </span>
+                            <span th:text="${order.id}"></span>
+                        </div>
+                        |
+                        <div style="color: orangered;" class="order-status">
+                            <span>Status: </span>
+                            <span th:text="${order.status}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products -->
+                <div class="row">
+                    <section class="shop-product-info" th:if="${order.userCarts}" th:each="seller : ${order.userCarts}">
+                        <div class="shop">
+                            <div class="shop-info">
+                                <a th:href="@{/shop(id=${seller.user.id})}" class="seller-name" th:text="${seller.user.fullName}"></a>
+                            </div>
+                        </div>
+                        <section class="product" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}">
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <div >
+                                        <img width="60px" height="60px" class="product-order-img" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}">
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div th:text="${item.product.name}"></div>
+                                    <div class="">
+                                        <div style="color: orangered;" th:text="'&#36;' +${item.product.price}"></div>
+                                    </div>
+                                    <div class="">
+                                        <div th:text="'x' +${item.quantity}"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 product-total">
+                                    <div style="color: orangered;" th:text="'&#36;' +${item.total}"></div>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                </div>
+
+                <!-- Payment -->
+                <div class="row">
+                    <section class="payment-info">
+                        <div class="row">
+                            <div class="col-6 col-md-2 payment-title">
+                                <div style="color: orangered; font-size: 20px; font-weight: 400;">Total amount: </div>
+                            </div>
+                            <div class="col-6 col-md-2 payment-value">
+                                <div style="color: orangered; font-size: 20px; font-weight: 400;" id="payment-total" class="payment-total" th:text="'&#36;' +${order.finalTotal}">$10000</div>
+                            </div>
+                        </div>
+<!--                        <div class="row">-->
+<!--                            <div class="payment-btn">-->
+<!--                                <div class="btn-cancel">-->
+<!--                                    <a href="#">-->
+<!--                                        <button type="button">-->
+<!--                                            Cancel-->
+<!--                                        </button>-->
+<!--                                    </a>-->
+<!--                                </div>-->
+<!--                                <div class="btn-return">-->
+<!--                                    <a href="#">-->
+<!--                                        <button>-->
+<!--                                            Return and Refunds-->
+<!--                                        </button>-->
+<!--                                    </a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </section>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+<!--Image (Product and Avatar)-->
+<script src="/js/getErrorImage.js"></script>
+<script src="/js/fetchImageToView.js"></script>
+<script src="/js/fetchSearch.js"></script>
+<!--Header and Navbar-->
+<script src="/js/fetchCategoryInNavbar.js"></script>
+<script src="/js/scrollHeader.js"></script>
+<script src="/js/showMenu.js"></script>
+<script src="/js/submenu.js"></script>
+<script src="/js/getCsrfToken.js"></script>
+
+</body>
+
+</html>

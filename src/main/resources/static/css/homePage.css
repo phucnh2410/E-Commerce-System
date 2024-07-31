@@ -109,6 +109,11 @@ main .container{
     font-size: 20px;
 }
 
+/*Product Card*/
+.card-cover .card-item{
+    height: 283px;
+}
+
 .card-img-top {
     width: 100%;
     border-top-left-radius: 8px;

@@ -48,5 +48,5 @@ public class Voucher {
     @OneToMany(mappedBy = "voucher", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH, CascadeType.REMOVE})
     @JsonBackReference("voucher-orders")
-    private List<Order> order;
+    private List<Order> orders;
 }

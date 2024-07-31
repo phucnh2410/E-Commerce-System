@@ -94,8 +94,6 @@ public class OrderRestController {
             //Loop through each cartTemp to get product and quantity to set it into each orderDetail
             defectiveUserCarts.stream().forEach(userCart -> {
                 userCart.getCartTemps().stream().forEach(cartTemp -> {
-//                    Product product = this.productService.findById()
-//                    OrderDetail orderDetail = new OrderDetail();
                     OrderDetail orderDetail = this.orderDetailService.addProductToOrder(order, cartTemp.getProduct(), cartTemp.getQuantity());
                     orderDetails.add(orderDetail);
                 });
@@ -119,16 +117,17 @@ public class OrderRestController {
                 );
             }
 
-
             response.put("order", order);
-            response.put("message", "You ordered successful, And here your order id"+order.getId());
+            response.put("address", this.addressService.findById(orderTempResponse.getAddress().getId()));
+            response.put("payment", this.paymentService.findById(orderTempResponse.getPaymentMethod().getId()));
+            response.put("message", "You ordered successful");
 
         }catch (Exception e){
             e.printStackTrace();
         }
 
-
         return ResponseEntity.ok().body(response);
+
     }
 
 

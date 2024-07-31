@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -43,4 +44,31 @@ public class ProductController {
 
         return "Product/productManagement :: productManagementFrag";
     }
+
+    @GetMapping("/search")
+    public String productSearch(@RequestParam("name") String name, Model model){
+        List<Product> products = this.productService.findByName(name);
+        model.addAttribute("products", products);
+        return "Product/productSearching";
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

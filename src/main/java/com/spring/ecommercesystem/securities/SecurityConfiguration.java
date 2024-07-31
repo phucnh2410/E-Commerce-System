@@ -51,7 +51,7 @@ public class SecurityConfiguration {
         httpSecurity.authorizeHttpRequests(configurer -> configurer
                         .requestMatchers("/api/**").permitAll()
 //                        .requestMatchers("/").permitAll()  /product_detail ?id=24   /shop ?id=
-                        .requestMatchers( "/", "/product_detail/**", "/shop/**", "/categories/**").permitAll()
+                        .requestMatchers( "/", "/product_detail/**", "/shop/**", "/categories/**", "/products/search/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/icons/**", "/src/main/resources/static/userAvatar/**").permitAll()
 //                        .requestMatchers("/home/login").permitAll()
                         .requestMatchers("/logout").permitAll()

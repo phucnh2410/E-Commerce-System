@@ -41,6 +41,8 @@ public class ProductRestController {
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
+
+
     @GetMapping("{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") Long id){
         Product product = this.productService.findById(id);

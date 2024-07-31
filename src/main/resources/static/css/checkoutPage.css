@@ -90,12 +90,12 @@ section {
     margin-bottom: 30px;
 }
 
-.shop-name {
+.seller-name {
     color: black;
     text-decoration: none;
 }
 
-.shop-name:hover {
+.seller-name:hover {
     color: #ff445c;
 }
 
@@ -195,6 +195,81 @@ section .payment-methods {
 
 .btn-checkout button a:hover {
     color: #f68190;
+}
+
+.modal {
+    font-weight: 400;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+    opacity: 0; /* Bắt đầu với độ mờ */
+    transition: opacity 0.5s ease;
+}
+
+/* Show Modal */
+.modal.show {
+    display: block;
+    opacity: 1; /* Hiển thị modal với độ mờ 1 */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 700px;
+    transform: translateY(-20px); /* Di chuyển modal lên trên một chút */
+    transition: transform 0.3s ease;
+}
+
+/* Slide in Effect */
+.modal.show .modal-content {
+    transform: translateY(0); /* Đưa modal về vị trí bình thường */
+}
+
+.modal-content .form-btn{
+    margin-top: 20px;
+}
+
+.modal-content .form-btn button{
+    font-weight: 300;
+    margin-right: 13px;
+    width: 130px;
+    border: 1px solid #808080;
+    background-color: #fff;
+    border-radius: 2px;
+    color: rgb(110, 107, 107);
+}
+
+/*.modal-content .form-btn a{*/
+/*    font-weight: 300;*/
+/*    margin-right: 13px;*/
+/*    width: 130px;*/
+/*    height: 28px;*/
+/*    border: 1px solid #808080;*/
+/*    background-color: #fff;*/
+/*    border-radius: 2px;*/
+/*    color: rgb(110, 107, 107);*/
+/*    text-decoration: none;*/
+/*    text-align: center;*/
+/*}*/
+/*.modal-content .form-btn .btn-view{*/
+/*    margin-top: -5px;*/
+/*    width: 160px;*/
+/*}*/
+
+.modal-content .form-btn button:hover{
+    background-color: rgb(248, 240, 230);
 }
 
 @media (max-width: 1000px) {

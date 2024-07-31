@@ -66,7 +66,7 @@
                                 <input type="checkbox" class="stardust-checkbox-input seller-checkbox" th:data-seller-id="${seller.user.id}" name="">
                             </label>
                         </div>
-                        <a th:href="@{/shop(id=${seller.user.id}) }" class="shop-name" th:text="${seller.user.fullName}"></a>
+                        <a th:href="@{/shop(id=${seller.user.id}) }" class="seller-name" th:text="${seller.user.fullName}"></a>
                     </div>
                 </div>
 <!--                    Products of seller-->
@@ -181,6 +181,7 @@
 <!--Image (Product and Avatar)-->
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>
+<script src="/js/fetchSearch.js"></script>
 <!--Header and Navbar-->
 <script src="/js/fetchCategoryInNavbar.js"></script>
 <script src="/js/scrollHeader.js"></script>

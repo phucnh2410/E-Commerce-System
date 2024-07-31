@@ -76,7 +76,7 @@
             <section class="shop-product-info" th:if="${userCarts}" th:each="seller : ${userCarts}" >
                 <div class="shop">
                     <div class="shop-info">
-                        <a href="" class="shop-name" th:data-seller-id="${seller.user.id}" th:text="${seller.user.fullName}"></a>
+                        <a href="" class="seller-name" th:data-seller-id="${seller.user.id}" th:text="${seller.user.fullName}"></a>
                     </div>
                 </div>
                 <section class="product" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}">
@@ -173,69 +173,45 @@
         </div>
 
 
-<!--        &lt;!&ndash; popup section &ndash;&gt;-->
-<!--        <section>-->
-<!--            <div id="myModal" class="modal">-->
-<!--                <div class="modal-content">-->
-<!--                    &lt;!&ndash; <span class="close">&times;</span> &ndash;&gt;-->
-<!--                    <h5>Add New</h5>-->
-<!--                    <form id="product-form" action="#" method="post">-->
-<!--                        <div class="row">-->
-<!--                            <div class="form-group row col-md-6">-->
-<!--                                <input type="hidden" id="product-id">-->
+        <!-- popup section -->
+        <section>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h3 id="order-message"></h3>
+                    </div>
 
-<!--                                <div class="form-group">-->
-<!--                                    <input type="text" id="product-name" placeholder="Product Name">-->
-<!--                                </div>-->
+                    <!-- Modal Body -->
+                    <div class="modal-body" >
+                        <div class="row order-detail">
+                            <span class="col-md-3">Your Order ID:</span>
+                            <p id="order-id" class="col-md-9"></p>
+                        </div>
+                        <div class="row order-detail">
+                            <span class="col-md-3">Total Amount:</span>
+                            <p id="final-total-amount" class="col-md-9" style="color: orangered;"></p>
+                        </div>
+                        <div class="row order-detail">
+                            <span class="col-md-3">Address:</span>
+                            <p class="col-md-9" id="address"></p>
+                        </div>
+                        <div class="row order-detail">
+                            <span class="col-md-3">Payment:</span>
+                            <p class="col-md-9" id="payment-method"></p>
+                        </div>
+                    </div>
 
-<!--                                <div class="form-group">-->
-<!--                                    <input type="text" id="product-brand" placeholder="Product Brand">-->
-<!--                                </div>-->
-
-<!--                                <div class="form-group">-->
-<!--                                    <input type="text" id="product-price" placeholder="Product Price">-->
-<!--                                </div>-->
-
-<!--                                <div class="form-group">-->
-<!--                                    <input type="number" min="1" max="999" id="product-stock" placeholder="Number of product">-->
-<!--                                </div>-->
-
-<!--                                <div class="form-group">-->
-<!--                                    <select id="category">-->
-<!--                                        &lt;!&ndash;                                        <option value="">Choose category</option>&ndash;&gt;-->
-<!--                                        &lt;!&ndash;                                        <option value="">Choose category</option>&ndash;&gt;-->
-<!--                                        &lt;!&ndash;                                        <option value="">Choose category</option>&ndash;&gt;-->
-<!--                                    </select>-->
-<!--                                </div>-->
-
-<!--                                <div class="form-group">-->
-<!--                                    <input type="file" id="product-file">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="form-group row col-md-6">-->
-<!--                                <div class="form-group">-->
-<!--                                    &lt;!&ndash; <label for="">Product Description</label> &ndash;&gt;-->
-<!--                                    <input name="" id="product-description" placeholder="Product Description">-->
-
-<!--                                    </input>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-<!--                            <div>-->
-<!--                                <p id="product-message" class="message"></p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--                        <div class="form-btn">-->
-<!--                            <button id="btn-save" type="button" onclick="saveProduct(event)">Save</button>-->
-<!--                            <button class="btn-done" type="button">Done</button>-->
-<!--                        </div>-->
-
-<!--                    </form>-->
-
-<!--                </div>-->
-<!--            </div>-->
-<!--        </section>-->
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <div class="form-btn">
+                            <a id="btn-view"><button class="btn-view" type="button">View Order</button></a>
+                            <a th:href="@{/}"> <button class="btn-done" type="button">Done</button> </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
     </div>
 </main>

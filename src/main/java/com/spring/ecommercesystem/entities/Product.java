@@ -48,7 +48,6 @@ public class Product implements Serializable {
     @JoinColumn(name = "category_id")
 //    @JsonManagedReference("category-products")
     @JsonBackReference("category-products")
-//    @JsonIgnoreProperties({"products"})
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
@@ -69,6 +68,7 @@ public class Product implements Serializable {
     private List<Feedback> feedbacks;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("product-order_details")
     private List<OrderDetail> orderDetails;
 
 }

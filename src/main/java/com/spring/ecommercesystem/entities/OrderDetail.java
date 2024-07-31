@@ -1,5 +1,6 @@
 package com.spring.ecommercesystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,12 +23,14 @@ public class OrderDetail {
     @ManyToOne
     @MapsId("orderId")
     @JoinColumn(name = "order_id")
+    @JsonBackReference("order-order_details")
     private Order order;
 
 
     @ManyToOne
     @MapsId("productId")
     @JoinColumn(name = "product_id")
+    @JsonBackReference("product-order_details")
     private Product product;
 
     @Column(name = "product_quantity")

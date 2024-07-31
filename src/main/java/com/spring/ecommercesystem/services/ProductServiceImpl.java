@@ -28,6 +28,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> findByName(String name) {
+        return this.productRepository.findProductByNameContainingIgnoreCase(name);
+    }
+
+    @Override
     @Transactional
     public void saveAndUpdate(Product product) {
         this.productRepository.saveAndFlush(product);

@@ -156,17 +156,19 @@
                         Products
                     </div>
                     <div class="horizontal-line"></div>
-                    <div class="row">
-                        <div class="col-6 col-md-2" th:each="product : ${products}">
-                            <a th:href="@{/product_detail(id=${product.id}) }">
-                                <div class="card-item">
-                                    <img class="card-img-top" th:data-product-id="${product.id}" th:data-file-name="${product.productImg}" alt="Product Image" >
-                                    <div class="card-body">
-                                        <div class="name" th:text="${product.name}"></div>
-                                        <div class="price" style="color: orangered;" th:text="'&#36;' +${product.price}"></div>
+                    <div id="product-searching-page" th:fragment="productSearchingFrag">
+                        <div class="row">
+                            <div class="col-6 col-md-2" th:each="product : ${products}">
+                                <a class="card-cover" th:href="@{/product_detail(id=${product.id}) }">
+                                    <div class="card-item">
+                                        <img class="card-img-top" th:data-product-id="${product.id}" th:data-file-name="${product.productImg}" alt="Product Image" >
+                                        <div class="card-body">
+                                            <div class="name" th:text="${product.name}"></div>
+                                            <div class="price" style="color: orangered;" th:text="'&#36;' +${product.price}"></div>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,10 +178,40 @@
 </main>
 
 <footer th:include="fragments/footer :: footer"></footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.querySelector('.search-input');
+        var header = document.querySelector('header'); // Thay đổi selector nếu cần
 
+        window.addEventListener('scroll', function() {
+            var stickyPoint = header.offsetHeight; // Vị trí kích hoạt sticky
+
+            if (window.scrollY > stickyPoint) {
+                searchInput.classList.add('sticky-active');
+            } else {
+                searchInput.classList.remove('sticky-active');
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.querySelector('.search-input');
+
+        searchInput.addEventListener('input', function() {
+            if (searchInput.value.trim() !== '') {
+                searchInput.classList.add('has-value');
+            } else {
+                searchInput.classList.remove('has-value');
+            }
+        });
+    });
+</script>
 <!--Image (Product and Avatar)-->
  <script src="/js/getErrorImage.js"></script>
  <script src="/js/fetchImageToView.js"></script>
+ <script src="/js/fetchSearch.js"></script>
 <!--Header and Navbar-->
  <script src="/js/fetchCategoryInNavbar.js"></script>
  <script src="/js/scrollHeader.js"></script>

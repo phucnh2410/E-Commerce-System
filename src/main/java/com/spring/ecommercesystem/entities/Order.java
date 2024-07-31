@@ -31,6 +31,12 @@ public class Order {
     @Column(name = "ordered_date")
     private Date orderedDate;
 
+    @Column(name = "confirmed_date")
+    private Date confirmedDate;
+
+    @Column(name = "canceled_date")
+    private Date canceledDate;
+
     @Column(name = "delivered_date")
     private Date deliveredDate;
 
@@ -46,10 +52,11 @@ public class Order {
     //One to many
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST,
             CascadeType.REFRESH}, orphanRemoval = true)
+    @JsonManagedReference("order-order_details")
     private List<OrderDetail> orderDetails;
 
     //many to One
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "address_id")
     @JsonBackReference("address-orders")
     private Address address;
@@ -65,12 +72,27 @@ public class Order {
     @JsonBackReference("user-orders")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "paymentMethod_id")
     @JsonBackReference("payment-orders")
     private PaymentMethod paymentMethod;
 
 
+    public Order(Long id, Date orderedDate, Date confirmedDate, Date canceledDate, Date deliveredDate, Date receivedDate, Status status, Double totalAmount, List<OrderDetail> orderDetails, Address address, Voucher voucher, User user, PaymentMethod paymentMethod) {
+        this.id = id;
+        this.orderedDate = orderedDate;
+        this.confirmedDate = confirmedDate;
+        this.canceledDate = canceledDate;
+        this.deliveredDate = deliveredDate;
+        this.receivedDate = receivedDate;
+        this.status = status;
+        this.totalAmount = totalAmount;
+        this.orderDetails = orderDetails;
+        this.address = address;
+        this.voucher = voucher;
+        this.user = user;
+        this.paymentMethod = paymentMethod;
+    }
 
     public Order(Long id, Date orderedDate, Date deliveredDate, Date receivedDate, Status status, Double totalAmount, List<OrderDetail> orderDetails, Address address, Voucher voucher, User user, PaymentMethod paymentMethod) {
         this.id = id;
@@ -122,6 +144,24 @@ public class Order {
 
     public Order setReceivedDate(Date receivedDate) {
         this.receivedDate = receivedDate;
+        return this;
+    }
+
+    public Date getConfirmedDate() {
+        return confirmedDate;
+    }
+
+    public Order setConfirmedDate(Date confirmedDate) {
+        this.confirmedDate = confirmedDate;
+        return this;
+    }
+
+    public Date getCanceledDate() {
+        return canceledDate;
+    }
+
+    public Order setCanceledDate(Date canceledDate) {
+        this.canceledDate = canceledDate;
         return this;
     }
 

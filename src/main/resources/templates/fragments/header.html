@@ -13,135 +13,132 @@
 </head>
 
 <body>
-<header id="header" class="header">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2">
-                <h4 class="logo">Sherlock Store</h4>
-            </div>
+<header id="header">
+    <nav class="nav-header">
+        <div class="show-menu">
+            <a href="#" onclick="toggleSidebar()"><i class="bx bx-menu"></i></a>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 shop-name">
+                    <h4 class="logo">Sherlock Store</h4>
+                </div>
 
-            <div class="col-md-5">
-                <div class="search">
-                    <input class="search-input" type="text" placeholder="" />
+                <div class="col-md-5">
+                    <div class="search search-input-container">
+                        <input id="search-input" class="search-input sticky-search-input" type="text" placeholder="" />
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-1 shopping-cart" >
+                    <div class="cart-drawer-container" sec:authorize="hasAnyRole('CUSTOMER')">
+                        <a th:href="@{/shopping_cart}">
+                            <div id="cart-number-badge" class="cart-number-badge" aria-hidden="true"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+                                 class="bi bi-cart2" viewBox="0 0 16 16">
+                                <path
+                                        d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-3 col-md-4 user-info">
+                    <ul sec:authorize="!isAuthenticated()">
+                        <li >
+                            <a th:href="@{/login}">Login</a>
+                        </li>
+                    </ul>
+
+                    <ul id="username" sec:authorize="isAuthenticated()" >
+                        <li >
+                            <a th:href="@{/profile}"><img class="img-avatar" id="avatar-header" th:data-user-id="${currentUser.id}" th:data-file-name="${currentUser.avatar}" alt="" width="25px" height="25px" onerror="onError(event)"/></a>
+                        </li>
+
+                        <li class="username">
+                            <a th:href="@{/profile}" th:text="${currentUser.fullName}"> </a>
+                        </li>
+
+                        <li class="logout">
+                            <a th:href="@{/logout}">Logout</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="col-md-1" sec:authorize="hasAnyRole('CUSTOMER')">
-                <div class="cart-drawer-container">
-                    <a th:href="@{/shopping_cart}">
-                        <div id="cart-number-badge" class="cart-number-badge" aria-hidden="true"></div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                             class="bi bi-cart2" viewBox="0 0 16 16">
-                            <path
-                                    d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
-                        </svg>
-                    </a>
-                </div>
+
+
+        </div>
+        <!-- side bar -->
+        <div class="sidebar">
+<!--            <div class="close-menu">-->
+<!--                <ul>-->
+<!--                    <li onclick="hideSidebar()">-->
+<!--                        <a href="#"><i class="bx bx-x"></i></a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+
+            <div class="sidebar-search">
+                <input class="sidebar-search-input" type="text" placeholder="" />
             </div>
 
-            <div class="col-md-4">
-                <ul sec:authorize="!isAuthenticated()">
-                    <li >
-                        <a th:href="@{/login}">Login</a>
+<!--            <div class="menu">-->
+<!--                <p>Menu</p>-->
+<!--            </div>-->
+
+            <div class="icon_item">
+                <!-- li*10>a -->
+                <ul>
+                    <li class="active">
+                        <i class="bx bxs-home"></i>
+                        <a th:href="@{/}">Home</a>
                     </li>
-                </ul>
+                    <li class="category-item">
+                        <i class="bx bxs-category"></i>
+                        <a href="#">Categories</a>
+                        <i class="bx bx-chevron-right"></i>
 
-                <ul id="username" sec:authorize="isAuthenticated()">
-                    <li >
-                        <a th:href="@{/profile}"><img class="img-avatar" id="avatar-header" th:data-user-id="${currentUser.id}" th:data-file-name="${currentUser.avatar}" alt="" width="25px" height="25px" onerror="onError(event)"/></a>
+                        <div class="submenu">
+                            <ul id="category-list">
+                            </ul>
+                        </div>
+                    </li>
+                    <li sec:authorize="hasRole('CUSTOMER')">
+                        <i class='bx bx-package'></i>
+                        <a th:href="@{/order/list}">Your orders</a>
+                    </li>
+
+                    <li sec:authorize="hasRole('SELLER')">
+                        <i class='bx bx-store'></i>
+                        <a th:href="@{/shop(id=${currentUser.id}) }">Your shop</a>
                     </li>
 
                     <li>
-                        <a th:href="@{/profile}" th:text="${currentUser.fullName}"> </a>
+                        <i class="bx bxs-contact"></i>
+                        <a href="#">Contact</a>
                     </li>
-
-                    <li class="logout">
+                    <!-- <li>
+                        <i class='bx bxs-contact' ></i>
+                        <a href="#">About</a>
+                    </li>
+                    <li>
+                        <i class='bx bxs-contact' ></i>
+                        <a href="#">Contact</a>
+                    </li> -->
+                    <li>
+                        <i class="bx bx-log-out"></i>
                         <a th:href="@{/logout}">Logout</a>
                     </li>
                 </ul>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <div class="show-menu">
-        <ul>
-            <li onclick="showSidebar()">
-                <a href="#"><i class="bx bx-menu"></i></a>
-            </li>
-        </ul>
-    </div>
-
-    <!-- side bar -->
-    <div class="sidebar">
-        <div class="close-menu">
-            <ul>
-                <li onclick="hideSidebar()">
-                    <a href="#"><i class="bx bx-x"></i></a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="sidebar-search">
-            <input class="sidebar-search-input" type="text" placeholder="" />
-        </div>
-
-        <div class="menu">
-            <p>Menu</p>
-        </div>
-
-        <div class="icon_item">
-            <!-- li*10>a -->
-            <ul>
-                <li class="active">
-                    <i class="bx bxs-home"></i>
-                    <a th:href="@{/}">Home</a>
-                </li>
-                <li class="category-item">
-                    <i class="bx bxs-category"></i>
-                    <a href="#">Categories</a>
-                    <i class="bx bx-chevron-right"></i>
-
-                    <div class="submenu">
-                        <ul id="category-list">
-<!--                            <li><i class="bx bx-laptop"></i> <a href="#">Laptops</a></li>-->
-<!--                            <li>-->
-<!--                                <i class="bx bxs-mobile"></i> <a href="#">Smart phones</a>-->
-<!--                            </li>-->
-<!--                            <li><i class="bx bx-tab"></i> <a href="#">Tablets</a></li>-->
-<!--                            <li>-->
-<!--                                <i class="bx bx-male"></i> <a href="#">Male Fashions</a>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <i class="bx bx-female"></i> <a href="#">Female Fashions</a>-->
-<!--                            </li>-->
-<!--                            <li><i class="bx bxs-watch"></i> <a href="#">Watches</a></li>-->
-<!--                            <li>-->
-<!--                                <i class="bx bx-football"></i>-->
-<!--                                <a href="#">Sports & Travels</a>-->
-<!--                            </li>-->
-                        </ul>
-                    </div>
-                </li>
-                <li>
-                    <i class="bx bxs-contact"></i>
-                    <a href="#">Contact</a>
-                </li>
-                <!-- <li>
-                    <i class='bx bxs-contact' ></i>
-                    <a href="#">About</a>
-                </li>
-                <li>
-                    <i class='bx bxs-contact' ></i>
-                    <a href="#">Contact</a>
-                </li> -->
-                <li>
-                    <i class="bx bx-log-out"></i>
-                    <a href="#">Logout</a>
-                </li>
-            </ul>
-        </div>
-    </div>
 </header>
+
+<script src="/js/fetchSearch.js"> </script>
+
 </body>
 
 </html>
