@@ -35,17 +35,20 @@ public class CartService {
             System.out.println("User is not authenticated!");
             return null;
         }
-        UserDetails userAuth = (UserDetails) authentication.getPrincipal();
-        if (userAuth == null){
-            System.out.println("User does not authenticate!!!");
+        try {
+            UserDetails userAuth = (UserDetails) authentication.getPrincipal();
+
+            Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
+
+            boolean isCustomer = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_CUSTOMER"));
+            if (isCustomer){
+                return this.userService.getCurrentUser().getId();
+            }
+
+        }catch (ClassCastException e){
             return null;
         }
-        Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
 
-        boolean isCustomer = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_CUSTOMER"));
-        if (isCustomer){
-            return this.userService.getCurrentUser().getId();
-        }
         return null;
     }
 

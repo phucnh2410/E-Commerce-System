@@ -9,6 +9,8 @@ import org.hibernate.annotations.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
     private final OrderDetailRepository orderDetailRepository;
@@ -24,6 +26,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         this.productService = productService;
     }
 
+
+    @Override
+    public List<OrderDetail> findAllItems() {
+        return this.orderDetailRepository.findAll();
+    }
 
     @Override
     public OrderDetail addProductToOrder(Order order, Product product, int quantity) {

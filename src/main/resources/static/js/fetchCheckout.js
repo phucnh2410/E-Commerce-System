@@ -21,7 +21,7 @@ async function paymentAction(){
         //seller and products
         let userCarts = [];
 
-        document.querySelectorAll('.shop-name').forEach(function (seller){
+        document.querySelectorAll('.seller-name').forEach(function (seller){
             let cartTemps = [];
             const sellerId = seller.getAttribute("data-seller-id");
 

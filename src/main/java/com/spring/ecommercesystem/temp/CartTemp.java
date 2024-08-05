@@ -12,9 +12,10 @@ public class CartTemp{
     public CartTemp() {
     }
 
-    public CartTemp(Product product, int quantity) {
+    public CartTemp(Product product, int quantity, Double total) {
         this.product = product;
         this.quantity = quantity;
+        this.total = total;
     }
 
     public Product getProduct() {
@@ -36,7 +37,7 @@ public class CartTemp{
     }
 
     public Double getTotal() {
-        return (product.getPrice()*quantity);
+        return total;
     }
 
     public CartTemp setTotal(Double total) {

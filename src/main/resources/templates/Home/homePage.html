@@ -51,7 +51,7 @@
             <div class="border-sale">
                 <div class="title">
                     <div class="x2txed">
-                        <div class="flash-sale" aria-label="title ">Flash Sales</div>
+                        <div class="flash-sale" aria-label="title " style="color: orangered">Flash Sales</div>
                         <a href="">See more...</a>
                     </div>
                 </div>
@@ -149,6 +149,42 @@
             </div>
         </section>
 
+<!--        Best sellers-->
+        <section>
+            <div class="border-best-sellers">
+                <div class="title-container">
+                    <div class="title">
+                        <div class="best-sellers" aria-label="title " style="color: orange">Best sellers</div>
+                        <a href="">See more...</a>
+                    </div>
+                </div>
+                <div class="best-seller-carousel-container">
+                    <button class="best-seller-carousel-btn" id="best-seller-previous-btn">
+                        <i class="bx bx-left-arrow-alt"></i>
+                    </button>
+
+                    <div class="best-seller-carousel" id="best-seller-carousel">
+
+                        <div class="card-scroll" th:if="${productBestSellers}" th:each="bestSellers : ${productBestSellers}">
+                            <a th:href="@{/product_detail(id=${bestSellers.id})}">
+                                <img class="card-img-top" th:data-product-id="${bestSellers.id}" th:data-file-name="${bestSellers.productImg}" alt="Product Image" />
+                                <div class="card-body">
+                                    <p class="card-title" th:text="'&#36;' +${bestSellers.price}" style="color:orangered;">2000</p>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <button class="best-seller-carousel-btn" id="best-seller-next-btn">
+                        <i class="bx bx-right-arrow-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+<!--        Products-->
+
         <section>
             <div class="products">
                 <div class="product-item">
@@ -178,6 +214,34 @@
 </main>
 
 <footer th:include="fragments/footer :: footer"></footer>
+
+<!-- Best sellers -->
+<script>
+    const bestSellerCarousel = document.getElementById("best-seller-carousel");
+    const bestSellerPreviousBtn = document.getElementById("best-seller-previous-btn");
+    const bestSellerNextBtn = document.getElementById("best-seller-next-btn");
+
+    bestSellerPreviousBtn.addEventListener("click", () => {
+        bestSellerCarousel.scrollBy({
+            left: -220,
+            behavior: "smooth",
+        });
+    });
+
+    bestSellerNextBtn.addEventListener("click", () => {
+        bestSellerCarousel.scrollBy({
+            left: 220,
+            behavior: "smooth",
+        });
+    });
+    // Optionally, you can disable the buttons when reaching the start/end
+    bestSellerCarousel.addEventListener("scroll", () => {
+        bestSellerPreviousBtn.disabled = bestSellerCarousel.scrollLeft === 0;
+        bestSellerNextBtn.disabled =
+            bestSellerCarousel.scrollLeft + bestSellerCarousel.offsetWidth >= bestSellerCarousel.scrollWidth;
+    });
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var searchInput = document.querySelector('.search-input');

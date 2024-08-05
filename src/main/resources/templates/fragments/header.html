@@ -50,7 +50,7 @@
                         </li>
                     </ul>
 
-                    <ul id="username" sec:authorize="isAuthenticated()" >
+                    <ul id="username" sec:authorize="isAuthenticated()">
                         <li >
                             <a th:href="@{/profile}"><img class="img-avatar" id="avatar-header" th:data-user-id="${currentUser.id}" th:data-file-name="${currentUser.avatar}" alt="" width="25px" height="25px" onerror="onError(event)"/></a>
                         </li>

@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2 product-total">
-                                    <div style="color: orangered;" th:text="'&#36;' +${item.total}"></div>
+                                    <div style="color: orangered;" th:text="'&#36;' +${item.product.price * item.quantity}"></div>
                                 </div>
                             </div>
                         </section>

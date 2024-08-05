@@ -1,11 +1,9 @@
 package com.spring.ecommercesystem.controllers;
 
+import com.spring.ecommercesystem.entities.OrderDetail;
 import com.spring.ecommercesystem.entities.Product;
 import com.spring.ecommercesystem.entities.User;
-import com.spring.ecommercesystem.services.CategoryService;
-import com.spring.ecommercesystem.services.FileUpload;
-import com.spring.ecommercesystem.services.ProductService;
-import com.spring.ecommercesystem.services.UserService;
+import com.spring.ecommercesystem.services.*;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,9 +20,8 @@ import org.springframework.web.service.annotation.GetExchange;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -32,18 +29,59 @@ public class HomeController {
     private final UserService userService;
     private final CategoryService categoryService;
 
+    private final OrderDetailService orderDetailService;
+
 
     @Autowired
-    public HomeController(ProductService productService, UserService userService, CategoryService categoryService) {
+    public HomeController(ProductService productService, UserService userService, CategoryService categoryService, OrderDetailService orderDetailService) {
         this.productService = productService;
         this.userService = userService;
         this.categoryService = categoryService;
+        this.orderDetailService = orderDetailService;
     }
 
 
     @GetMapping("/")
     public String home(Model model){
+        //Get all items in the OrderDetail table
+        List<OrderDetail> orderDetails = this.orderDetailService.findAllItems();
+
+        //Using the "Map<Long, Integer>" to get all products id and quantity for each product
+        Map<Long, Integer> productSales = new HashMap<>();
+
+        orderDetails.forEach(orderDetail -> {
+            Long productId = orderDetail.getProduct().getId();
+            int productQuantity = orderDetail.getProductQuantity();
+            //If the products id are duplicated, increasing quantity of these product id
+//            if (productSales.containsKey(productId)){
+//                productSales.put(productId, productSales.get(productId) + productQuantity);// 'productSales.get(productId) + productQuantity" get value by key and then plus more into this value
+//                return;
+//            }
+//            productSales.put(productId, productQuantity);
+
+            //this code will replace if else statement above
+            productSales.merge(productId, productQuantity, Integer::sum);
+        });
+
+        //transfer map to list map and Sorting from large to small quantity
+        List<Map.Entry<Long, Integer>> sortedProducts = productSales.entrySet().stream()
+                .sorted(Map.Entry.<Long, Integer>comparingByValue(Comparator.reverseOrder()))
+                .limit(30)
+                .collect(Collectors.toList());
+        //show sorted products
+        sortedProducts.forEach(longIntegerEntry -> System.out.println("Product id: "+longIntegerEntry.getKey() +" -> "+ "Quantity: "+longIntegerEntry.getValue()));
+
+        List<Product> productBestSellers = new ArrayList<>();
+
+        sortedProducts.forEach(longIntegerEntry -> {
+            Product product = this.productService.findById(longIntegerEntry.getKey());
+
+            productBestSellers.add(product);
+        });
+
+
         List<Product> products = this.productService.findAll();
+        model.addAttribute("productBestSellers", productBestSellers);
         model.addAttribute("products", products);
         return "Home/homePage";
     }
