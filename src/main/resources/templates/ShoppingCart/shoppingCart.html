@@ -103,6 +103,10 @@
                         <div class="col-12 col-md-1">
                             <div class="product-action"> <a href="javascript:void(0);" th:onclick="|deleteProductFromCart(${item.product.id});|" ><i class='bx bx-trash'></i></a></div>
                         </div>
+
+                        <div>
+                            <p th:id="|cart-message-${item.product.id}|"></p>
+                        </div>
                     </div>
                 </section>
             </section>

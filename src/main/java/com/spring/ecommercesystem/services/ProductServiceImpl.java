@@ -33,6 +33,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> findNewestProducts() {
+        return this.productRepository.findNewestProducts();
+    }
+
+    @Override
     @Transactional
     public void saveAndUpdate(Product product) {
         this.productRepository.saveAndFlush(product);

@@ -225,10 +225,10 @@ async function addProductToCart(productId){
 async function updateQuantity(productId, quantity) {
     const quantityInput = document.getElementById("quantity-input-product-"+productId);
     const totalAmount = document.getElementById("total-amount-product-"+productId);
-    try {
-        console.log("Quantity: "+quantity);
-        console.log("Product id: "+productId);
 
+    const messageElement = document.getElementById('cart-message-'+productId);
+
+    try {
         const response = await fetch("/api/cart/quantity/" + productId +"?quantity="+quantity, {
             method: "POST",
             headers: {
@@ -236,34 +236,43 @@ async function updateQuantity(productId, quantity) {
             }
         });
 
-        if (!response.ok){
-            const errorMessage = await response.text();
-            throw new Error(errorMessage);
-            return;
+        const result = await response.json();
+
+        if (response.ok){
+            messageElement.textContent = result.message;
+
+            //update data into view
+            quantityInput.value = result.quantity;
+            totalAmount.innerText = '$' + (result.price * result.quantity).toFixed(1);
+
+            // await getCart();
+            const productCartImg = document.querySelectorAll(".product-cart-image");
+
+            if (productCartImg){
+                for (const productCart of productCartImg) {
+                    const productId = productCart.getAttribute("data-product-id");
+                    const fileName = productCart.getAttribute("data-file-name");
+
+                    try {
+                        await getProductImage(productId, fileName, productCart);
+                    } catch (error) {
+                        console.error(`There was a problem with the update quantity operation for product ID ${productId}:`, error);
+                    }
+                }
+            }else {
+                console.log("class 'product-cart-image' does not exist!!!");
+            }
         }
 
-        const data = await response.json();
+        if (!response.ok){
+            messageElement.textContent = result.message;
+            messageElement.style.color = 'red';
 
-        //update data into view
-        quantityInput.value = data.quantity;
-        totalAmount.innerText = '$' + (data.price * data.quantity).toFixed(1);
-
-        // await getCart();
-        const productCartImg = document.querySelectorAll(".product-cart-image");
-
-        if (productCartImg){
-            for (const productCart of productCartImg) {
-                const productId = productCart.getAttribute("data-product-id");
-                const fileName = productCart.getAttribute("data-file-name");
-
-                try {
-                    await getProductImage(productId, fileName, productCart);
-                } catch (error) {
-                    console.error(`There was a problem with the update quantity operation for product ID ${productId}:`, error);
-                }
+            if (result.stock !== undefined){
+                quantityInput.setAttribute('max', result.stock);
+                quantityInput.value = result.stock;
             }
-        }else {
-            console.log("class 'product-cart-image' does not exist!!!");
+            return;
         }
 
     } catch (error) {

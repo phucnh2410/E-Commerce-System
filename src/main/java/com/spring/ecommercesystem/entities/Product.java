@@ -1,13 +1,13 @@
 package com.spring.ecommercesystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -41,6 +41,9 @@ public class Product implements Serializable {
 
     @Column(name = "product_image")
     private String productImg;
+
+    @Column(name = "created_at")
+    private Date createAt;
 
     // Many to One
 //    @JsonIgnore

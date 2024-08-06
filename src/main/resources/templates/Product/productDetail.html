@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<html lang="en" xmlns:th="http://www.thymeleaf.com" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8" />
@@ -43,11 +43,11 @@
                         <div class="product-price" style="font-size: 30px; color: orangered;" th:text="'&#36;' +${product.price}"></div>
                     </div>
 
-                    <div class="col-md-9">
+                    <div class="col-md-9" sec:authorize="hasRole('CUSTOMER')">
                         <input type="number" id="product-quantity" value="1" min="1" max="999" class="product-quantity">
                     </div>
 
-                    <div class="col-md-9">
+                    <div class="col-md-9" sec:authorize="hasRole('CUSTOMER')">
                         <div class="product-btn">
                             <div class="add-cart-btn">
                                 <i class='bx bx-cart-add'></i>
@@ -71,7 +71,7 @@
                 <div class="">
                     <div class="shop-name" th:text="${product.user.fullName}"></div>
                     <div class="btn">
-                        <div class="chat-btn ">
+                        <div class="chat-btn" sec:authorize="hasRole('CUSTOMER')">
                             <i class='bx bx-message-minus'></i>
                             <a href="#">Chat</a>
                         </div>

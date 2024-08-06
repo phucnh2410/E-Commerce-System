@@ -75,7 +75,6 @@ async function getAllProduct(){
 
 async function saveProduct(event){
     event.preventDefault();
-    const formProduct = document.getElementById("");
 
     //Input element
     const productId = document.getElementById("product-id");
@@ -90,29 +89,87 @@ async function saveProduct(event){
     //Message element
     const messageElement = document.getElementById('product-message');
 
+    function isValidString(value){
+        return /^[a-zA-Z\s]+$/.test(value);
+    }
+
+    function isValidNameAndDescription(value){
+        const hasLetters = /[a-zA-Z]/.test(value);
+        const hasNumbers = /[0-9]/.test(value);
+        return (hasLetters || hasNumbers) || (hasLetters && hasNumbers);
+    }
+
+    function isValidInteger(value){
+        return /^[1-9]\d*$/.test(value);
+    }
+
+    function isValidImage(file) {
+        const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (file) {
+            const extension = file.name.split('.').pop().toLowerCase();
+            return validExtensions.includes(extension);
+        }
+        return false;
+    }
+
     //check empty
     if (!productName.value){
         messageElement.textContent = "Please enter the Name of product";
         messageElement.style.color = 'red';
         return;
-    }if (!productBrand.value){
+    }else if (!isValidNameAndDescription(productName.value)) {
+        messageElement.textContent = "Product Name must be a string";
+        messageElement.style.color = 'red';
+        return;
+    }
+
+    //Brand
+    if (!productBrand.value){
         messageElement.textContent = "Please enter the Brand of product";
         messageElement.style.color = 'red';
         return;
-    }if (!productPrice.value){
+    }else if (!isValidString(productBrand.value)) {
+        messageElement.textContent = "Product Brand must be a string";
+        messageElement.style.color = 'red';
+        return;
+    }
+
+    if (!productPrice.value){
         messageElement.textContent = "Please enter the Price of product";
         messageElement.style.color = 'red';
         return;
-    }if (!productStock.value){
+    }else if (!isValidInteger(productPrice.value)) {
+        messageElement.textContent = "Product Price must be a positive number";
+        messageElement.style.color = 'red';
+        return;
+    }
+
+    if (!productStock.value){
         messageElement.textContent = "Please enter the Number of product";
         messageElement.style.color = 'red';
         return;
-    }if (!productFile){
+    }else if (!isValidInteger(productStock.value)) {
+        messageElement.textContent = "Number of product must be a positive number";
+        messageElement.style.color = 'red';
+        return;
+    }
+
+    if (!productFile){
         messageElement.textContent = "Please the Image of product";
         messageElement.style.color = 'red';
         return;
-    }if (!productDescription.value){
+    }else if (!isValidImage(productFile)) {
+        messageElement.textContent = "Please select a valid image file (jpg, jpeg, png, gif, webp)";
+        messageElement.style.color = 'red';
+        return;
+    }
+    //Description
+    if (!productDescription.value){
         messageElement.textContent = "Please enter the Description of product";
+        messageElement.style.color = 'red';
+        return;
+    }else if (!isValidNameAndDescription(productDescription.value)) {
+        messageElement.textContent = "Product Description must be a string";
         messageElement.style.color = 'red';
         return;
     }
@@ -122,8 +179,8 @@ async function saveProduct(event){
         id: productId.value,
         name: productName.value,
         brand: productBrand.value,
-        price: productPrice.value,
-        stock: productStock.value,
+        price: parseFloat(productPrice.value),
+        stock: parseInt(productStock.value, 10),
         description: productDescription.value,
         category: { id: categoryId.value }
     };
@@ -145,6 +202,13 @@ async function saveProduct(event){
             if (response.ok) {
                 messageElement.textContent = result.message;
                 messageElement.style.color = 'green';
+
+                productName.value = '';
+                productBrand.value = '';
+                productPrice.value = '';
+                productStock.value = '';
+                productDescription.value = '';
+                // productName.value = '';
 
                 await getAllProduct();
             } else {

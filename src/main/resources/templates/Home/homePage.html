@@ -155,7 +155,7 @@
                 <div class="title-container">
                     <div class="title">
                         <div class="best-sellers" aria-label="title " style="color: orange">Best sellers</div>
-                        <a href="">See more...</a>
+<!--                        <a href="">See more...</a>-->
                     </div>
                 </div>
                 <div class="best-seller-carousel-container">
@@ -164,7 +164,6 @@
                     </button>
 
                     <div class="best-seller-carousel" id="best-seller-carousel">
-
                         <div class="card-scroll" th:if="${productBestSellers}" th:each="bestSellers : ${productBestSellers}">
                             <a th:href="@{/product_detail(id=${bestSellers.id})}">
                                 <img class="card-img-top" th:data-product-id="${bestSellers.id}" th:data-file-name="${bestSellers.productImg}" alt="Product Image" />
@@ -173,7 +172,6 @@
                                 </div>
                             </a>
                         </div>
-
                     </div>
 
                     <button class="best-seller-carousel-btn" id="best-seller-next-btn">
@@ -189,12 +187,12 @@
             <div class="products">
                 <div class="product-item">
                     <div class="title">
-                        Products
+                        New Products
                     </div>
                     <div class="horizontal-line"></div>
                     <div id="product-searching-page" th:fragment="productSearchingFrag">
                         <div class="row">
-                            <div class="col-6 col-md-2" th:each="product : ${products}">
+                            <div class="col-6 col-md-2" th:each="product : ${newestProducts}">
                                 <a class="card-cover" th:href="@{/product_detail(id=${product.id}) }">
                                     <div class="card-item">
                                         <img class="card-img-top" th:data-product-id="${product.id}" th:data-file-name="${product.productImg}" alt="Product Image" >

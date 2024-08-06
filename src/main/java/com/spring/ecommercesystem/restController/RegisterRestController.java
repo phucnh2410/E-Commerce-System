@@ -45,7 +45,7 @@ public class RegisterRestController {
         String email = user.getEmail();
         User userExisted = this.userService.findByEmail(email);
         if (userExisted != null){
-            response.put("message", "Email already exists!!!");
+            response.put("message", "Email already exists!, Please enter another email");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
 

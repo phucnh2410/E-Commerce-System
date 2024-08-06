@@ -69,7 +69,7 @@ public class HomeController {
                 .limit(30)
                 .collect(Collectors.toList());
         //show sorted products
-        sortedProducts.forEach(longIntegerEntry -> System.out.println("Product id: "+longIntegerEntry.getKey() +" -> "+ "Quantity: "+longIntegerEntry.getValue()));
+//        sortedProducts.forEach(longIntegerEntry -> System.out.println("Product id: "+longIntegerEntry.getKey() +" -> "+ "Quantity: "+longIntegerEntry.getValue()));
 
         List<Product> productBestSellers = new ArrayList<>();
 
@@ -80,9 +80,9 @@ public class HomeController {
         });
 
 
-        List<Product> products = this.productService.findAll();
+        List<Product> newestProducts = this.productService.findNewestProducts();
         model.addAttribute("productBestSellers", productBestSellers);
-        model.addAttribute("products", products);
+        model.addAttribute("newestProducts", newestProducts);
         return "Home/homePage";
     }
 

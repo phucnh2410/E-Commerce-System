@@ -53,16 +53,72 @@ async function getRole(event){
 async function register(event){
     event.preventDefault();
 
-    const fullName = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const roleId = document.getElementById("role").value;
+    const fullName = document.getElementById("name");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const roleId = document.getElementById("role");
+
+    const messageElement = document.getElementById('register-message');
+
+    // Helper function to check if a string contains only letters and spaces
+    function isValidString(value) {
+        return /^[a-zA-Z\s]+$/.test(value);
+    }
+
+// Helper function to validate email format
+    function isValidEmail(value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(value);
+    }
+
+// Helper function to validate password
+    function isValidPassword(value) {
+        // Example: At least 8 characters long, including at least one letter and one number
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        return passwordRegex.test(value);
+    }
+
+
+    if (!fullName.value){
+        messageElement.textContent = "Please enter the your full name";
+        messageElement.style.color = 'red';
+        return;
+    }
+    //
+    // else if (!isValidString(fullName.value)) {
+    //     messageElement.textContent = "Your full name must be a string";
+    //     messageElement.style.color = 'red';
+    //     return;
+    // }
+
+    if (!email.value){
+        messageElement.textContent = "Please enter the your email";
+        messageElement.style.color = 'red';
+        return;
+    }else if (!isValidEmail(email.value)) {
+        messageElement.textContent = "Please enter a valid email address";
+        messageElement.style.color = 'red';
+        return;
+    }
+
+    //password
+    if (!password.value){
+        messageElement.textContent = "Please enter the your Password";
+        messageElement.style.color = 'red';
+        return;
+    }else if (!isValidPassword(password.value)) {
+        messageElement.textContent = "Your Password must be at least 8 characters long and include at least one letter and one number";
+        messageElement.style.color = 'red';
+        return;
+    }
+
+
 
     const formData = {
-        fullName: fullName,
-        email: email,
-        password: password,
-        role: { id: roleId}
+        fullName: fullName.value,
+        email: email.value,
+        password: password.value,
+        role: { id: roleId.value}
     };
 
     try{
@@ -77,7 +133,7 @@ async function register(event){
 
         try{
             const result = await response.json();//Get result from http
-            const messageElement = document.getElementById('message');
+
 
             //Successfully
             if (response.ok){

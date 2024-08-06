@@ -9,6 +9,8 @@ public interface ProductService {
     public Product findById(Long id);
 
     List<Product> findByName(String name);
+
+    List<Product> findNewestProducts();
     public void saveAndUpdate(Product product);
     public void deleteById(Long id);
 }

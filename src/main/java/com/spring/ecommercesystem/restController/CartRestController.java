@@ -1,6 +1,7 @@
 package com.spring.ecommercesystem.restController;
 
 import com.spring.ecommercesystem.entities.Cart;
+import com.spring.ecommercesystem.entities.Product;
 import com.spring.ecommercesystem.services.CartService;
 import com.spring.ecommercesystem.services.ProductService;
 import com.spring.ecommercesystem.services.UserService;
@@ -50,16 +51,26 @@ public class CartRestController {
     }
 
     @PostMapping("/quantity/{productId}")
-    public ResponseEntity<Map<String, Object>> updateQuantity(@PathVariable("productId") Long productId, @RequestParam("quantity") int quantity){
+    public ResponseEntity<Map<String, Object>> updateQuantity(@PathVariable("productId") Long productIdRequest, @RequestParam("quantity") int quantityRequest){
         Map<String, Object> response = new HashMap<>();
-        try {
-            this.cartService.updateQuantity(productId, quantity);
-            Cart cart = this.cartService.getCartByProductId(productId);
 
-            response.put("quantity", cart.getQuantity());
-            response.put("price", cart.getProduct().getPrice());
-            return ResponseEntity.ok().body(response);
-        }catch (Exception e){
+        try {
+            int stock = this.productService.findById(productIdRequest).getStock();
+            if (quantityRequest <= stock) {
+                this.cartService.updateQuantity(productIdRequest, quantityRequest);
+                Cart cart = this.cartService.getCartByProductId(productIdRequest);
+
+                response.put("message", null);
+                response.put("quantity", cart.getQuantity());
+                response.put("price", cart.getProduct().getPrice());
+                return ResponseEntity.ok().body(response);
+            }
+
+            response.put("stock", stock);
+            response.put("message", "The number of products has reached the limit");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+
+        }catch (Exception e) {
             response.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }

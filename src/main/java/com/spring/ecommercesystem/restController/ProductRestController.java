@@ -15,6 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +88,7 @@ public class ProductRestController {
                 String fileName = StringUtils.cleanPath(file.getOriginalFilename());
                 product.setProductImg(fileName);
                 product.setUser(this.userService.getCurrentUser());
+                product.setCreateAt(Date.valueOf(LocalDate.now(ZoneId.systemDefault())));
                 String uploadDirectory = "src/main/resources/static/productImg/" + product.getId();
                 FileUpload.saveFile(uploadDirectory, fileName, file);
                 this.productService.saveAndUpdate(product);
