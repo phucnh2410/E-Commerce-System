@@ -7,6 +7,7 @@ import com.spring.ecommercesystem.entities.User;
 import com.spring.ecommercesystem.services.OrderDetailService;
 import com.spring.ecommercesystem.services.OrderService;
 import com.spring.ecommercesystem.services.ProductService;
+import com.spring.ecommercesystem.services.UserService;
 import com.spring.ecommercesystem.temp.CartTemp;
 import com.spring.ecommercesystem.temp.OrderTemp;
 import com.spring.ecommercesystem.temp.UserCart;
@@ -32,16 +33,21 @@ public class ConfirmOrderController {
 
     private final OrderDetailService orderDetailService;
 
+    private final UserService userService;
+
     @Autowired
-    public ConfirmOrderController(OrderService orderService, ProductService productService, OrderDetailService orderDetailService) {
+    public ConfirmOrderController(OrderService orderService, ProductService productService, OrderDetailService orderDetailService, UserService userService) {
         this.orderService = orderService;
         this.productService = productService;
         this.orderDetailService = orderDetailService;
+        this.userService = userService;
     }
 
     @GetMapping("/list")
     public String showAllOrders(Model model){
-        List<Order> orders = this.orderService.findAll();
+        User currentUser = this.userService.getCurrentUser();
+
+        List<Order> orders = currentUser.getOrders();
 
         List<OrderTemp> orderTemps = new ArrayList<>();
 

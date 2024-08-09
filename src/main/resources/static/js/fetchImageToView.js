@@ -5,6 +5,7 @@ $(document).ready(function() {
     const avatarHeader = document.getElementById("avatar-header");
     const avatarShop = document.getElementById("avatar-shop");
     const avatarProductDetail = document.getElementById("avatar-product-detail");
+    // const userImgAdminPage =  document.querySelectorAll('.user-img');
 
     if (avatarProfile){
         const userId = avatarProfile.getAttribute("data-user-id");
@@ -29,6 +30,23 @@ $(document).ready(function() {
         const fileName = avatarProductDetail.getAttribute("data-file-name");
         getUserAvatar(userId, fileName, avatarProductDetail).then(r => {});
     }
+
+    // if (userImgAdminPage){
+    //     userImgAdminPage.forEach(async (userAvatar) =>{
+    //         const userId = userAvatar.getAttribute("data-user-id");
+    //         const fileName = userAvatar.getAttribute("data-file-name");
+    //
+    //         try {
+    //             await getUserAvatar(userId, fileName, userAvatar);
+    //         } catch (error) {
+    //             console.error(`There was a problem with the get product cart image operation for product ID ${productId}:`, error);
+    //         }
+    //     });
+    // }else {
+    //     console.log("class 'product-cart-image' does not exist!!!");
+    // }
+
+
 
 
     const productInShop = document.querySelectorAll('.card-img-top');

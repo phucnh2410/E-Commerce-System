@@ -114,6 +114,11 @@
                         <a th:href="@{/shop(id=${currentUser.id}) }">Your shop</a>
                     </li>
 
+                    <li sec:authorize="hasRole('ADMIN')">
+                        <i class='bx bxs-user-rectangle'></i>
+                        <a th:href="@{/admin}">Admin Page</a>
+                    </li>
+
                     <li>
                         <i class="bx bxs-contact"></i>
                         <a href="#">Contact</a>

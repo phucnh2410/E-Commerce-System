@@ -217,6 +217,38 @@
 </main>
 <footer th:replace="fragments/footer :: footer"></footer>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.querySelector('.search-input');
+        var header = document.querySelector('header'); // Thay đổi selector nếu cần
+
+        window.addEventListener('scroll', function() {
+            var stickyPoint = header.offsetHeight; // Vị trí kích hoạt sticky
+
+            if (window.scrollY > stickyPoint) {
+                searchInput.classList.add('sticky-active');
+            } else {
+                searchInput.classList.remove('sticky-active');
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.querySelector('.search-input');
+
+        searchInput.addEventListener('input', function() {
+            if (searchInput.value.trim() !== '') {
+                searchInput.classList.add('has-value');
+            } else {
+                searchInput.classList.remove('has-value');
+            }
+        });
+    });
+</script>
+
+
 <!-- SweetAlert2 JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script src="/js/fetchPaymentMethodAndAction.js"></script>
@@ -232,8 +264,6 @@
 <script src="/js/scrollHeader.js"></script>
 <script src="/js/showMenu.js"></script>
 <script src="/js/submenu.js"></script>
-<script src="/js/getCsrfToken.js"></script>
-
 </body>
 
 </html>

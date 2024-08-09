@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.com">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/adminDashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+    <script src="/js/fetchAdminPage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
+    <!-- Icons link -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+</head>
+
+
+
+<body>
+
+<header th:replace="fragments/header :: header"></header>
+
+<main>
+    <div class="page-title">
+        <h1>Admin Page</h1>
+    </div>
+    <div class="container">
+
+        <nav class="admin-navbar">
+            <ul class="tabs">
+                <li class="tab-link active" data-tab="orders-management">Order Management</li>
+                <li class="tab-link" data-tab="account-management">Account Management</li>
+                <li class="tab-link" data-tab="categories-management">Category Management</li>
+                <li class="tab-link" data-tab="statistics-management">Statistic Management</li>
+            </ul>
+        </nav>
+<!--        Order Management-->
+        <div id="orders-management" class="tab-content active">
+            <section class="order-management">
+                <div class="header-management">
+                    <div class="title">
+                        Order Management
+                    </div>
+                </div>
+                <div class="horizontal-line"></div>
+                <table class="orderTable">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ordered Date</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th>Products</th>
+                        <th>Vchrs</th>
+<!--                        <th>Shipping Fee</th>-->
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody id="orderManagement" th:fragment="orderManagementFrag">
+                        <tr th:if="${orders}" th:each="order : ${orders}">
+                            <td><a th:href="@{/order(id=${order.id}) }"  th:text="${order.id}"></a></td>
+                            <td th:text="${order.orderedDate}"></td>
+                            <td th:text="${order.user.fullName}"></td>
+                            <td th:text="${order.status}"></td>
+                            <td th:text="${order.paymentMethod.name}"></td>
+                            <td class="productDetail">
+                                <table class="productTable">
+                                    <tbody>
+                                        <tr th:each="orderDetail : ${order.orderDetails}">
+                                            <td th:text="${orderDetail.product.brand}"></td>
+                                            <td th:text="${orderDetail.product.name}"></td>
+                                            <td th:text="'$'+ ${orderDetail.product.price}"></td>
+                                            <td th:text="'x'+ ${orderDetail.productQuantity}"></td>
+            <!--                                <td th:text="${orderDetail.productQuantity}"></td>-->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td th:text="'-'+ ${order.voucher.percentageIsReduced} +'%'"></td>
+    <!--                        <td th:text="${order.phoneNumber}"></td>-->
+                            <td th:text="'$'+ ${order.totalAmount}"></td>
+                            <!--                    <td th:text="${product.}">Sample Image</td>-->
+                            <!--                        <td>-->
+                            <!--                            <a class="btn-edit" href="javascript:void(0);" th:onclick="|showFormUpdate(${product.id});|"><i class='bx bxs-edit' ></i></a>-->
+                            <!--                            <a class="btn-delete" href="javascript:void(0);" th:onclick="|showDeleteConfirmation(${product.id});|"><i class='bx bx-trash'></i></a>-->
+                            <!--                        </td>-->
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+
+
+    <!--    Account Management-->
+        <div id="account-management" class="tab-content">
+            <section class="account-management">
+                <div class="header-management">
+                    <div class="title">
+                        Account Management
+                    </div>
+                </div>
+                <div class="horizontal-line"></div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Role</th>
+                        <th>Avatar</th>
+                    </tr>
+                    </thead>
+                    <tbody id="accountTable" th:fragment="accountManagementFrag">
+
+                    <tr th:if="${users}" th:each="user : ${users}">
+
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.fullName}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.phoneNumber}"></td>
+                        <td th:text="${user.role.name}"></td>
+                        <td> <img class="user-img" id="user-avatar" th:data-user-id="${user.id}" th:data-file-name="${user.avatar}" width="40px" height="40px"> </td>
+                        <!--                    <td th:text="${product.}">Sample Image</td>-->
+<!--                        <td>-->
+<!--                            <a class="btn-edit" href="javascript:void(0);" th:onclick="|showFormUpdate(${product.id});|"><i class='bx bxs-edit' ></i></a>-->
+<!--                            <a class="btn-delete" href="javascript:void(0);" th:onclick="|showDeleteConfirmation(${product.id});|"><i class='bx bx-trash'></i></a>-->
+<!--                        </td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+
+
+    <!--    Categories Management-->
+        <div id="categories-management" class="tab-content">
+            <section class="category-management">
+                <div class="header-management">
+                    <div class="title">
+                        Categories Management
+                    </div>
+                </div>
+                <div class="horizontal-line"></div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="categoryTable" th:fragment="categoryManagementFrag">
+<!--                    <tr>-->
+<!--                        <td>Sample Name</td>-->
+<!--                        <td>-->
+<!--                            <button class="btn btn-info">Update</button>-->
+<!--                            <button class="btn btn-danger">Delete</button>-->
+<!--                        </td>-->
+<!--                    </tr><tr>-->
+<!--                        <td>Sample Name</td>-->
+<!--                        <td>-->
+<!--                            <button class="btn btn-info">Update</button>-->
+<!--                            <button class="btn btn-danger">Delete</button>-->
+<!--                        </td>-->
+<!--                    </tr><tr>-->
+<!--                        <td>Sample Name</td>-->
+<!--                        <td>-->
+<!--                            <button class="btn btn-info">Update</button>-->
+<!--                            <button class="btn btn-danger">Delete</button>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+                        <tr th:if="${categories}" th:each="category : ${categories}">
+
+                            <td th:text="${category.name}"></td>
+<!--                            <td>-->
+<!--                                <a class="btn-edit" href="javascript:void(0);" th:onclick="|showFormUpdate(${product.id});|"><i class='bx bxs-edit' ></i></a>-->
+<!--                                <a class="btn-delete" href="javascript:void(0);" th:onclick="|showDeleteConfirmation(${product.id});|"><i class='bx bx-trash'></i></a>-->
+<!--                            </td>-->
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+
+
+    <!--    Statistic Management-->
+        <div id="statistics-management" class="tab-content">
+            <section class="statistic-management">
+                <div class="header-management">
+                    <div class="title">
+                        Statistics Management
+                    </div>
+                </div>
+                <div class="horizontal-line"></div>
+
+                <nav class="statistics-navbar">
+                    <ul class="tabs">
+                        <li class="statistic-tab-link active" data-tab="seller-statistic">Seller</li>
+                        <li class="statistic-tab-link" data-tab="customer-statistic">Customer</li>
+                        <li class="statistic-tab-link" data-tab="category-statistic">Category</li>
+                    </ul>
+                </nav>
+
+
+                <div id="seller-statistic" class="statistic-tab-content active">
+                    <h2>Seller</h2>
+                    <div>
+                        <canvas id="barMonthlySellerChart"></canvas>
+                        <canvas id="barQuarterlySellerChart"></canvas>
+                        <canvas id="barYearlySellerChart"></canvas>
+                    </div>
+                </div>
+
+
+                <div id="customer-statistic" class="statistic-tab-content">
+                    <h2>Customer</h2>
+                    <div>
+                        <canvas id="barMonthlyCustomerChart"></canvas>
+                        <canvas id="barQuarterlyCustomerChart"></canvas>
+                        <canvas id="barYearlyCustomerChart"></canvas>
+                    </div>
+                </div>
+
+
+                <div id="category-statistic" class="statistic-tab-content">
+                    <h2>Category</h2>
+                </div>
+
+            </section>
+        </div>
+    </div>
+</main>
+
+<!--<footer th:replace="fragments/footer :: footer"></footer>-->
+
+<script>
+    //admin navbar
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.tab-link');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding content
+                const target = document.getElementById(tab.dataset.tab);
+                tab.classList.add('active');
+                target.classList.add('active');
+            });
+        });
+    });
+</script>
+
+<script>
+    //statistic navbar
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.statistic-tab-link');
+        const contents = document.querySelectorAll('.statistic-tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding content
+                const target = document.getElementById(tab.dataset.tab);
+                tab.classList.add('active');
+                target.classList.add('active');
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.querySelector('.search-input');
+        var header = document.querySelector('header'); // Thay đổi selector nếu cần
+
+        window.addEventListener('scroll', function() {
+            var stickyPoint = header.offsetHeight; // Vị trí kích hoạt sticky
+
+            if (window.scrollY > stickyPoint) {
+                searchInput.classList.add('sticky-active');
+            } else {
+                searchInput.classList.remove('sticky-active');
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.querySelector('.search-input');
+
+        searchInput.addEventListener('input', function() {
+            if (searchInput.value.trim() !== '') {
+                searchInput.classList.add('has-value');
+            } else {
+                searchInput.classList.remove('has-value');
+            }
+        });
+    });
+</script>
+<!--Admin Page-->
+<script src="/js/fetchAdminPage.js"></script>
+<script src="/js/fetchStatistic.js"></script>
+
+<!--Image (Product and Avatar)-->
+<script src="/js/getErrorImage.js"></script>
+<script src="/js/fetchImageToView.js"></script>
+<!--Header and Navbar-->
+<script src="/js/fetchCategoryInNavbar.js"></script>
+<script src="/js/scrollHeader.js"></script>
+<script src="/js/showMenu.js"></script>
+<script src="/js/submenu.js"></script>
+<!-- <script src="/js/getCsrfToken.js"></script>-->
+
+</body>
+</html>
