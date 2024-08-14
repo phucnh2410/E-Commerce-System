@@ -122,6 +122,47 @@ public class AdminController {
         return "Admin/adminDashboard :: categoryManagementFrag";
     }
 
+    @GetMapping("/sellerFragment")
+    public String sellerFrag(Model model){
+        List<User> users = this.userService.findAll();
+
+        List<User> sellers = new ArrayList<>();
+
+        users.forEach(user -> {
+            boolean isSeller = user.getRole().getName().equals("ROLE_SELLER");
+            if (isSeller){
+                sellers.add(user);
+            }
+        });
+
+        model.addAttribute("sellers", sellers);
+        return "Admin/adminDashboard :: sellerFrag";
+    }
+
+    @GetMapping("/customerFragment")
+    public String customerFrag(Model model){
+        List<User> users = this.userService.findAll();
+
+        List<User> customers = new ArrayList<>();
+
+        users.forEach(user -> {
+            boolean isCustomer = user.getRole().getName().equals("ROLE_CUSTOMER");
+            if (isCustomer){
+                customers.add(user);
+            }
+        });
+
+        model.addAttribute("customers", customers);
+        return "Admin/adminDashboard :: customerFrag";
+    }
+
+    @GetMapping ("/categoryStatisticFragment")
+    public String categoryStatisticFrag(Model model){
+        List<Category> categories = this.categoryService.findAll();
+        model.addAttribute("categories", categories);
+        return "Admin/adminDashboard :: categoryFrag";
+    }
+
 
 
 

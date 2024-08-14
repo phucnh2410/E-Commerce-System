@@ -28,6 +28,9 @@ $(document).ready(function() {
 
     getAllCategories().then(r => {});
 
+    // getAllSeller().then(r => {});
+    // getAllC().then(r => {});
+
 });
 
 async function getAllOrders(){
@@ -95,3 +98,70 @@ async function getAllCategories(){
         console.error('There was a problem with the fetch all categories in the Admin operation:', error);
     }
 }
+
+/////////////////////////Seller ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function getAllSeller(){
+    const sellerFragment = document.querySelector('#seller-body');
+
+    try{
+        const response = await fetch('/admin/sellerFragment');
+
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+
+        const sellers = await response.text();
+        if (!sellerFragment) {
+            console.log('Element #productTable not found in the response');
+        }
+        sellerFragment.innerHTML = "";
+        sellerFragment.innerHTML = sellers;
+    }catch (error){
+        console.error('There was a problem with the fetch all sellers in the Admin operation:', error);
+    }
+}
+
+/////////////////////////Customer ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function getAllCustomer(){
+    const customerFragment = document.querySelector('#customer-body');
+
+    try{
+        const response = await fetch('/admin/customerFragment');
+
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+
+        const customers = await response.text();
+        if (!customerFragment) {
+            console.log('Element #productTable not found in the response');
+        }
+        customerFragment.innerHTML = "";
+        customerFragment.innerHTML = customers;
+    }catch (error){
+        console.error('There was a problem with the fetch all customers in the Admin operation:', error);
+    }
+}
+
+async function getAllStatisticCategory(){
+    const categoryFragment = document.querySelector('#category-body');
+
+    try{
+        const response = await fetch('/admin/categoryStatisticFragment');
+
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+
+        const categories = await response.text();
+        if (!categoryFragment) {
+            console.log('Element #productTable not found in the response');
+        }
+        categoryFragment.innerHTML = "";
+        categoryFragment.innerHTML = categories;
+    }catch (error){
+        console.error('There was a problem with the fetch all customers in the Admin operation:', error);
+    }
+}
+
+

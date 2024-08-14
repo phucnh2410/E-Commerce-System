@@ -3,7 +3,7 @@
 // import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 $(document).ready(function() {
-    renderCharts().then(r => {});
+
 });
 
 async function fetchStatisticData(endpoint){
@@ -11,8 +11,34 @@ async function fetchStatisticData(endpoint){
     return await response.json();
 }
 
-function createChart(ctx, labels, revenueData, quantityData, title) {
-    new Chart(ctx, {
+function showSellerCharts(sellerId, fullName) {
+    // Hiển thị biểu đồ cho seller
+    document.getElementById('seller-charts').style.display = 'block';
+    const title = document.querySelector('.seller-name-title');
+    title.innerText = "Seller: "+ fullName;
+    renderSellerCharts(sellerId).then(r => {});
+}
+
+function showCustomerCharts(customerId) {
+    // Hiển thị biểu đồ cho customer
+    document.getElementById('customer-charts').style.display = 'block';
+    renderCustomerCharts(customerId).then(r => {});
+}
+
+function showCategoryCharts(categoryId) {
+    // Hiển thị biểu đồ cho customer
+    document.getElementById('category-charts').style.display = 'block';
+    renderCategoryCharts(categoryId).then(r => {});
+}
+
+let charts = [];
+
+function createChart(ctx, labels, revenueData, quantityData, title, chartId) {
+    if (charts[chartId]){
+        charts[chartId].destroy();
+    }
+
+    charts[chartId] = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
@@ -83,42 +109,64 @@ function createChart(ctx, labels, revenueData, quantityData, title) {
 }
 
 
-async function renderCharts() {
-    const monthlySellerData = await fetchStatisticData('/api/statistic/seller/monthly/6');
-    const quarterlySellerData = await fetchStatisticData('/api/statistic/seller/quarterly/6');
-    const yearlySellerData = await fetchStatisticData('/api/statistic/seller/yearly/6');
+async function renderSellerCharts(sellerId) {
+    const monthlySellerData = await fetchStatisticData('/api/statistic/seller/monthly/'+sellerId);
+    const quarterlySellerData = await fetchStatisticData('/api/statistic/seller/quarterly/'+sellerId);
+    const yearlySellerData = await fetchStatisticData('/api/statistic/seller/yearly/'+sellerId);
 
     // Monthly Chart
     // const currentMonths = monthlyData.months.map(month => `${month} ${currentYear}`);
     const ctxMonthlySeller = document.getElementById('barMonthlySellerChart').getContext('2d');
-    createChart(ctxMonthlySeller, monthlySellerData.months, monthlySellerData.revenue, monthlySellerData.quantity, 'Monthly Sales Data ');
+    createChart(ctxMonthlySeller, monthlySellerData.months, monthlySellerData.revenue, monthlySellerData.quantity, 'Monthly Sales Data', 'barMonthlySellerChart');
 
     // Quarterly Chart
     const ctxQuarterlySeller = document.getElementById('barQuarterlySellerChart').getContext('2d');
-    createChart(ctxQuarterlySeller, quarterlySellerData.quarters, quarterlySellerData.revenue, quarterlySellerData.quantity, 'Quarterly Sales Data ');
+    createChart(ctxQuarterlySeller, quarterlySellerData.quarters, quarterlySellerData.revenue, quarterlySellerData.quantity, 'Quarterly Sales Data', 'barQuarterlySellerChart');
 
     // Yearly Chart
     const ctxYearlySeller = document.getElementById('barYearlySellerChart').getContext('2d');
-    createChart(ctxYearlySeller, yearlySellerData.years, yearlySellerData.revenue, yearlySellerData.quantity, 'Yearly Sales Data');
+    createChart(ctxYearlySeller, yearlySellerData.years, yearlySellerData.revenue, yearlySellerData.quantity, 'Yearly Sales Data', 'barYearlySellerChart');
 
+}
 
-
+async function renderCustomerCharts(customerId) {
 ////////////////////////////////////////////////* Customer *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const monthlyCustomerData = await fetchStatisticData('/api/statistic/customer/monthly/7');
-    // const quarterlyCustomerData = await fetchStatisticData('/api/statistic/customer/quarterly/7');
-    // const yearlyCustomerData = await fetchStatisticData('/api/statistic/customer/yearly/7');
+    const monthlyCustomerData = await fetchStatisticData('/api/statistic/customer/monthly/'+customerId);
+    const quarterlyCustomerData = await fetchStatisticData('/api/statistic/customer/quarterly/'+customerId);
+    const yearlyCustomerData = await fetchStatisticData('/api/statistic/customer/yearly/'+customerId);
 
     // Monthly Chart
     // const currentMonths = monthlyData.months.map(month => `${month} ${currentYear}`);
     const ctxMonthlyCustomer = document.getElementById('barMonthlyCustomerChart').getContext('2d');
-    createChart(ctxMonthlyCustomer, monthlyCustomerData.months, monthlyCustomerData.totalAmount, monthlyCustomerData.quantity, 'Monthly Customer Data ');
+    createChart(ctxMonthlyCustomer, monthlyCustomerData.months, monthlyCustomerData.totalAmount, monthlyCustomerData.quantity, 'Monthly Customer Data', 'barMonthlyCustomerChart');
 
-    // // Quarterly Chart
-    // const ctxQuarterlyCustomer = document.getElementById('barQuarterlyCustomerChart').getContext('2d');
-    // createChart(ctxQuarterlyCustomer, quarterlyCustomerData.quarters, quarterlyCustomerData.revenue, quarterlyCustomerData.quantity, 'Quarterly Sales Data ');
+    // Quarterly Chart
+    const ctxQuarterlyCustomer = document.getElementById('barQuarterlyCustomerChart').getContext('2d');
+    createChart(ctxQuarterlyCustomer, quarterlyCustomerData.quarters, quarterlyCustomerData.totalAmount, quarterlyCustomerData.quantity, 'Quarterly Customer Data', 'barQuarterlyCustomerChart');
     //
-    // // Yearly Chart
-    // const ctxYearlyCustomer = document.getElementById('barYearlyCustomerChart').getContext('2d');
-    // createChart(ctxYearlyCustomer, yearlyCustomerData.years, yearlyCustomerData.revenue, yearlyCustomerData.quantity, 'Yearly Sales Data');
+    // Yearly Chart
+    const ctxYearlyCustomer = document.getElementById('barYearlyCustomerChart').getContext('2d');
+    createChart(ctxYearlyCustomer, yearlyCustomerData.years, yearlyCustomerData.totalAmount, yearlyCustomerData.quantity, 'Yearly Customer Data', 'barYearlyCustomerChart');
+}
+
+async function renderCategoryCharts(categoryId) {
+////////////////////////////////////////////////* Customer *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const monthlyCategoryData = await fetchStatisticData('/api/statistic/category/monthly/'+categoryId);
+    const quarterlyCategoryData = await fetchStatisticData('/api/statistic/category/quarterly/'+categoryId);
+    const yearlyCategoryData = await fetchStatisticData('/api/statistic/category/yearly/'+categoryId);
+
+    // Monthly Chart
+    // const currentMonths = monthlyData.months.map(month => `${month} ${currentYear}`);
+    const ctxMonthlyCategory = document.getElementById('barMonthlyCategoryChart').getContext('2d');
+    createChart(ctxMonthlyCategory, monthlyCategoryData.months, monthlyCategoryData.revenue, monthlyCategoryData.quantity, 'Monthly Category Data', 'barMonthlyCategoryChart');
+
+    // Quarterly Chart
+    const ctxQuarterlyCategory = document.getElementById('barQuarterlyCategoryChart').getContext('2d');
+    createChart(ctxQuarterlyCategory, quarterlyCategoryData.quarters, quarterlyCategoryData.revenue, quarterlyCategoryData.quantity, 'Quarterly Category Data', 'barQuarterlyCategoryChart');
+    //
+    // Yearly Chart
+    const ctxYearlyCategory = document.getElementById('barYearlyCategoryChart').getContext('2d');
+    createChart(ctxYearlyCategory, yearlyCategoryData.years, yearlyCategoryData.revenue, yearlyCategoryData.quantity, 'Yearly Category Data', 'barYearlyCategoryChart');
 }

@@ -41,7 +41,7 @@
                 <li class="tab-link active" data-tab="orders-management">Order Management</li>
                 <li class="tab-link" data-tab="account-management">Account Management</li>
                 <li class="tab-link" data-tab="categories-management">Category Management</li>
-                <li class="tab-link" data-tab="statistics-management">Statistic Management</li>
+                <li class="tab-link" id="data-tab-statistics" data-tab="statistics-management">Statistic Management</li>
             </ul>
         </nav>
 <!--        Order Management-->
@@ -214,21 +214,69 @@
                         <li class="statistic-tab-link" data-tab="category-statistic">Category</li>
                     </ul>
                 </nav>
-
-
+<!--                    SELLER-->
                 <div id="seller-statistic" class="statistic-tab-content active">
                     <h2>Seller</h2>
-                    <div>
+                    <div id="seller-table-container">
+                        <!-- Thêm bảng danh sách seller ở đây -->
+                        <table id="seller-table">
+                            <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="seller-body" th:fragment="sellerFrag">
+                            <!-- Dữ liệu seller sẽ được thêm vào đây -->
+                            <tr th:if="${sellers}" th:each="seller : ${sellers}">
+                                <td th:text="${seller.id}"></td>
+                                <td th:text="${seller.fullName}"></td>
+                                <td th:text="${seller.email}"></td>
+                                <td th:text="${seller.phoneNumber}"></td>
+                                <td><a href="javascript:void(0);" th:onclick="|showSellerCharts(${seller.id});|">Detail</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="seller-charts" class="charts-container" style="display: none;">
+                        <h3 class="seller-name-title"></h3>
                         <canvas id="barMonthlySellerChart"></canvas>
                         <canvas id="barQuarterlySellerChart"></canvas>
                         <canvas id="barYearlySellerChart"></canvas>
                     </div>
                 </div>
-
-
+<!--                CUSTOMER-->
                 <div id="customer-statistic" class="statistic-tab-content">
                     <h2>Customer</h2>
-                    <div>
+                    <div id="customer-table-container">
+                        <!-- Thêm bảng danh sách customer ở đây -->
+                        <table id="customer-table">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Full name</th>
+                                <th>Email</th>
+                                <th>Phone number</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="customer-body" th:fragment="customerFrag">
+                                <tr th:if="${customers}" th:each="customer : ${customers}">
+                                    <td th:text="${customer.id}"></td>
+                                    <td th:text="${customer.fullName}"></td>
+                                    <td th:text="${customer.email}"></td>
+                                    <td th:text="${customer.phoneNumber}"></td>
+                                    <td><a href="javascript:void(0);" th:onclick="|showCustomerCharts(${customer.id});|">Detail</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="customer-charts" class="charts-container" style="display: none;">
+                        <h2>Customer...</h2>
                         <canvas id="barMonthlyCustomerChart"></canvas>
                         <canvas id="barQuarterlyCustomerChart"></canvas>
                         <canvas id="barYearlyCustomerChart"></canvas>
@@ -238,6 +286,36 @@
 
                 <div id="category-statistic" class="statistic-tab-content">
                     <h2>Category</h2>
+                    <div id="category-table-container">
+                        <!-- Thêm bảng danh sách customer ở đây -->
+                        <table id="category-table">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Category name</th>
+<!--                                <th>Email</th>-->
+<!--                                <th>Phone number</th>-->
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="category-body" th:fragment="categoryFrag">
+                            <tr th:if="${categories}" th:each="category : ${categories}">
+                                <td th:text="${category.id}"></td>
+                                <td th:text="${category.name}"></td>
+<!--                                <td th:text="${category.email}"></td>-->
+<!--                                <td th:text="${category.phoneNumber}"></td>-->
+                                <td><a href="javascript:void(0);" th:onclick="|showCategoryCharts(${category.id});|">Detail</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="category-charts" class="charts-container" style="display: none;">
+                        <h2>Category...</h2>
+                        <canvas id="barMonthlyCategoryChart"></canvas>
+                        <canvas id="barQuarterlyCategoryChart"></canvas>
+                        <canvas id="barYearlyCategoryChart"></canvas>
+                    </div>
                 </div>
 
             </section>
@@ -263,11 +341,16 @@
                 const target = document.getElementById(tab.dataset.tab);
                 tab.classList.add('active');
                 target.classList.add('active');
+
+                if (tab.dataset.tab === 'statistics-management'){
+                    getAllSeller().then(r => {});
+                }
             });
         });
     });
 </script>
 
+<!--statistic-->
 <script>
     //statistic navbar
     document.addEventListener('DOMContentLoaded', () => {
@@ -284,11 +367,22 @@
                 const target = document.getElementById(tab.dataset.tab);
                 tab.classList.add('active');
                 target.classList.add('active');
+
+                // Hiển thị bảng và biểu đồ tương ứng khi chọn tab
+                if (tab.dataset.tab === 'seller-statistic') {
+                    getAllSeller().then(r => {});
+                } else if (tab.dataset.tab === 'customer-statistic') {
+                    getAllCustomer().then(r => {});
+                }else if (tab.dataset.tab === 'category-statistic') {
+                    getAllStatisticCategory().then(r => {});
+                }
             });
         });
     });
 </script>
 
+
+<!--Header-->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var searchInput = document.querySelector('.search-input');
@@ -319,6 +413,8 @@
         });
     });
 </script>
+
+
 <!--Admin Page-->
 <script src="/js/fetchAdminPage.js"></script>
 <script src="/js/fetchStatistic.js"></script>
