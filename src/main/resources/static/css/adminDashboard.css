@@ -257,6 +257,16 @@ th, td {
 }
 
 
+.statistic-management .table-container table tbody tr td a{
+    text-decoration: none;
+    color: rgb(32, 32, 31);
+}
+
+.statistic-management .table-container table tbody tr td a:hover{
+    color: #ff445c;
+}
+
+
 @media screen and (max-width: 768px) {
     th, td {
         padding: 12px 8px; /* Tăng khoảng đệm cho các thiết bị nhỏ */
