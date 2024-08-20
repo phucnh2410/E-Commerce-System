@@ -10,6 +10,7 @@ spring:
       client:
         registration:
           google:
+
             scope:
               - profile
               - email
