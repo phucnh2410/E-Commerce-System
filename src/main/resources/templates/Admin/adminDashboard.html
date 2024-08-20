@@ -217,7 +217,7 @@
 <!--                    SELLER-->
                 <div id="seller-statistic" class="statistic-tab-content active">
                     <h2>Seller</h2>
-                    <div id="seller-table-container">
+                    <div id="seller-table-container" class="table-container">
                         <!-- Thêm bảng danh sách seller ở đây -->
                         <table id="seller-table">
                             <thead>
@@ -236,7 +236,7 @@
                                 <td th:text="${seller.fullName}"></td>
                                 <td th:text="${seller.email}"></td>
                                 <td th:text="${seller.phoneNumber}"></td>
-                                <td><a href="javascript:void(0);" th:onclick="|showSellerCharts(${seller.id});|">Detail</a></td>
+                                <td><a style="" href="javascript:void(0);" th:onclick="|showSellerCharts(${seller.id});|">Detail</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -251,7 +251,7 @@
 <!--                CUSTOMER-->
                 <div id="customer-statistic" class="statistic-tab-content">
                     <h2>Customer</h2>
-                    <div id="customer-table-container">
+                    <div id="customer-table-container" class="table-container">
                         <!-- Thêm bảng danh sách customer ở đây -->
                         <table id="customer-table">
                             <thead>
@@ -269,7 +269,7 @@
                                     <td th:text="${customer.fullName}"></td>
                                     <td th:text="${customer.email}"></td>
                                     <td th:text="${customer.phoneNumber}"></td>
-                                    <td><a href="javascript:void(0);" th:onclick="|showCustomerCharts(${customer.id});|">Detail</a></td>
+                                    <td><a style="" href="javascript:void(0);" th:onclick="|showCustomerCharts(${customer.id});|">Detail</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -286,7 +286,7 @@
 
                 <div id="category-statistic" class="statistic-tab-content">
                     <h2>Category</h2>
-                    <div id="category-table-container">
+                    <div id="category-table-container" class="table-container">
                         <!-- Thêm bảng danh sách customer ở đây -->
                         <table id="category-table">
                             <thead>
@@ -304,7 +304,7 @@
                                 <td th:text="${category.name}"></td>
 <!--                                <td th:text="${category.email}"></td>-->
 <!--                                <td th:text="${category.phoneNumber}"></td>-->
-                                <td><a href="javascript:void(0);" th:onclick="|showCategoryCharts(${category.id});|">Detail</a></td>
+                                <td><a style="" href="javascript:void(0);" th:onclick="|showCategoryCharts(${category.id});|">Detail</a></td>
                             </tr>
                             </tbody>
                         </table>

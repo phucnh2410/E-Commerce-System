@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,8 +79,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        User user = this.userRepository.findByEmail(email);
+        if (authentication == null) {
+//            throw new IllegalStateException("No authenticated user found");
+        }
+        Object principal = authentication.getPrincipal();
+
+        String email = null;
+        User user;
+        if (principal instanceof DefaultOAuth2User){
+            DefaultOAuth2User oAuth2User = (DefaultOAuth2User) principal;
+            email = oAuth2User.getAttribute("email");
+        }
+
+        if (principal instanceof UserDetails){
+            UserDetails userDetails = (UserDetails) principal;
+            email = userDetails.getUsername();
+        }
+
+        if (!(principal instanceof DefaultOAuth2User) && !(principal instanceof UserDetails)){
+//            throw new IllegalStateException("Unsssupported authentication principal type");
+        }
+
+        if (email == null){
+//            throw new IllegalStateException("Email not found in this Authentication");
+        }
+
+        user = this.userRepository.findByEmail(email);
+        if (user == null){
+//            throw new IllegalStateException("User not found in the database");
+        }
 
         return user;
     }

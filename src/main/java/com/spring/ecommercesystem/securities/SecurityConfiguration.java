@@ -22,6 +22,12 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    //OAuth2 Login with social
+    @Bean
+    public OAuth2AuthenticationSuccessHandler successHandler(){
+        return new OAuth2AuthenticationSuccessHandler();
+    }
+
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(UserService service){
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -70,9 +76,13 @@ public class SecurityConfiguration {
                 configurer -> configurer
                         .accessDeniedPage("/login/403")
                         .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))// handle requiring authenticate when the user access
-
-
         );
+
+        //OAuth2 Login
+        httpSecurity.oauth2Login(oauth -> {
+            oauth.loginPage("/login");
+            oauth.successHandler(successHandler());
+        });
 
 
         return httpSecurity.build();
