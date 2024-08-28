@@ -69,23 +69,3 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         new DefaultRedirectStrategy().sendRedirect(request, response, "/");
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

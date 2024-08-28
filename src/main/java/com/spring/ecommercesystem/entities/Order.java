@@ -2,6 +2,7 @@ package com.spring.ecommercesystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,6 +55,11 @@ public class Order {
             CascadeType.REFRESH}, orphanRemoval = true)
     @JsonManagedReference("order-order_details")
     private List<OrderDetail> orderDetails;
+
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST,
+            CascadeType.REFRESH})
+    @JsonManagedReference("order-feedbacks")
+    private List<Feedback> feedbacks;
 
     //many to One
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
@@ -189,6 +195,15 @@ public class Order {
 
     public Order setOrderDetails(List<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
+        return this;
+    }
+
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public Order setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
         return this;
     }
 

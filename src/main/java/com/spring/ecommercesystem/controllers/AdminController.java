@@ -43,7 +43,7 @@ public class AdminController {
 
 
     @GetMapping
-    public String showAdminPage(Model model){
+    public String showAdminPage(){
         return "Admin/adminDashboard";
     }
 
@@ -51,6 +51,56 @@ public class AdminController {
     @GetMapping("/orderFragment")
     public String orderFrag (Model model){
         List<Order> orders = this.orderService.findAll();
+
+//        List<OrderTemp> orderTemps = new ArrayList<>();
+//
+//        orders.forEach(order -> {
+//            OrderTemp orderTemp = new OrderTemp()
+//                    .setAddress(order.getAddress())
+//                    .setPaymentMethod(order.getPaymentMethod())
+//                    .setVoucher(order.getVoucher())
+//                    .setFinalTotal(order.getTotalAmount())
+//                    .setId(order.getId())
+//                    .setStatus(order.getStatus());
+//
+//            //get Orderdetail to get Products and quantity each product
+//            List<Product> products = new ArrayList<>();
+//            order.getOrderDetails().forEach(orderDetail -> {
+//                Product product = orderDetail.getProduct();
+//                products.add(product);
+//            });
+//
+//            //get Seller from List Product
+//            List<User> sellers = products.stream().map(product -> product.getUser()).distinct().collect(Collectors.toList());//Get and Removes duplicate sellers in the stream
+//
+//            List<UserCart> userCarts = new ArrayList<>();
+//
+//            List<CartTemp> cartTempsList = new ArrayList<>();
+//
+//            order.getOrderDetails().forEach(orderDetail -> {
+//                CartTemp cartTemp = new CartTemp()
+//                        .setProduct(orderDetail.getProduct())
+//                        .setQuantity(orderDetail.getProductQuantity());
+//                cartTempsList.add(cartTemp);
+//            });
+//
+//            sellers.forEach(seller -> {
+//                List<CartTemp> cartTemps = cartTempsList.stream().filter(cartTemp -> cartTemp.getProduct().getUser().equals(seller)).collect(Collectors.toList());
+//
+//                UserCart userCart = new UserCart()
+//                        .setUser(seller)
+//                        .setCartTemps(cartTemps);
+//
+//                userCarts.add(userCart);
+//            });
+//
+//            //set List UserCart into OrderTemp
+//            orderTemp.setUserCarts(userCarts);
+//
+//            orderTemps.add(orderTemp);
+//        });
+
+//        model.addAttribute("orderTemps", orderTemps);
         model.addAttribute("orders", orders);
         return "Admin/adminDashboard :: orderManagementFrag";
     }
@@ -68,7 +118,11 @@ public class AdminController {
     public String categoryFrag(Model model){
         List<Category> categories = this.categoryService.findAll();
 
-        model.addAttribute("categories", categories);
+        List<Category> categoriesPreparing = categories.stream()
+                .filter(category -> category.getStatus() == Category.Status.preparing)//Get all categories with the status is preparing
+                .collect(Collectors.toList());
+
+        model.addAttribute("categories", categoriesPreparing);
         return "Admin/adminDashboard :: categoryManagementFrag";
     }
 

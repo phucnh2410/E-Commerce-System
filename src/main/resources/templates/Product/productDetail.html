@@ -39,6 +39,63 @@
                         <div class="product-name" style="font-size: 20px;" th:text="${product.name}"></div>
                     </div>
 
+
+
+                    <div class="rating-average" th:data-rating-average="${ratingAverage}">
+                        <span class="number-average" th:text="${ratingAverage}"></span>
+
+                        <span class="star-average" data-value="1">&#9733;</span>
+                        <span class="star-average" data-value="2">&#9733;</span>
+                        <span class="star-average" data-value="4">&#9733;</span>
+                        <span class="star-average" data-value="3">&#9733;</span>
+                        <span class="star-average" data-value="5">&#9733;</span>
+
+                        <span class="number-rating" th:text="'| '+${numberOfRating}+' ratings | ' +${numberOfProductSale} +' sold'"></span>
+                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Truy xuất phần tử có class 'rating-average'
+                            const ratingContainer = document.querySelector('.rating-average');
+
+                            // Lấy giá trị 'data-rating-average'
+                            const ratingAverage = parseFloat(ratingContainer.getAttribute('data-rating-average'));
+
+                            if (isNaN(ratingAverage)) {
+                                console.error("data-rating-average is not set or is not a valid number");
+                                return;
+                            }
+
+                            // Truy xuất tất cả các phần tử sao trong 'rating-average'
+                            const stars = document.querySelectorAll('.rating-average .star-average');
+
+                            stars.forEach(star => {
+                                const starValue = parseFloat(star.getAttribute('data-value'));
+
+                                if (ratingAverage >= starValue) {
+                                    // Sao đầy
+                                    star.style.color = '#FFD700'; // Màu vàng cho sao đầy
+                                    star.style.background = ''; // Đặt lại để không bị ảnh hưởng bởi sao nửa
+                                } else if (ratingAverage >= (starValue - 0.5)) {
+                                    // Sao nửa
+                                    const half = 0.5;
+                                    const difference = ratingAverage - (starValue - half);
+                                    if (difference >= half) {
+                                        star.style.background = 'linear-gradient(90deg, #FFD700 50%, #ccc 50%)'; // Nửa sao vàng
+                                    } else {
+                                        star.style.background = 'linear-gradient(90deg, #FFD700 50%, #ccc 50%)'; // Nửa sao màu vàng
+                                    }
+                                    star.style.backgroundClip = 'text';
+                                    star.style.webkitBackgroundClip = 'text';
+                                    star.style.color = 'transparent'; // Đảm bảo sao không bị ảnh hưởng màu sắc
+                                } else {
+                                    // Sao trống
+                                    star.style.color = '#ccc'; // Màu xám cho sao trống
+                                    star.style.background = ''; // Đặt lại để không bị ảnh hưởng bởi sao nửa
+                                }
+                            });
+                        });
+                    </script>
+
                     <div class="col-md-9">
                         <div class="product-price" style="font-size: 30px; color: orangered;" th:text="'&#36;' +${product.price}"></div>
                     </div>
@@ -103,62 +160,31 @@
             <div class="feedback-content">
                 <h4 class="feedback-title">Product Feedbacks</h4>
 
-                <div class="feedback-info">
+                <div class="feedback-info" th:if="${feedbacks}" th:each="feedback : ${feedbacks}">
                     <div class="cus-info">
                         <div class="cus-avatar">
-                            <img src="https://down-vn.img.susercontent.com/file/4fb4ec01b4d61e8b9a8f2b847a95c613_tn" width="40px" height="40px" alt="">
+                            <img width="40px" height="40px" class="customer-feedback-img" th:data-customer-id="${feedback.user.id}" th:data-file-name="${feedback.user.avatar}" alt="">
                         </div>
 
                         <div class="content">
-                            <div class="date-time">
+                            <div class="rating-feedback" th:data-rating="${feedback.feedbackRating}">
+                                <span class="star-feedback" data-value="1">&#9733;</span>
+                                <span class="star-feedback" data-value="2">&#9733;</span>
+                                <span class="star-feedback" data-value="3">&#9733;</span>
+                                <span class="star-feedback" data-value="4">&#9733;</span>
+                                <span class="star-feedback" data-value="5">&#9733;</span>
+                            </div>
+
+                            <div class="date-time" th:text="${feedback.feedbackDate}">
                                 2024-05-20
                             </div>
-                            <div class="product-quality">
+                            <div class="product-quality" th:text="${feedback.content}">
                                 Ok,đủ hàng, sản phẩm như hình cho shop 5 sao. Chất lượng thì chờ thơi gian nữa mới biết được
                             </div>
                         </div>
                     </div>
                     <hr>
                 </div>
-
-                <!-- row2 -->
-                <div class="feedback-info">
-                    <div class="cus-info">
-                        <div class="cus-avatar">
-                            <img src="https://down-vn.img.susercontent.com/file/4fb4ec01b4d61e8b9a8f2b847a95c613_tn" width="40px" height="40px" alt="">
-                        </div>
-
-                        <div class="content">
-                            <div class="date-time">
-                                2024-05-20
-                            </div>
-                            <div class="product-quality">
-                                Ok,đủ hàng, sản phẩm như hình cho shop 5 sao. Chất lượng thì chờ thơi gian nữa mới biết được
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                </div>
-
-                <!-- row3 -->
-                <div class="feedback-info">
-                    <div class="cus-info">
-                        <div class="cus-avatar">
-                            <img src="https://down-vn.img.susercontent.com/file/4fb4ec01b4d61e8b9a8f2b847a95c613_tn" width="40px" height="40px" alt="">
-                        </div>
-
-                        <div class="content">
-                            <div class="date-time">
-                                2024-05-20
-                            </div>
-                            <div class="product-quality">
-                                Ok,đủ hàng, sản phẩm như hình cho shop 5 sao. Chất lượng thì chờ thơi gian nữa mới biết được
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                </div>
-
 
             </div>
         </section>
@@ -166,6 +192,41 @@
 
 </main>
 <footer th:replace="fragments/footer :: footer"></footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ratingContainers = document.querySelectorAll('.rating-feedback');
+
+        ratingContainers.forEach(container => {
+            const ratingValue = parseFloat(container.getAttribute('data-rating'));
+
+            if (isNaN(ratingValue)) {
+                console.error("data-rating is not set or is not a valid number");
+                return;
+            }
+
+            const stars = container.querySelectorAll('.star-feedback');
+
+            stars.forEach(star => {
+                const starValue = parseInt(star.getAttribute('data-value'));
+
+                if (starValue <= ratingValue) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                    star.classList.remove('half');
+                }
+
+                // else if (starValue === Math.ceil(ratingValue) && ratingValue % 1 !== 0) {
+                //         // Xử lý sao nửa (nếu cần)
+                //         star.classList.add('selected'); // Thay đổi kiểu theo yêu cầu nếu có nửa sao
+                //         star.classList.add('half');
+                //     }
+            });
+        });
+    });
+</script>
+
 <!--Sweetalert library-->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!--Cart management-->
@@ -174,6 +235,7 @@
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>
 <!--Header and Navbar-->
+<script src="/js/searchAnimation.js"></script>
 <script src="/js/fetchCategoryInNavbar.js"></script>
 <script src="/js/scrollHeader.js"></script>
 <script src="/js/showMenu.js"></script>

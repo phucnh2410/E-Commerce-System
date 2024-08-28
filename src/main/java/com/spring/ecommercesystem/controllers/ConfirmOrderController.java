@@ -43,12 +43,7 @@ public class ConfirmOrderController {
         this.userService = userService;
     }
 
-    @GetMapping("/list")
-    public String showAllOrders(Model model){
-        User currentUser = this.userService.getCurrentUser();
-
-        List<Order> orders = currentUser.getOrders();
-
+    private List<OrderTemp> sortOrder(List<Order> orders) {
         List<OrderTemp> orderTemps = new ArrayList<>();
 
         orders.forEach(order -> {
@@ -97,10 +92,67 @@ public class ConfirmOrderController {
             orderTemps.add(orderTemp);
         });
 
-//        model.addAttribute("orders", orders);
-        model.addAttribute("orderTemps", orderTemps);
+        return orderTemps;
+    }
+
+    @GetMapping("/list")
+    public String showAllOrders(){
         return "OrderManagement/orderManagement";
     }
+
+    @GetMapping("/pendingOrderFragment")
+    public String showPreparingOrders(Model model){
+        User currentUser = this.userService.getCurrentUser();
+
+        List<Order> orders = currentUser.getOrders();
+        List<Order> preparingOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.pending_confirmation).collect(Collectors.toList());
+        List<OrderTemp> orderTemps = sortOrder(preparingOrders);
+
+//        model.addAttribute("orders", orders);
+        model.addAttribute("orderTemps", orderTemps);
+        return "OrderManagement/orderManagement :: pendingOrderFrag";
+    }
+
+    @GetMapping("/deliveringOrderFragment")
+    public String showDeliveringOrders(Model model){
+        User currentUser = this.userService.getCurrentUser();
+
+        List<Order> orders = currentUser.getOrders();
+        List<Order> deliveringOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.delivering).collect(Collectors.toList());
+        List<OrderTemp> orderTemps = sortOrder(deliveringOrders);
+
+//        model.addAttribute("orders", orders);
+        model.addAttribute("orderTemps", orderTemps);
+        return "OrderManagement/orderManagement :: deliveringOrderFrag";
+    }
+
+    @GetMapping("/receivedOrderFragment")
+    public String showReceivedOrders(Model model){
+        User currentUser = this.userService.getCurrentUser();
+
+        List<Order> orders = currentUser.getOrders();
+        List<Order> receivedOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.received).collect(Collectors.toList());
+        List<OrderTemp> orderTemps = sortOrder(receivedOrders);
+
+//        model.addAttribute("orders", orders);
+        model.addAttribute("orderTemps", orderTemps);
+        return "OrderManagement/orderManagement :: receivedOrderFrag";
+    }
+
+    @GetMapping("/canceledOrderFragment")
+    public String showCanceledOrders(Model model){
+        User currentUser = this.userService.getCurrentUser();
+
+        List<Order> orders = currentUser.getOrders();
+        List<Order> canceledOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.canceled).collect(Collectors.toList());
+        List<OrderTemp> orderTemps = sortOrder(canceledOrders);
+
+//        model.addAttribute("orders", orders);
+        model.addAttribute("orderTemps", orderTemps);
+        return "OrderManagement/orderManagement :: canceledOrderFrag";
+    }
+
+
 
     @GetMapping
     public String showOrderByOrderId(@PathParam("id") Long id, Model model){

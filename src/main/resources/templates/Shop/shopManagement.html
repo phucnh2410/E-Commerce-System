@@ -53,6 +53,9 @@
                             <div class="btn-product" sec:authorize="hasAnyRole('SELLER')">
                                 <a id="add-new-btn" th:href="@{products}">Manage Products</a>
                             </div>
+                            <div class="btn-request-category" sec:authorize="hasAnyRole('SELLER')">
+                                <a id="request-category-btn">Request new category</a>
+                            </div>
                         </div>
 
                     </div>
@@ -124,6 +127,41 @@
                 </div>
             </div>
         </section>
+
+
+        <!-- popup section -->
+        <section>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <!-- <span class="close">&times;</span> -->
+                    <h5>Request a new category</h5>
+                    <form id="category-form" action="#" method="post">
+                        <div class="row">
+                            <div class="form-group row col-md-12">
+                                <input type="hidden" id="product-id">
+
+                                <div class="form-group">
+                                    <input type="text" id="category-name" placeholder="Category Name">
+                                </div>
+                            </div>
+
+                            <div class="category-message">
+                                <p id="category-message" class="message"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-btn">
+                            <button id="btn-save" type="button" href="javascript:void(0);" th:onclick="|categoryRequest(${user.id}, event);|">Send request</button>
+                            <button class="btn-done" type="button">Done</button>
+                        </div>
+
+                        <div class="loader"></div>
+
+                    </form>
+
+                </div>
+            </div>
+        </section>
     </div>
 
 </main>
@@ -131,10 +169,55 @@
 
 <footer th:replace="fragments/footer :: footer"></footer>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var requestBtn = document.getElementById("request-category-btn");
+        var modal = document.getElementById("myModal");
+        var done = document.getElementsByClassName("btn-done")[0];
+        // var studentForm = document.getElementById("studentForm");
+
+        if (requestBtn) {
+            // Hiển thị modal khi click vào nút "Add New"
+            requestBtn.addEventListener("click", function () {
+                modal.style.display = "block";
+                setTimeout(function () {
+                    modal.classList.add("show");
+                }, 10); // Đảm bảo rằng lớp 'show' được thêm sau khi display được áp dụng
+            });
+        } else {
+            console.error("Add New button not found");
+        }
+
+        // Ẩn modal khi click vào nút "done"
+        done.addEventListener("click", function () {
+            modal.classList.remove("show");
+            setTimeout(function () {
+                modal.style.display = "none";
+                // studentForm.reset();
+            }, 500); // Khớp với thời gian của transition
+        });
+
+        // Ẩn modal khi click ra ngoài modal
+        window.addEventListener("click", function (event) {
+            if (event.target == modal) {
+                modal.classList.remove("show");
+                setTimeout(function () {
+                    modal.style.display = "none";
+                    // studentForm.reset();
+                }, 500); // Khớp với thời gian của transition
+            }
+        });
+    });
+</script>
+
+<!--Category fetch-->
+<script src="/js/fetchManageCategory.js"></script>
+
 <!--Image (Product and Avatar)-->
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>
 <!--Header and Navbar-->
+<script src="/js/searchAnimation.js"></script>
 <script src="/js/fetchCategoryInNavbar.js"></script>
 <script src="/js/scrollHeader.js"></script>
 <script src="/js/showMenu.js"></script>

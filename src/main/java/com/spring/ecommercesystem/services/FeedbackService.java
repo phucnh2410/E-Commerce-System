@@ -6,8 +6,8 @@ import com.spring.ecommercesystem.entities.Feedback;
 import java.util.List;
 
 public interface FeedbackService {
-    public List<Feedback> findAll();
-    public Feedback findById(Long id);
-    public void saveAndUpdate(Feedback feedback);
-    public void deleteById(Long id);
+    List<Feedback> findAll();
+    Feedback findById(Long id);
+    Boolean saveAndUpdate(Feedback feedback);
+    void deleteById(Long id);
 }

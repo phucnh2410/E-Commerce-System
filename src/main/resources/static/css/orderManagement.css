@@ -20,12 +20,12 @@ h1{
 
 .btn-back{
     margin-bottom: 15px;
+    margin-left: 10px;
 }
 
 .btn-back a{
     margin-left: -10px;
     text-decoration: none;
-
 }
 
 .btn-back button{
@@ -42,8 +42,48 @@ h1{
     background-color: rgb(248, 240, 230);
 }
 
+
+.orders-navbar {
+    margin: 1rem 0;
+}
+
+.orders-navbar .tabs {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+
+.orders-navbar .tabs .order-tab-link {
+    flex: 1;
+    padding: 1rem;
+    text-align: center;
+    background-color: #f4f4f4;
+    cursor: pointer;
+}
+
+.orders-navbar .tabs .order-tab-link.active {
+    background-color: #ddd;
+}
+
+
+.order-tab-content {
+    display: none;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+}
+
+.order-tab-content.active {
+    display: block;
+    opacity: 1;
+}
+
 .order-cover{
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .05);
+    /*box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .05);*/
     margin-bottom: 20px;
 }
 
@@ -71,7 +111,6 @@ h1{
 }
 
 
-
 .order-infomation .order-code{
     font-weight: 400;
     margin-right: 25px;
@@ -79,7 +118,6 @@ h1{
 .order-infomation .order-status{
     margin-left: 25px;
 }
-
 
 
 section {
@@ -125,6 +163,23 @@ section {
     margin-top: -5px;
     /* margin-bottom: 5px; */
 }
+
+.btn-feedback{
+    margin-bottom: 10px;
+}
+
+.btn-feedback a {
+    font-weight: 200;
+    color: rgb(110, 107, 107);
+    text-decoration: none;
+
+}
+.btn-feedback a:hover {
+    /*background-color: rgb(248, 240, 230);*/
+    border-bottom: 1px solid orangered;
+}
+
+
 .product .product-total{
     margin-top: 15px;
     /* margin-bottom: 5px; */
@@ -132,8 +187,8 @@ section {
 
 
 /* Payment */
-section .payment-info {
-    /* align-items: center; */
+.payment-info {
+    align-items: center;
     width: 100%;
     border-bottom: 1px solid rgba(0, 0, 0, .09);
     box-sizing: border-box;
@@ -141,19 +196,20 @@ section .payment-info {
     display: flex;
 }
 
-.payment-info{
-    font-size: 14px;
-    font-weight: 300;
-}
-.payment-info .row{
+
+.payment-info .total-payment{
     justify-content: right;
-    margin-right: -1px;
+    margin-left: 880px;
 }
+
 .payment-info .payment-title {
-    border-right: 1px solid orangered;
+    /*border-right: 1px solid orangered;*/
+    color: orangered; font-size: 20px; font-weight: 400;
+
 }
 .payment-info .payment-value {
-    border-left: 1px solid orangered;
+    /*border-left: 1px solid orangered;*/
+    color: orangered; font-size: 20px; font-weight: 400;
 }
 .payment-info .payment-title div{
     margin-bottom: 10px;
@@ -163,65 +219,165 @@ section .payment-info {
 }
 
 
-
+/***********************************/
+.payment-btn{
+    margin-right: 500px;
+    display: flex;
+}
 
 .payment-btn a{
     /* height: 130px; */
     text-decoration: none;
     color: rgb(110, 107, 107);
 }
-/* .payment-btn button{
-    font-weight: 300;
-    width: auto;
-    border: 1px solid #808080;
-    border-radius: 2px;
-    color: rgb(110, 107, 107);
-    margin-left: -818px;
-    text-decoration: none;
-} */
 
-.btn-cancel {
+.btn-repurchase {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    padding-top: 33px;
+    /*padding-top: 33px;*/
 }
-.btn-return {
+.btn-return-refund {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
 }
 
-/* .btn-cancel a{
-    text-decoration: none;
-    color: rgb(110, 107, 107);
-} */
 
-.btn-cancel button {
+.btn-repurchase button {
     font-weight: 300;
-    width: 100px;
-    border: 1px solid #808080;
+    width: 110px;
+    border: 1px solid darkgreen;
     border-radius: 2px;
-    color: rgb(110, 107, 107);
+    background-color: #ffffff;
+    color: darkgreen;
     /* margin-left: -818px; */
     text-decoration: none;
+    margin-right: 15px;
 }
-.btn-return button {
+.btn-return-refund button {
     font-weight: 300;
     width: 170px;
     border: 1px solid #808080;
     border-radius: 2px;
+    background-color: #ffffff;
     color: rgb(110, 107, 107);
     text-decoration: none;
+    margin-right: 15px;
 }
+
+.btn-cancel button{
+    font-weight: 300;
+    width: 100px;
+    border: 1px solid orangered;
+    border-radius: 2px;
+    background-color: #ffffff;
+    color: orangered;
+    text-decoration: none;
+}
+
 .btn-cancel button:hover {
     background-color: rgb(248, 240, 230);
 }
-.btn-return button:hover {
+
+.btn-return-refund button:hover {
+    background-color: rgb(248, 240, 230);
+}
+.btn-repurchase button:hover {
+    background-color: rgb(248, 240, 230);
+}
+
+.modal {
+    font-weight: 400;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+    opacity: 0; /* Bắt đầu với độ mờ */
+    transition: opacity 0.5s ease;
+}
+
+.modal.show {
+    display: block;
+    opacity: 1; /* Hiển thị modal với độ mờ 1 */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    /* border: 1px solid #888; */
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    width: 100%;
+    width: 600px;
+    border-radius: 5px;
+    transform: translateY(-20px); /* Di chuyển modal lên trên một chút */
+    transition: transform 0.3s ease;
+}
+
+.modal.show .modal-content {
+    transform: translateY(0); /* Đưa modal về vị trí bình thường */
+}
+
+.rating {
+    display: flex;
+    direction: row-reverse;
+    justify-content: flex-start;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.star {
+    color: #ccc;
+    transition: color 0.2s;
+}
+
+.star.selected {
+    color: gold;
+}
+
+
+
+.modal-content .row .form-group textarea{
+    width: 100%;
+    height: 100%;
+    margin-bottom: 10px;
+}
+
+.modal-content .form-btn{
+    margin-top: 10px;
+}
+
+.modal-content .form-btn button{
+    font-weight: 300;
+    /*margin-right: 13px;*/
+    width: 120px;
+    border: 1px solid #808080;
+    background-color: #fff;
+    border-radius: 2px;
+    color: rgb(110, 107, 107);
+}
+
+.modal-content .form-btn .btn-done{
+    /*margin-left: 90px;*/
+}
+
+.modal-content .form-btn button:hover{
     background-color: rgb(248, 240, 230);
 }
 
 @media (max-width: 1000px) {
+
+    .orders-navbar .tabs .order-tab-link {
+        padding: 0.5rem;
+    }
 
     .address{
         border-right: #fff;
@@ -238,4 +394,26 @@ section .payment-info {
     .status-titles{
         margin-left: -55px;
     }
+
+    .product .col-md-9{
+        margin-top: 0px;
+        /* margin-bottom: 5px; */
+    }
+
+    .payment-info .payment-title{
+        font-size: 17px;
+        font-weight: 400;
+        border-right: none;
+    }
+    .payment-info .payment-value{
+        font-size: 17px;
+        font-weight: 400;
+        border-left: none;
+    }
+
+    .payment-info .row{
+        margin-left: 0px;
+    }
+
+
 }

@@ -5,6 +5,7 @@ $(document).ready(function() {
     const avatarHeader = document.getElementById("avatar-header");
     const avatarShop = document.getElementById("avatar-shop");
     const avatarProductDetail = document.getElementById("avatar-product-detail");
+    const customerFeedbackImgs = document.querySelectorAll('.customer-feedback-img');
     // const userImgAdminPage =  document.querySelectorAll('.user-img');
 
     if (avatarProfile){
@@ -31,6 +32,20 @@ $(document).ready(function() {
         getUserAvatar(userId, fileName, avatarProductDetail).then(r => {});
     }
 
+    if (customerFeedbackImgs){
+        customerFeedbackImgs.forEach(async (customerImg) =>{
+            const customerId = customerImg.getAttribute("data-customer-id");
+            const fileName = customerImg.getAttribute("data-file-name");
+            try {
+                await getUserAvatar(customerId, fileName, customerImg);
+            } catch (error) {
+                console.error(`There was a problem with the get product cart image operation for product ID ${productId}:`, error);
+            }
+        });
+    }else {
+        console.log("class 'product-cart-image' does not exist!!!");
+    }
+
     // if (userImgAdminPage){
     //     userImgAdminPage.forEach(async (userAvatar) =>{
     //         const userId = userAvatar.getAttribute("data-user-id");
@@ -49,11 +64,14 @@ $(document).ready(function() {
 
 
 
+
+
     const productInShop = document.querySelectorAll('.card-img-top');
     const productDetailImg = document.getElementById('product-detail-img');
     const productCartImg = document.querySelectorAll(".product-cart-image");
     const productCheckoutImg = document.querySelectorAll(".product-checkout-image");
     const productOrderImg = document.querySelectorAll(".product-order-img");
+
 
     if (productInShop){
         productInShop.forEach(async (productImg) =>{
@@ -108,7 +126,8 @@ $(document).ready(function() {
         productOrderImg.forEach(async (productOrder) =>{
             const productId = productOrder.getAttribute("data-product-id");
             const fileName = productOrder.getAttribute("data-file-name");
-
+            console.log("productID: "+productId);
+            console.log("productImg: "+fileName);
             try {
                 await getProductImage(productId, fileName, productOrder);
             } catch (error) {
@@ -118,6 +137,8 @@ $(document).ready(function() {
     }else {
         console.log("class 'product-cart-image' does not exist!!!");
     }
+
+
 
 
 });

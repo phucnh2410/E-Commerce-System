@@ -29,15 +29,24 @@ public class Feedback {
     @Column(name = "feedback_date")
     private Date feedbackDate;
 
+    @Column(name = "feedback_rating")
+    private Double feedbackRating;
+
 
     //Many to One
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.REMOVE})
     @JoinColumn(name = "user_id")
     @JsonBackReference("user-feedbacks")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.REMOVE})
+    @JoinColumn(name = "order_id")
+    @JsonBackReference("order-feedbacks")
+    private Order order;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.REMOVE})
     @JoinColumn(name = "product_id")
     @JsonBackReference("product-feedbacks")

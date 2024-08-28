@@ -151,7 +151,7 @@
             <section class="category-management">
                 <div class="header-management">
                     <div class="title">
-                        Categories Management
+                        Categories were requested by seller
                     </div>
                 </div>
                 <div class="horizontal-line"></div>
@@ -161,6 +161,7 @@
                         <th>Category Name</th>
                         <th>Actions</th>
                     </tr>
+
                     </thead>
                     <tbody id="categoryTable" th:fragment="categoryManagementFrag">
 <!--                    <tr>-->
@@ -185,6 +186,15 @@
                         <tr th:if="${categories}" th:each="category : ${categories}">
 
                             <td th:text="${category.name}"></td>
+                            <td class="btn-action">
+                                <div class="btn-approve-category">
+                                    <a href="javascript:void(0);" th:onclick="|updateCategoryStatus(${category.id}, 'approved');|" >Approve</a>
+                                </div>
+
+                                <div class="btn-reject-category">
+                                    <a href="javascript:void(0);" th:onclick="|updateCategoryStatus(${category.id}, 'reject');|">Reject</a>
+                                </div>
+                            </td>
 <!--                            <td>-->
 <!--                                <a class="btn-edit" href="javascript:void(0);" th:onclick="|showFormUpdate(${product.id});|"><i class='bx bxs-edit' ></i></a>-->
 <!--                                <a class="btn-delete" href="javascript:void(0);" th:onclick="|showDeleteConfirmation(${product.id});|"><i class='bx bx-trash'></i></a>-->
@@ -193,6 +203,8 @@
                     </tbody>
                 </table>
             </section>
+
+            <p id="category-status-message"></p>
         </div>
 
 
@@ -382,47 +394,19 @@
 </script>
 
 
-<!--Header-->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var searchInput = document.querySelector('.search-input');
-        var header = document.querySelector('header'); // Thay đổi selector nếu cần
-
-        window.addEventListener('scroll', function() {
-            var stickyPoint = header.offsetHeight; // Vị trí kích hoạt sticky
-
-            if (window.scrollY > stickyPoint) {
-                searchInput.classList.add('sticky-active');
-            } else {
-                searchInput.classList.remove('sticky-active');
-            }
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var searchInput = document.querySelector('.search-input');
-
-        searchInput.addEventListener('input', function() {
-            if (searchInput.value.trim() !== '') {
-                searchInput.classList.add('has-value');
-            } else {
-                searchInput.classList.remove('has-value');
-            }
-        });
-    });
-</script>
-
-
 <!--Admin Page-->
 <script src="/js/fetchAdminPage.js"></script>
 <script src="/js/fetchStatistic.js"></script>
+
+<!--Category fetch-->
+<script src="/js/fetchManageCategory.js"></script>
+<script src="/js/fetchCategoryInNavbar.js"></script>
 
 <!--Image (Product and Avatar)-->
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>
 <!--Header and Navbar-->
+<script src="/js/searchAnimation.js"></script>
 <script src="/js/fetchCategoryInNavbar.js"></script>
 <script src="/js/scrollHeader.js"></script>
 <script src="/js/showMenu.js"></script>

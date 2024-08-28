@@ -1,7 +1,6 @@
 package com.spring.ecommercesystem.restController;
 
 import com.spring.ecommercesystem.entities.Cart;
-import com.spring.ecommercesystem.entities.Product;
 import com.spring.ecommercesystem.services.CartService;
 import com.spring.ecommercesystem.services.ProductService;
 import com.spring.ecommercesystem.services.UserService;

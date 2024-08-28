@@ -29,131 +29,439 @@
             <a th:href="@{/}"><button><i class='bx bx-arrow-back'></i> Back</button></a>
         </div>
 
+            <nav class="orders-navbar">
+                <ul class="tabs">
+                    <li class="order-tab-link active" data-tab="pending-order">Pending Confirmation</li>
+                    <li class="order-tab-link" data-tab="delivering-order">Delivering</li>
+                    <li class="order-tab-link" data-tab="received-order">Received</li>
+                    <li class="order-tab-link" data-tab="canceled-order">Canceled</li>
+                </ul>
+            </nav>
+            <!--                    SELLER-->
+            <div id="pending-order" class="order-tab-content active" >
+<!--                    <h2>Preparing</h2>-->
+                <div id="pendingOrder" th:fragment="pendingOrderFrag">
+                    <div class="order-cover" th:if="${orderTemps}" th:each="order : ${orderTemps}">
+                        <a th:href="@{/order(id=${order.id}) }">
+                            <!-- Order Info -->
+                            <div class="row">
+                                <div class="order-infomation">
+                                    <div class="order-code">
+                                        <span>ID: </span>
+                                        <span th:text="${order.id}"></span>
+                                    </div>
+                                    |
+                                    <div style="color: orangered;" class="order-status">
+                                        <span>Status: </span>
+                                        <span th:text="${order.status}"></span>
+                                    </div>
+                                </div>
+                            </div>
 
-        <div class="order-cover" th:if="${orderTemps}" th:each="order : ${orderTemps}">
-            <a th:href="@{/order(id=${order.id}) }">
-                <!-- Order Info -->
-                <div class="row">
-                    <div class="order-infomation">
-                        <div class="order-code">
-                            <span>Order ID: </span>
-                            <span th:text="${order.id}"></span>
-                        </div>
-                        |
-                        <div style="color: orangered;" class="order-status">
-                            <span>Status: </span>
-                            <span th:text="${order.status}"></span>
-                        </div>
+                            <!-- Products -->
+                            <div class="row">
+                                <section class="shop-product-info" th:if="${order.userCarts}" th:each="seller : ${order.userCarts}">
+                                    <div class="shop">
+                                        <div class="shop-info">
+                                            <a th:href="@{/shop(id=${seller.user.id})}" class="seller-name" th:text="${seller.user.fullName}"></a>
+                                        </div>
+                                    </div>
+                                    <section class="product" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}">
+                                        <div class="row">
+                                            <div class="col-9 col-md-1">
+                                                <div>
+                                                    <img width="60px" height="60px" class="product-pending-order-img" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}" alt="Product Image">
+                                                </div>
+                                            </div>
+                                            <div class="col-9 col-md-9 ">
+                                                <div th:text="${item.product.name}"></div>
+                                                <div class="">
+                                                    <div style="color: orangered;" th:text="'&#36;' +${item.product.price}"></div>
+                                                </div>
+                                                <div class="">
+                                                    <div th:text="'x' +${item.quantity}"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 col-md-2 product-total">
+                                                <div style="color: orangered;" th:text="'&#36;' +${item.product.price * item.quantity}"></div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </section>
+                            </div>
+
+                            <!-- Payment -->
+                            <div class="row">
+                                <section class="payment-info">
+                                    <div class="row total-payment">
+                                        <div class="col-8 col-md-8 payment-title">
+                                            <div style="">Total amount: </div>
+                                        </div>
+                                        <div class="col-4 col-md-4 payment-value">
+                                            <div style="" id="pending-payment" class="payment-total" th:text="'&#36;' +${order.finalTotal}">$10000</div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="payment-btn">
+                                    <div class="btn-cancel">
+                                        <a href="#">
+                                            <button type="button">
+                                                Cancel
+                                            </button>
+                                        </a>
+                                    </div>
+                                </section>
+                            </div>
+                        </a>
                     </div>
                 </div>
+            </div>
 
-                <!-- Products -->
-                <div class="row">
-                    <section class="shop-product-info" th:if="${order.userCarts}" th:each="seller : ${order.userCarts}">
-                        <div class="shop">
-                            <div class="shop-info">
-                                <a th:href="@{/shop(id=${seller.user.id})}" class="seller-name" th:text="${seller.user.fullName}"></a>
-                            </div>
-                        </div>
-                        <section class="product" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}">
+
+            <div id="delivering-order" class="order-tab-content" >
+                <div id="deliveringOrder" th:fragment="deliveringOrderFrag">
+                    <div class="order-cover" th:if="${orderTemps}" th:each="order : ${orderTemps}">
+                        <a th:href="@{/order(id=${order.id}) }">
+                            <!-- Order Info -->
                             <div class="row">
-                                <div class="col-md-1">
-                                    <div >
-                                        <img width="60px" height="60px" class="product-order-img" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}">
+                                <div class="order-infomation">
+                                    <div class="order-code">
+                                        <span>ID: </span>
+                                        <span th:text="${order.id}"></span>
                                     </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div th:text="${item.product.name}"></div>
-                                    <div class="">
-                                        <div style="color: orangered;" th:text="'&#36;' +${item.product.price}"></div>
+                                    |
+                                    <div style="color: orangered;" class="order-status">
+                                        <span>Status: </span>
+                                        <span th:text="${order.status}"></span>
                                     </div>
-                                    <div class="">
-                                        <div th:text="'x' +${item.quantity}"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 product-total">
-                                    <div style="color: orangered;" th:text="'&#36;' +${item.product.price * item.quantity}"></div>
                                 </div>
                             </div>
-                        </section>
-                    </section>
-                </div>
 
-                <!-- Payment -->
-                <div class="row">
-                    <section class="payment-info">
-                        <div class="row">
-                            <div class="col-6 col-md-2 payment-title">
-                                <div style="color: orangered; font-size: 20px; font-weight: 400;">Total amount: </div>
+                            <!-- Products -->
+                            <div class="row">
+                                <section class="shop-product-info" th:if="${order.userCarts}" th:each="seller : ${order.userCarts}">
+                                    <div class="shop">
+                                        <div class="shop-info">
+                                            <a th:href="@{/shop(id=${seller.user.id})}" class="seller-name" th:text="${seller.user.fullName}"></a>
+                                        </div>
+                                    </div>
+                                    <section class="product" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}">
+                                        <div class="row">
+                                            <div class="col-9 col-md-1">
+                                                <div >
+                                                    <img width="60px" height="60px" class="product-delivering-order-img" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}">
+                                                </div>
+                                            </div>
+                                            <div class="col-9 col-md-9">
+                                                <div th:text="${item.product.name}"></div>
+                                                <div class="">
+                                                    <div style="color: orangered;" th:text="'&#36;' +${item.product.price}"></div>
+                                                </div>
+                                                <div class="">
+                                                    <div th:text="'x' +${item.quantity}"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 col-md-2 product-total">
+                                                <div style="color: orangered;" th:text="'&#36;' +${item.product.price * item.quantity}"></div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </section>
                             </div>
-                            <div class="col-6 col-md-2 payment-value">
-                                <div style="color: orangered; font-size: 20px; font-weight: 400;" id="payment-total" class="payment-total" th:text="'&#36;' +${order.finalTotal}">$10000</div>
+
+                            <!-- Payment -->
+                            <div class="row">
+                                <section class="payment-info">
+                                    <div class="row total-payment">
+                                        <div class="col-8 col-md-8 payment-title">
+                                            <div style="">Total amount: </div>
+                                        </div>
+                                        <div class="col-4 col-md-4 payment-value">
+                                            <div style="" id="delivering-payment" class="payment-total" th:text="'&#36;' +${order.finalTotal}">$10000</div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="received-order" class="order-tab-content" >
+                <div id="receivedOrder" th:fragment="receivedOrderFrag">
+                    <div class="order-cover" th:if="${orderTemps}" th:each="order : ${orderTemps}">
+                        <a th:href="@{/order(id=${order.id}) }">
+                            <!-- Order Info -->
+                            <div class="row">
+                                <div class="order-infomation">
+                                    <div class="order-code">
+                                        <span>ID: </span>
+                                        <span th:text="${order.id}"></span>
+                                    </div>
+                                    |
+                                    <div style="color: orangered;" class="order-status">
+                                        <span>Status: </span>
+                                        <span th:text="${order.status}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Products -->
+                            <div class="row">
+                                <section class="shop-product-info" th:if="${order.userCarts}" th:each="seller : ${order.userCarts}">
+                                    <div class="shop">
+                                        <div class="shop-info">
+                                            <a th:href="@{/shop(id=${seller.user.id})}" class="seller-name" th:text="${seller.user.fullName}"></a>
+                                        </div>
+                                    </div>
+                                    <section class="product" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}">
+                                        <div class="row">
+                                            <div class="col-9 col-md-1">
+                                                <div>
+                                                    <img width="60px" height="60px" class="product-received-order-img" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-9 col-md-9">
+                                                <div th:text="${item.product.name}"></div>
+                                                <div class="">
+                                                    <div style="color: orangered;" th:text="'&#36;' +${item.product.price}"></div>
+                                                </div>
+                                                <div class="">
+                                                    <div th:text="'x' +${item.quantity}"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-3 col-md-2 product-total">
+                                                <div class="btn-feedback">
+                                                    <a class="btn-feedback-a" href="javascript:void(0);" th:onclick="|clickToCallPopup(${item.product.id}, ${order.id}, event);|">Feedback</a>
+                                                </div>
+                                                <div style="color: orangered;" th:text="'&#36;' +${item.product.price * item.quantity}"></div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </section>
+                            </div>
+
+                            <!-- Payment -->
+                            <div class="row">
+                                <section class="payment-info">
+                                    <div class="row total-payment">
+                                        <div class="col-8 col-md-8 payment-title">
+                                            <div style="">Total amount: </div>
+                                        </div>
+                                        <div class="col-4 col-md-4 payment-value">
+                                            <div style="" id="received-payment" class="payment-total" th:text="'&#36;' +${order.finalTotal}">$10000</div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="payment-btn">
+                                    <div class="btn-repurchase">
+                                        <a href="#">
+                                            <button type="button">
+                                                Repurchase
+                                            </button>
+                                        </a>
+                                    </div>
+                                    <div class="btn-return-refund">
+                                        <a href="#">
+                                            <button>
+                                                Return and Refunds
+                                            </button>
+                                        </a>
+                                    </div>
+                                </section>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="canceled-order" class="order-tab-content" >
+                <div id="canceledOrder" th:fragment="canceledOrderFrag">
+                    <div class="order-cover" th:if="${orderTemps}" th:each="order : ${orderTemps}">
+                        <a th:href="@{/order(id=${order.id}) }">
+                            <!-- Order Info -->
+                            <div class="row">
+                                <div class="order-infomation">
+                                    <div class="order-code">
+                                        <span>ID: </span>
+                                        <span th:text="${order.id}"></span>
+                                    </div>
+                                    |
+                                    <div style="color: orangered;" class="order-status">
+                                        <span>Status: </span>
+                                        <span th:text="${order.status}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Products -->
+                            <div class="row">
+                                <section class="shop-product-info" th:if="${order.userCarts}" th:each="seller : ${order.userCarts}">
+                                    <div class="shop">
+                                        <div class="shop-info">
+                                            <a th:href="@{/shop(id=${seller.user.id})}" class="seller-name" th:text="${seller.user.fullName}"></a>
+                                        </div>
+                                    </div>
+                                    <section class="product" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}">
+                                        <div class="row">
+                                            <div class="col-9 col-md-1">
+                                                <div >
+                                                    <img width="60px" height="60px" class="product-canceled-order-img" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}">
+                                                </div>
+                                            </div>
+                                            <div class="col-9 col-md-9">
+                                                <div th:text="${item.product.name}"></div>
+                                                <div class="">
+                                                    <div style="color: orangered;" th:text="'&#36;' +${item.product.price}"></div>
+                                                </div>
+                                                <div class="">
+                                                    <div th:text="'x' +${item.quantity}"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3 col-md-2 product-total">
+                                                <div style="color: orangered;" th:text="'&#36;' +${item.product.price * item.quantity}"></div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </section>
+                            </div>
+
+                            <!-- Payment -->
+                            <div class="row">
+                                <section class="payment-info">
+                                    <div class="row total-payment">
+                                        <div class="col-8 col-md-8 payment-title">
+                                            <div style="">Total amount: </div>
+                                        </div>
+                                        <div class="col-4 col-md-4 payment-value">
+                                            <div style="" id="canceled-payment" class="payment-total" th:text="'&#36;' +${order.finalTotal}">$10000</div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="row">
+                                <section class="payment-btn">
+                                    <div class="btn-repurchase">
+                                        <a href="#">
+                                            <button type="button">
+                                                Repurchase
+                                            </button>
+                                        </a>
+                                    </div>
+                                </section>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- popup section -->
+        <section>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <!-- <span class="close">&times;</span> -->
+                    <h5>Sending a feedback</h5>
+                    <form id="category-form" action="#" method="post">
+                        <div class="row">
+                            <div class="form-group row col-md-12">
+
+                                <label>Quantity of product:</label>
+                                <div class="rating">
+                                    <span class="star" data-value="1">&#9733;</span>
+                                    <span class="star" data-value="2">&#9733;</span>
+                                    <span class="star" data-value="3">&#9733;</span>
+                                    <span class="star" data-value="4">&#9733;</span>
+                                    <span class="star" data-value="5">&#9733;</span>
+                                </div>
+                                <input type="hidden" id="rating-value" name="rating-value" value="0">
+
+                                <label>Quantity of product:</label>
+                                <div class="form-group">
+                                    <textarea type="text" id="feedback-content" placeholder="Feedback Content"> </textarea>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="feedback-message"></p>
                             </div>
                         </div>
-<!--                        <div class="row">-->
-<!--                            <div class="payment-btn">-->
-<!--                                <div class="btn-cancel">-->
-<!--                                    <a href="#">-->
-<!--                                        <button type="button">-->
-<!--                                            Cancel-->
-<!--                                        </button>-->
-<!--                                    </a>-->
-<!--                                </div>-->
-<!--                                <div class="btn-return">-->
-<!--                                    <a href="#">-->
-<!--                                        <button>-->
-<!--                                            Return and Refunds-->
-<!--                                        </button>-->
-<!--                                    </a>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-                    </section>
+
+                        <div class="form-btn">
+                            <button id="btn-save" type="button" href="javascript:void(0);" th:onclick="|saveFeedback();|">Send</button>
+                            <button class="btn-done" type="button">Done</button>
+                        </div>
+
+                        <div class="loader"></div>
+
+                    </form>
+
                 </div>
-            </a>
-        </div>
+            </div>
+        </section>
 
     </div>
 </main>
 
 <footer th:replace="fragments/footer :: footer"></footer>
 
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var searchInput = document.querySelector('.search-input');
-        var header = document.querySelector('header'); // Thay đổi selector nếu cần
+    //order navbar
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.order-tab-link');
+        const contents = document.querySelectorAll('.order-tab-content');
 
-        window.addEventListener('scroll', function() {
-            var stickyPoint = header.offsetHeight; // Vị trí kích hoạt sticky
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
 
-            if (window.scrollY > stickyPoint) {
-                searchInput.classList.add('sticky-active');
-            } else {
-                searchInput.classList.remove('sticky-active');
-            }
+                // Add active class to clicked tab and corresponding content
+                const target = document.getElementById(tab.dataset.tab);
+                tab.classList.add('active');
+                target.classList.add('active');
+
+                // Hiển thị bảng và biểu đồ tương ứng khi chọn tab
+                if (tab.dataset.tab === 'pending-order') {
+                    getPendingOrder().then(r => {});
+                } else if (tab.dataset.tab === 'delivering-order') {
+                    getDeliveringOrder().then(r => {});
+                }else if (tab.dataset.tab === 'received-order') {
+                    getReceivedOrder().then(r => {});
+                }else if (tab.dataset.tab === 'canceled-order') {
+                    getCanceledOrder().then(r => {});
+                }
+            });
         });
     });
 </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var searchInput = document.querySelector('.search-input');
+<!--Popup-->
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
 
-        searchInput.addEventListener('input', function() {
-            if (searchInput.value.trim() !== '') {
-                searchInput.classList.add('has-value');
-            } else {
-                searchInput.classList.remove('has-value');
-            }
-        });
-    });
-</script>
+<!--    });-->
+<!--</script>-->
 
+
+
+<!--Order Management-->
+<script src="/js/fetchOrderManagement.js"></script>
 <!--Image (Product and Avatar)-->
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>
-<script src="/js/fetchSearch.js"></script>
+
 <!--Header and Navbar-->
+<script src="/js/searchAnimation.js"></script>
 <script src="/js/fetchCategoryInNavbar.js"></script>
 <script src="/js/scrollHeader.js"></script>
 <script src="/js/showMenu.js"></script>

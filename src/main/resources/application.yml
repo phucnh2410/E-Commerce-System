@@ -10,6 +10,7 @@ spring:
       client:
         registration:
           google:
+#            declare the GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET variable in the '.env' file
 
             scope:
               - profile
@@ -25,18 +26,6 @@ spring:
 #        format_sql: true
 #    database: mysql
 #    database-platform: org.hibernate.dialect.MySQLDialect
-
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-
-            scope:
-              - profile
-              - email
-            #this line must match with the URIs on GG API (Authorized redirect URIs)
-            redirect-uri: http://localhost:8080/login/oauth2/code/google
 
 
 

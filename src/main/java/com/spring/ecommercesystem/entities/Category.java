@@ -17,6 +17,14 @@ import java.util.List;
 @Entity
 @Table(name = "categories")
 public class Category implements Serializable {
+    private static final long serialVersionUID = 5942615693414973512L;
+    public enum Status{
+        reject,
+        approved,
+        preparing
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,6 +34,9 @@ public class Category implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "status")
+    private Status status;
 
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.REFRESH)

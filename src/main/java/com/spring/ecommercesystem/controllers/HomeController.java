@@ -1,5 +1,6 @@
 package com.spring.ecommercesystem.controllers;
 
+import com.spring.ecommercesystem.entities.Feedback;
 import com.spring.ecommercesystem.entities.OrderDetail;
 import com.spring.ecommercesystem.entities.Product;
 import com.spring.ecommercesystem.entities.User;
@@ -53,11 +54,6 @@ public class HomeController {
             Long productId = orderDetail.getProduct().getId();
             int productQuantity = orderDetail.getProductQuantity();
             //If the products id are duplicated, increasing quantity of these product id
-//            if (productSales.containsKey(productId)){
-//                productSales.put(productId, productSales.get(productId) + productQuantity);// 'productSales.get(productId) + productQuantity" get value by key and then plus more into this value
-//                return;
-//            }
-//            productSales.put(productId, productQuantity);
 
             //this code will replace if else statement above
             productSales.merge(productId, productQuantity, Integer::sum);
@@ -69,8 +65,6 @@ public class HomeController {
                 .limit(30)
                 .collect(Collectors.toList());
         //show sorted products
-//        sortedProducts.forEach(longIntegerEntry -> System.out.println("Product id: "+longIntegerEntry.getKey() +" -> "+ "Quantity: "+longIntegerEntry.getValue()));
-
         List<Product> productBestSellers = new ArrayList<>();
 
         sortedProducts.forEach(longIntegerEntry -> {
@@ -153,6 +147,25 @@ public class HomeController {
     @GetMapping("/product_detail")
     public String showProductDetail(Model model, @RequestParam("id") Long id){
         Product product = this.productService.findById(id);
+
+        //Get all items in orderDetail from the product
+        List<OrderDetail> orderDetails = product.getOrderDetails();
+        int numberOfProductSale = 0;
+
+        for (OrderDetail orderDetail : orderDetails){
+            numberOfProductSale += orderDetail.getProductQuantity();
+        }
+
+        List<Feedback> feedbacks = product.getFeedbacks();
+
+        OptionalDouble getRatingAverage = feedbacks.stream().mapToDouble(Feedback::getFeedbackRating).average();
+
+        double ratingAverage = getRatingAverage.orElse(0.0); // Trả về 0.0 nếu không có giá trị trung bình
+
+        model.addAttribute("numberOfProductSale", numberOfProductSale);
+        model.addAttribute("numberOfRating", feedbacks.size());
+        model.addAttribute("ratingAverage", ratingAverage);
+        model.addAttribute("feedbacks", feedbacks);
         model.addAttribute("product", product);
         return "Product/productDetail";
     }
