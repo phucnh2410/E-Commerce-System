@@ -164,25 +164,6 @@
 
                     </thead>
                     <tbody id="categoryTable" th:fragment="categoryManagementFrag">
-<!--                    <tr>-->
-<!--                        <td>Sample Name</td>-->
-<!--                        <td>-->
-<!--                            <button class="btn btn-info">Update</button>-->
-<!--                            <button class="btn btn-danger">Delete</button>-->
-<!--                        </td>-->
-<!--                    </tr><tr>-->
-<!--                        <td>Sample Name</td>-->
-<!--                        <td>-->
-<!--                            <button class="btn btn-info">Update</button>-->
-<!--                            <button class="btn btn-danger">Delete</button>-->
-<!--                        </td>-->
-<!--                    </tr><tr>-->
-<!--                        <td>Sample Name</td>-->
-<!--                        <td>-->
-<!--                            <button class="btn btn-info">Update</button>-->
-<!--                            <button class="btn btn-danger">Delete</button>-->
-<!--                        </td>-->
-<!--                    </tr>-->
                         <tr th:if="${categories}" th:each="category : ${categories}">
 
                             <td th:text="${category.name}"></td>

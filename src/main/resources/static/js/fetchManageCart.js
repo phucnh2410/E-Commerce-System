@@ -144,18 +144,31 @@ function transferObject(){
 }
 
 
-function checkoutAction(){
+async function checkoutAction(){
     try {
         const data = transferObject();
 
-        const purchaseLink = document.getElementById("purchase-link");
-        if (purchaseLink){
-            const queryString = new URLSearchParams({ data: JSON.stringify(data) }).toString();
-            purchaseLink.setAttribute('href', `/shopping_cart/checkout?${queryString}`);
+        // const purchaseLink = document.getElementById("purchase-link");
+        // if (purchaseLink){
+        //     const queryString = new URLSearchParams({ data: JSON.stringify(data) }).toString();
+        //     purchaseLink.setAttribute('href', `/shopping_cart/checkout?${queryString}`);
+        //
+        //     window.location.href = purchaseLink.href;
+        //     //redirect to url = /shopping_cart/checkout?data=..........
+        // }
 
-            window.location.href = purchaseLink.href;
-            //redirect to url = /shopping_cart/checkout?data=..........
+        const response = await fetch('/api/cart/store_checkout_info', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok){
+            const error = await response.text()
+            return error;
         }
+
+        window.location.href = "/shopping_cart/checkout";
 
     }catch (error) {
         console.error('An error with the checkout action operation:', error);
@@ -184,30 +197,40 @@ async function getCart(){
 }
 
 async function addProductToCart(productId){
-    const productQuantity = document.getElementById("product-quantity");
+    let productQuantity = 1;
+    const getProductQuantity = document.getElementById("product-quantity");
+    productQuantity = getProductQuantity && getProductQuantity.value ? parseInt(getProductQuantity.value) : 1;
+
+    const messageElement = document.getElementById('product-detail-message');
+
     try{
-        const response = await fetch("/api/cart/add/"+productId +"?quantity="+productQuantity.value, {
+        const response = await fetch("/api/cart/add/"+productId +"?quantity="+productQuantity, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             }
         });
 
+        const result = await response.json();
+
         if (!response.ok){
-            // console.Error("Something went wrong with API response. +");
-            const errorMessage = await response.text();
-            throw new Error(errorMessage);
+            messageElement.style.display = 'block';
+            messageElement.textContent = result.message;
+            messageElement.style.color = 'red';
             return;
         }
+
+        messageElement.style.display = 'none';
 
         //Popup notice successfully
         Swal.fire({
             title: "Success!",
-            text: "The product was added to cart successfully.",
+            text: result.message,
             icon: "success",
             timer: 1000, // thời gian hiển thị 1 giây (1000ms)
             showConfirmButton: false // không hiển thị nút bấm xác nhận
         });
+        getProductQuantity.value = 1;
         await showNumberOfProductInCartIcon();
     }catch (error) {
         console.error(`There was a problem with the add product to cart operation:`, error);

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class ConfirmOrderController {
     }
 
     private List<OrderTemp> sortOrder(List<Order> orders) {
-        List<OrderTemp> orderTemps = new ArrayList<>();
+        List<OrderTemp> orderTemps = new LinkedList<>();
 
         orders.forEach(order -> {
             OrderTemp orderTemp = new OrderTemp()
@@ -89,10 +90,16 @@ public class ConfirmOrderController {
             //set List UserCart into OrderTemp
             orderTemp.setUserCarts(userCarts);
 
-            orderTemps.add(orderTemp);
+            orderTemps.addFirst(orderTemp);
         });
 
         return orderTemps;
+    }
+
+    @GetMapping("/success")
+    public String successfulOrder(@PathParam("id") Long id, Model model) {
+        model.addAttribute("orderId", id);
+        return "OrderManagement/successfulOrdered";
     }
 
     @GetMapping("/list")

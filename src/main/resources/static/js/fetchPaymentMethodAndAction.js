@@ -2,39 +2,82 @@ $(document).ready(function() {
 
 });
 
-async function changePaymentMethod(){
+function showPaymentMethod() {
+    var paymentModal = document.getElementById('payment-modal');
+
+    var btnCancel = document.getElementById('btn-cancel-payment');
+
+    paymentModal.style.display = "block";
+    setTimeout(function () {
+        paymentModal.classList.add("show");
+    }, 10); // Đảm bảo rằng lớp 'show' được thêm sau khi display được áp dụng
+
+    // Ẩn modal khi click vào nút "done"
+    btnCancel.addEventListener("click", function () {
+        paymentModal.classList.remove("show");
+        setTimeout(function () {
+            paymentModal.style.display = "none";
+            // studentForm.reset();
+        }, 500); // Khớp với thời gian của transition
+    });
+
+    //Ẩn modal khi click ra ngoài modal
+    window.addEventListener("click", function (event) {
+        if (event.target == paymentModal) {
+            paymentModal.classList.remove("show");
+            setTimeout(function () {
+                paymentModal.style.display = "none";
+                // studentForm.reset();
+            }, 500); // Khớp với thời gian của transition
+        }
+    });
+
+    //Get the voucher id when choose a voucher
+    let selectedPaymentId = null;
+    const paymentItems = document.querySelectorAll('.payment-item');
+    const okButton = document.getElementById('btn-payment-ok');
+
+    paymentItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+            // Xóa class 'selected' từ tất cả các address-item khác
+            paymentItems.forEach(function (el) {
+                el.classList.remove('selected');
+            });
+
+            // Thêm class 'selected' cho address-item được click
+            this.classList.add('selected');
+
+            // Lấy ID của address được chọn
+            selectedPaymentId = this.getAttribute('data-payment-id');
+
+            // Mở khóa nút OK
+            okButton.disabled = false;
+        });
+    });
+
+    okButton.addEventListener('click', function () {
+        if (selectedPaymentId) {
+            changePaymentMethod(selectedPaymentId).then(r => {});
+        }
+
+        paymentModal.classList.remove("show");
+        setTimeout(function () {
+            paymentModal.style.display = "none";
+            // studentForm.reset();
+        }, 500);
+    });
+
+}
+
+async function changePaymentMethod(selectedPaymentId){
 
     try {
-        const response = await fetch("/api/payment/all");
-        const data = await response.json();
-        const inputOptions = data.reduce((options, method) => {
-            options[method.id] = method.name;
-            return options;
-        }, {});
+        const response = await fetch("/api/payment/"+selectedPaymentId);
+        const paymentMethod = await response.json();
 
+        document.getElementById('selected-payment-method').innerText = paymentMethod.name;
+        document.getElementById('data-payment-id').value = paymentMethod.id;
 
-        const result = await Swal.fire({
-            title: 'Select Payment Method',
-            input: 'select',
-            inputOptions: inputOptions,
-            // inputPlaceholder: 'Select a payment method',
-            showCancelButton: true,
-            inputValidator: (value) => {
-                return new Promise((resolve, reject) => {
-                    if (value) {
-                        resolve();
-                    } else {
-                        reject('You need to select a payment method!');
-                    }
-                });
-            }
-        });
-
-        if (result.isConfirmed) {
-            const selectedMethod = inputOptions[result.value];
-            document.getElementById('selected-payment-method').innerText = selectedMethod;
-            document.getElementById('data-payment-id').value = result.value;
-        }
     }catch (error) {
         console.error('Error fetching payment methods:', error);
     }

@@ -36,6 +36,15 @@ h1{
     /* color: #ff445c; */
 }
 
+.current-address{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.current-address div{
+    margin-right: 15px;
+}
+
 .address-change {
     margin-left: 16px;
 }
@@ -109,16 +118,23 @@ section {
 section .voucher{
     align-items: center;
     align-content: center;
-    font-size: 16px;
     font-weight: 400;
+    font-size: 17px;
     /*border-bottom: 1px solid rgba(0, 0, 0, .09);*/
     box-sizing: border-box;
     /*height: 3.75rem;*/
+    padding-top: 10px;
+    padding-left: 20px;/*Top, left*/
     margin-bottom: 10px;
+}
+
+section .voucher .voucher-option-btn{
+    margin-right: -20px;
 }
 
 section .voucher .voucher-option-btn a{
     text-decoration: none;
+    font-weight: 300;
 }
 
 
@@ -139,6 +155,7 @@ section .payment-methods {
 
 .payment-change a {
     text-decoration: none;
+    font-weight: 300;
 }
 
 .payment-info {
@@ -197,7 +214,7 @@ section .payment-methods {
     color: #f68190;
 }
 
-.modal {
+.bill-modal {
     font-weight: 400;
     display: none;
     position: fixed;
@@ -214,17 +231,17 @@ section .payment-methods {
 }
 
 /* Show Modal */
-.modal.show {
+.bill-modal.show {
     display: block;
     opacity: 1; /* Hiển thị modal với độ mờ 1 */
 }
 
 /* Modal Content */
-.modal-content {
+.bill-modal-content {
     background-color: #fefefe;
     margin: 5% auto;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 2px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 90%;
     max-width: 700px;
@@ -233,15 +250,15 @@ section .payment-methods {
 }
 
 /* Slide in Effect */
-.modal.show .modal-content {
+.bill-modal.show .bill-modal-content {
     transform: translateY(0); /* Đưa modal về vị trí bình thường */
 }
 
-.modal-content .form-btn{
+.bill-modal-content.form-btn{
     margin-top: 20px;
 }
 
-.modal-content .form-btn button{
+.bill-modal-content .form-btn button{
     font-weight: 300;
     margin-right: 13px;
     width: 130px;
@@ -268,7 +285,309 @@ section .payment-methods {
 /*    width: 160px;*/
 /*}*/
 
-.modal-content .form-btn button:hover{
+.bill-modal-content.form-btn button:hover{
+    background-color: rgb(248, 240, 230);
+}
+
+
+/**********************************************/
+.address-modal {
+    font-weight: 400;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+    opacity: 0; /* Bắt đầu với độ mờ */
+    transition: opacity 0.5s ease;
+}
+
+/* Show Modal */
+.address-modal.show {
+    display: block;
+    opacity: 1; /* Hiển thị modal với độ mờ 1 */
+}
+
+/* Modal Content */
+.address-modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 2px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 700px;
+    transform: translateY(-20px); /* Di chuyển modal lên trên một chút */
+    transition: transform 0.3s ease;
+}
+
+.address-modal-content a{
+    text-decoration: none;
+    font-weight: 300;
+    color: black;
+
+}
+
+.address-modal-content a .address-item{
+    height: auto;
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các phần tử con xuống dòng khi hết chiều rộng */
+    border: 1px solid #808080;
+    border-radius: 2px;
+    /*margin-right: 50px;*/
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.address-modal-content a .address-item div{
+    margin-right: 15px;
+    /*flex-basis: 150px;*/
+}
+
+.address-modal-content a .address-item:hover{
+    border: 1px solid orangered;
+}
+
+.address-modal-content a .address-item:focus{
+    /*border: 1px solid orangered;*/
+    outline: 2px solid orangered; /* Viền màu cam */
+    outline-offset: 2px;
+
+}
+
+/* Slide in Effect */
+.address-modal.show .address-modal-content {
+    transform: translateY(0); /* Đưa modal về vị trí bình thường */
+}
+
+.address-modal-content .form-btn{
+    margin-top: 20px;
+}
+
+.address-modal-content .form-btn button{
+    font-weight: 300;
+    margin-right: 13px;
+    width: 90px;
+    border: 1px solid #808080;
+    background-color: #fff;
+    border-radius: 2px;
+    color: rgb(110, 107, 107);
+}
+
+/*.modal-content .form-btn a{*/
+/*    font-weight: 300;*/
+/*    margin-right: 13px;*/
+/*    width: 130px;*/
+/*    height: 28px;*/
+/*    border: 1px solid #808080;*/
+/*    background-color: #fff;*/
+/*    border-radius: 2px;*/
+/*    color: rgb(110, 107, 107);*/
+/*    text-decoration: none;*/
+/*    text-align: center;*/
+/*}*/
+/*.modal-content .form-btn .btn-view{*/
+/*    margin-top: -5px;*/
+/*    width: 160px;*/
+/*}*/
+
+.address-modal-content .form-btn button:hover{
+    background-color: rgb(248, 240, 230);
+}
+
+/*************************Voucher*/
+
+.voucher-modal {
+    font-weight: 400;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+    opacity: 0; /* Bắt đầu với độ mờ */
+    transition: opacity 0.5s ease;
+}
+
+/* Show Modal */
+.voucher-modal.show {
+    display: block;
+    opacity: 1; /* Hiển thị modal với độ mờ 1 */
+}
+
+/* Modal Content */
+.voucher-modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 2px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 700px;
+    transform: translateY(-20px); /* Di chuyển modal lên trên một chút */
+    transition: transform 0.3s ease;
+}
+
+.voucher-modal-content a{
+    text-decoration: none;
+    font-weight: 300;
+    color: black;
+
+}
+
+.voucher-modal-content a .voucher-item{
+    height: auto;
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các phần tử con xuống dòng khi hết chiều rộng */
+    border: 1px solid #808080;
+    border-radius: 2px;
+    /*margin-right: 50px;*/
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.voucher-modal-content a .voucher-item div{
+    margin-right: 15px;
+    /*flex-basis: 150px;*/
+}
+
+.voucher-modal-content a .voucher-item:hover{
+    border: 1px solid orangered;
+}
+
+.voucher-modal-content a .voucher-item:focus{
+    /*border: 1px solid orangered;*/
+    outline: 2px solid orangered; /* Viền màu cam */
+    outline-offset: 2px;
+
+}
+
+/* Slide in Effect */
+.voucher-modal.show .voucher-modal-content {
+    transform: translateY(0); /* Đưa modal về vị trí bình thường */
+}
+
+.voucher-modal-content .form-btn{
+    margin-top: 20px;
+}
+
+.voucher-modal-content .form-btn button{
+    font-weight: 300;
+    margin-right: 13px;
+    width: 90px;
+    border: 1px solid #808080;
+    background-color: #fff;
+    border-radius: 2px;
+    color: rgb(110, 107, 107);
+}
+
+
+.voucher-modal-content .form-btn button:hover{
+    background-color: rgb(248, 240, 230);
+}
+
+
+/*************************Payment Method*/
+
+.payment-modal {
+    font-weight: 400;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+    opacity: 0; /* Bắt đầu với độ mờ */
+    transition: opacity 0.5s ease;
+}
+
+/* Show Modal */
+.payment-modal.show {
+    display: block;
+    opacity: 1; /* Hiển thị modal với độ mờ 1 */
+}
+
+/* Modal Content */
+.payment-modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 2px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    transform: translateY(-20px); /* Di chuyển modal lên trên một chút */
+    transition: transform 0.3s ease;
+}
+
+.payment-modal-content a{
+    text-decoration: none;
+    font-weight: 300;
+    color: black;
+
+}
+
+.payment-modal-content a .payment-item{
+    height: auto;
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các phần tử con xuống dòng khi hết chiều rộng */
+    border: 1px solid #808080;
+    border-radius: 2px;
+    /*margin-right: 50px;*/
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.payment-modal-content a .payment-item div{
+    margin-right: 15px;
+    /*flex-basis: 150px;*/
+}
+
+.payment-modal-content a .payment-item:hover{
+    border: 1px solid orangered;
+}
+
+.payment-modal-content a .payment-item:focus{
+    /*border: 1px solid orangered;*/
+    outline: 2px solid orangered; /* Viền màu cam */
+    outline-offset: 2px;
+
+}
+
+/* Slide in Effect */
+.payment-modal.show .payment-modal-content {
+    transform: translateY(0); /* Đưa modal về vị trí bình thường */
+}
+
+.payment-modal-content .form-btn{
+    margin-top: 20px;
+}
+
+.payment-modal-content .form-btn button{
+    font-weight: 300;
+    margin-right: 13px;
+    width: 90px;
+    border: 1px solid #808080;
+    background-color: #fff;
+    border-radius: 2px;
+    color: rgb(110, 107, 107);
+}
+
+
+.payment-modal-content .form-btn button:hover{
     background-color: rgb(248, 240, 230);
 }
 
@@ -278,6 +597,21 @@ section .payment-methods {
         padding-bottom: 50px;
         margin-bottom: 12px;
     }
+
+    .address .current-address{
+        /*margin-left: -70px;*/
+    }
+
+    .address-change{
+        /*margin-top: 8px;*/
+        margin-left: -50px;
+    }
+
+    /*/custom popup swal*/
+    /*.custom-swal-popup-phoneNumber{*/
+    /*    width: 50%;*/
+    /*    margin-left: -1000px;*/
+    /*}*/
 
     .title {
         display: none;
@@ -303,4 +637,39 @@ section .payment-methods {
     .btn-checkout {
         margin-left: 112px;
     }
+
+    .bill-modal{
+        margin-left: -415px;
+    }
+
+    .bill-modal-content {
+        width: 370px;
+    }
+
+    .address-modal{
+        margin-left: -415px;
+    }
+
+    .address-modal-content {
+        width: 370px;
+    }
+
+    .voucher-modal{
+        margin-left: -415px;
+    }
+
+    .voucher-modal-content{
+        width: 370px;
+    }
+
+    .payment-modal{
+        margin-left: -417px;
+    }
+
+    .payment-modal-content{
+        width: 370px;
+    }
+
+
+
 }

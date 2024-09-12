@@ -72,23 +72,24 @@
 <!--                    Products of seller-->
                 <section class="product">
                     <div class="row" th:if="${seller.cartTemps}" th:each="item : ${seller.cartTemps}" th:id="|item-${item.product.id}|" th:fragment="productFrag">
-                        <div class="col-2 col-md-1">
+                        <div class="col-3 col-md-1">
                             <div class="product-checkbox">
                                 <label class="stardust-checkbox">
                                     <input type="checkbox" class="stardust-checkbox-input product-checkbox" th:data-seller-id="${seller.user.id}" th:data-product-id="${item.product.id}" name="">
                                 </label>
                             </div>
                         </div>
-                        <div class="col-6 col-md-1">
+                        <div class="col-2 col-md-1">
                             <div class="product-img">
                                 <img class="product-cart-image" th:data-product-id="${item.product.id}" th:data-file-name="${item.product.productImg}" alt="Product Image">
                             </div>
                         </div>
-                        <div class="col-6 col-md-4">
+                        <div class="col-7 col-md-4">
                             <a th:href="@{/product_detail(id=${item.product.id})}" class="product-name">
                                 <div  th:text="${item.product.name}">Product name</div>
                             </a>
                         </div>
+
                         <div class="col-12 col-md-2">
                             <div class="product-price" th:text="'&#36;' +${item.product.price}">10000</div>
                         </div>
@@ -97,10 +98,10 @@
                                 <input type="number"  th:value="${item.quantity}" min="1" th:id="|quantity-input-product-${item.product.id}|" th:oninput="|updateQuantity(${item.product.id}, this.value);|" class="quantity-input" th:data-product-id="${item.product.id}">
                             </div>
                         </div>
-                        <div class="col-12 col-md-1">
+                        <div class="col-3 col-md-1">
                             <div class="product-total" th:data-product-id="${item.product.id}" th:id="|total-amount-product-${item.product.id}|" th:text="'&#36;' +${item.product.price}*${item.quantity}"></div>
                         </div>
-                        <div class="col-12 col-md-1">
+                        <div class="col-9 col-md-1">
                             <div class="product-action"> <a href="javascript:void(0);" th:onclick="|deleteProductFromCart(${item.product.id});|" ><i class='bx bx-trash'></i></a></div>
                         </div>
 
@@ -113,49 +114,49 @@
         </div>
 
 
-<!--        <div class="checkout-container">-->
-            <!-- Checkout -->
-            <div class="row checkout-row">
-                <div class="border-checkout">
-                    <div class="col-1 col-md-1">
-                        <!-- <div><input type="checkbox" name="" id=""></div> -->
-                    </div>
+        <div class="row checkout-row">
+            <div class="border-checkout">
+                <div class="col-1 col-md-1">
+                    <!-- <div><input type="checkbox" name="" id=""></div> -->
+                </div>
 
-                    <div class="col-3 col-md-2">
-                        <div class="checkout-checkbox">
-                            <label class="stardust-checkbox">
-                                <input type="checkbox" class="stardust-checkbox-input" name="" id="">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div class="title-select">Select Alls</div>
+                <div class="col-3 col-md-2 checkbox-checkout">
+                    <div class="checkout-checkbox">
+                        <label class="stardust-checkbox">
+                            <input type="checkbox" class="stardust-checkbox-input" name="" id="">
+                            <span class="checkmark"></span>
+                        </label>
                     </div>
+                    <div class="title-select">Select Alls</div>
+                </div>
 
-                    <div class=" col-md-2">
-                        <div class="btn-remove"><a href="">Remove</a></div>
-                    </div>
+                <div class="col-md-2">
+                    <div class="checkout-quantity">Quantity of products: </div>
+                </div>
 
-                    <div class=" col-md-2">
-                        <div class="checkout-quantity">Quantity of products: </div>
-                    </div>
+                <div class="col-md-1">
+                    <div id="totalProduct" class="number-of-product">0</div>
+                </div>
 
-                    <div class=" col-md-1">
-                        <div id="totalProduct" class="number-of-product">0</div>
-                    </div>
+                <div class="col-1 col-md-1">
+                    <div class="checkout-total">Totals:</div>
+                </div>
 
-                    <div class="col-1 col-md-1">
-                        <div class="checkout-total">Totals:</div>
-                    </div>
+                <div class="col-2 col-md-3">
+                    <div id="totalMoney" class="number-of-money">0</div>
+                </div>
 
-                    <div class="col-4 col-md-2">
-                        <div id="totalMoney" class="number-of-money">0</div>
-                    </div>
-
-                    <div class="col-1 col-md-1">
-                        <div class="btn-purchase"><a id="purchase-link" href="#" onclick="checkoutAction()">Purchase</a></div>
+                <div class="col-3 col-md-2">
+                    <div class="checkout-btn">
+                        <a id="purchase-link" href="#" onclick="checkoutAction()">
+                            <button type="button" class="btn-purchase" >
+                                Purchase
+                            </button>
+                        </a>
                     </div>
                 </div>
             </div>
+        </div>
 <!--        </div>-->
     </div>
 </main>

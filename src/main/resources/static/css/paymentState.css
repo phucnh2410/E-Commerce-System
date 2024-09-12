@@ -1,0 +1,63 @@
+/* Đảm bảo rằng body chiếm toàn bộ chiều cao của viewport */
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    /*justify-items: center;*/
+    align-items: center;
+    justify-content: center;
+}
+
+
+._failed{ border-bottom: solid 4px red !important; }
+._failed i{  color:red !important;  }
+
+._success {
+    box-shadow: 0 15px 25px #00000019;
+    padding: 45px;
+    width: 100%;
+    text-align: center;
+    margin: 40px auto;
+    border-bottom: solid 4px #28a745;
+}
+
+._success i {
+    font-size: 55px;
+    color: #28a745;
+}
+
+._success h2 {
+    margin-bottom: 12px;
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 10px;
+}
+
+._success p {
+    margin-bottom: 0px;
+    font-size: 18px;
+    color: #495057;
+    font-weight: 500;
+}
+
+.redirect-button{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.redirect-button button{
+    font-weight: 300;
+    width: 140px;
+    border-radius: 2px;
+    border: 2px solid #28a745;
+    background-color: #ffffff;
+    color: #28a745;
+    text-decoration: none;
+}
+
+.redirect-button button:hover {
+    background-color: rgb(248, 240, 230);
+}

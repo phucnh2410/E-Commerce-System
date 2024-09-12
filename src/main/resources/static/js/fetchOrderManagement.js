@@ -5,6 +5,80 @@ $(document).ready(function() {
 
 });
 
+async function repurchaseEvent(orderId){
+    const response = await fetch('/api/order/repurchase_order/'+orderId);
+
+    const productIds = await response.json();
+    console.log(productIds);
+    if (response.ok){
+        for (const productId of productIds) {
+            const addResponse = await fetch('/api/cart/add/' + productId+'?quantity=' + 1, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!addResponse.ok) {
+                console.error(`Failed to add product ${productId} to cart`);
+            }
+        }
+
+        //redirect
+        window.location.href = '/shopping_cart';
+    }
+}
+
+function canceledOrderEvent(orderId, status){
+    Swal.fire({
+        title: 'Cancel Order',
+        text: "Do you really want to cancel this order?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, cancel it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            //Call updateOrderStatus function to handle
+            updateOrderStatus(orderId, status).then(r => {
+                Swal.fire(
+                    'Canceled!',
+                    'Your order has been canceled.',
+                    'success'
+                );
+            });
+        }
+    });
+}
+
+async function updateOrderStatus(orderId, status){
+    console.log("order id: " + orderId);
+    console.log("status: "+status);
+    let messageElement = '';
+    try {
+        const response = await fetch('/api/order/update_status/'+orderId+'/'+status, {
+            method: 'PUT',
+            headers: {"Content-Type": "application/json"}
+        });
+
+        const result = await response.json();
+        if (response.ok){
+            messageElement = result.message;
+            // messageElement.style.color = 'green';
+
+            await getPendingOrder();
+        }else {
+            messageElement = result.message;
+        }
+
+
+    }catch (error){
+        console.error('There was a problem with the update order status in the order management page operation:', error);
+    }
+}
+
 async function getPendingOrder(){
     const orderBody = document.querySelector('#pendingOrder');
 

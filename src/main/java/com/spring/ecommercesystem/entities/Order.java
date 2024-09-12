@@ -84,7 +84,7 @@ public class Order {
     private PaymentMethod paymentMethod;
 
 
-    public Order(Long id, Date orderedDate, Date confirmedDate, Date canceledDate, Date deliveredDate, Date receivedDate, Status status, Double totalAmount, List<OrderDetail> orderDetails, Address address, Voucher voucher, User user, PaymentMethod paymentMethod) {
+    public Order(Long id, Date orderedDate, Date confirmedDate, Date canceledDate, Date deliveredDate, Date receivedDate, Status status, Double totalAmount, List<OrderDetail> orderDetails, List<Feedback> feedbacks, Address address, Voucher voucher, User user, PaymentMethod paymentMethod) {
         this.id = id;
         this.orderedDate = orderedDate;
         this.confirmedDate = confirmedDate;
@@ -94,20 +94,7 @@ public class Order {
         this.status = status;
         this.totalAmount = totalAmount;
         this.orderDetails = orderDetails;
-        this.address = address;
-        this.voucher = voucher;
-        this.user = user;
-        this.paymentMethod = paymentMethod;
-    }
-
-    public Order(Long id, Date orderedDate, Date deliveredDate, Date receivedDate, Status status, Double totalAmount, List<OrderDetail> orderDetails, Address address, Voucher voucher, User user, PaymentMethod paymentMethod) {
-        this.id = id;
-        this.orderedDate = orderedDate;
-        this.deliveredDate = deliveredDate;
-        this.receivedDate = receivedDate;
-        this.status = status;
-        this.totalAmount = totalAmount;
-        this.orderDetails = orderDetails;
+        this.feedbacks = feedbacks;
         this.address = address;
         this.voucher = voucher;
         this.user = user;

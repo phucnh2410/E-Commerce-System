@@ -26,6 +26,9 @@ public class Address {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "recipient_name")
+    private String recipientName;
+
     @Column(name = "street")
     private String street;
 
@@ -40,6 +43,11 @@ public class Address {
 
     @Column(name = "country")
     private String country;
+
+    @Column(name = "status")
+    private boolean status;
+
+
 
 
     //Many to one

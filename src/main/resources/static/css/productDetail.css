@@ -37,7 +37,9 @@ a {
     padding-left: 25px !important;
 }
 
-
+.product-detail-message{
+    display: none;
+}
 
 .product-btn{
     display: flex;

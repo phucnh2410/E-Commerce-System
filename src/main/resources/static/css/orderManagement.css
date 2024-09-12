@@ -415,5 +415,16 @@ section {
         margin-left: 0px;
     }
 
+    .modal-content{
+        width: 290px;
+    }
+
+    .modal-content .form-btn button{
+        width: 110px;
+    }
+
+    .modal{
+        /*scale: 0.5;*/
+    }
 
 }

@@ -198,6 +198,16 @@
                                         <img class="card-img-top" th:data-product-id="${product.id}" th:data-file-name="${product.productImg}" alt="Product Image" >
                                         <div class="card-body">
                                             <div class="name" th:text="${product.name}"></div>
+
+                                            <div class="rating-average" th:data-rating-average="${product.averageFeedback}">
+                                                <span class="star-average" data-value="1">&#9733;</span>
+
+                                                <span class="number-average" th:text="${product.averageFeedback}"></span>
+
+                                                <span class="number-rating" th:text="'('+${product.numberOfFeedbacks}+' ratings)'"></span>
+                                            </div>
+
+
                                             <div class="price" style="color: orangered;" th:text="'&#36;' +${product.price}"></div>
                                         </div>
                                     </div>
@@ -239,6 +249,49 @@
             bestSellerCarousel.scrollLeft + bestSellerCarousel.offsetWidth >= bestSellerCarousel.scrollWidth;
     });
 </script>
+
+
+<!--<script>-->
+<!--    document.addEventListener('DOMContentLoaded', function () {-->
+<!--        // Truy xuất tất cả các phần tử có class 'rating-average'-->
+<!--        const ratingContainers = document.querySelectorAll('.rating-average');-->
+
+<!--        // Lặp qua tất cả các phần tử 'rating-average'-->
+<!--        ratingContainers.forEach(ratingContainer => {-->
+<!--            // Lấy giá trị 'data-rating-average'-->
+<!--            const ratingAverage = parseFloat(ratingContainer.getAttribute('data-rating-average'));-->
+
+<!--            if (isNaN(ratingAverage)) {-->
+<!--            console.error("data-rating-average is not set or is not a valid number");-->
+<!--            return;-->
+<!--            }-->
+
+<!--            // Truy xuất tất cả các phần tử sao trong 'rating-average' của từng sản phẩm-->
+<!--            const stars = ratingContainer.querySelectorAll('.star-average');-->
+
+<!--            stars.forEach(star => {-->
+<!--                const starValue = parseFloat(star.getAttribute('data-value'));-->
+
+<!--                if (ratingAverage >= starValue) {-->
+<!--                    // Sao đầy-->
+<!--                    star.style.color = '#FFD700'; // Màu vàng cho sao đầy-->
+<!--                    star.style.background = ''; // Đặt lại để không bị ảnh hưởng bởi sao nửa-->
+<!--                } else if (ratingAverage >= (starValue - 0.5)) {-->
+<!--                // Sao nửa-->
+<!--                    star.style.background = 'linear-gradient(90deg, #FFD700 50%, #ccc 50%)'; // Nửa sao màu vàng-->
+<!--                    star.style.backgroundClip = 'text';-->
+<!--                    star.style.webkitBackgroundClip = 'text';-->
+<!--                    star.style.color = 'transparent'; // Đảm bảo sao không bị ảnh hưởng màu sắc-->
+<!--                } else {-->
+<!--                // Sao trống-->
+<!--                    star.style.color = '#ccc'; // Màu xám cho sao trống-->
+<!--                    star.style.background = ''; // Đặt lại để không bị ảnh hưởng bởi sao nửa-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+
+<!--</script>-->
 
 
 

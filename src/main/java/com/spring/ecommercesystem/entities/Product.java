@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalDouble;
 
 @Data
 @Builder
@@ -73,5 +75,18 @@ public class Product implements Serializable {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("product-order_details")
     private List<OrderDetail> orderDetails;
+
+
+
+    public double getAverageFeedback(){
+        OptionalDouble average = feedbacks.stream().mapToDouble(Feedback::getFeedbackRating).average();
+        double finalAverage = average.orElse(0.0);
+
+        return finalAverage;
+    }
+
+    public int getNumberOfFeedbacks(){
+        return feedbacks.size();
+    }
 
 }

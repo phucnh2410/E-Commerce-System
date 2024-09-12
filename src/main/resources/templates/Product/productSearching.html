@@ -178,6 +178,13 @@
                                         <img class="card-img-top" th:data-product-id="${product.id}" th:data-file-name="${product.productImg}" >
                                         <div class="card-body">
                                             <div class="name" th:text="${product.name}">Product name</div>
+                                            <div class="rating-average" th:data-rating-average="${product.averageFeedback}">
+                                                <span class="star-average" data-value="1">&#9733;</span>
+
+                                                <span class="number-average" th:text="${product.averageFeedback}"></span>
+
+                                                <span class="number-rating" th:text="'('+${product.numberOfFeedbacks}+' ratings)'"></span>
+                                            </div>
                                             <div class="price" style="color: orangered;" th:text="'&#36;' + ${product.price}">10000</div>
                                         </div>
                                     </div>

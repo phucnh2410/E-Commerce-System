@@ -75,6 +75,7 @@ public class HomeController {
 
 
         List<Product> newestProducts = this.productService.findNewestProducts();
+
         model.addAttribute("productBestSellers", productBestSellers);
         model.addAttribute("newestProducts", newestProducts);
         return "Home/homePage";

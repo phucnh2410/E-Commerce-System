@@ -2,13 +2,11 @@ package com.spring.ecommercesystem.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.ecommercesystem.services.*;
 import com.spring.ecommercesystem.temp.CartTemp;
 import com.spring.ecommercesystem.temp.UserCart;
 import com.spring.ecommercesystem.entities.*;
-import com.spring.ecommercesystem.services.CartService;
-import com.spring.ecommercesystem.services.PaymentMethodService;
-import com.spring.ecommercesystem.services.ProductService;
-import com.spring.ecommercesystem.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,13 +26,17 @@ public class CartController {
     private final PaymentMethodService paymentService;
 
     private final UserService userService;
+    private final AddressService addressService;
+    private final VoucherService voucherService;
 
     @Autowired
-    public CartController(CartService cartService, ProductService productService, PaymentMethodService paymentService, UserService userService) {
+    public CartController(CartService cartService, ProductService productService, PaymentMethodService paymentService, UserService userService, AddressService addressService, VoucherService voucherService) {
         this.cartService = cartService;
         this.productService = productService;
         this.paymentService = paymentService;
         this.userService = userService;
+        this.addressService = addressService;
+        this.voucherService = voucherService;
     }
 
     @GetMapping
@@ -127,56 +129,29 @@ public class CartController {
 
 
     @GetMapping("/checkout")
-    public String showCheckout(@RequestParam("data") String data, Model model) {
-        //Giải mã JSON thành object userCarts
-        ObjectMapper mapper = new ObjectMapper();
+    public String showCheckout(HttpSession session, Model model) {
+        //get all UserCart from session
+        List<UserCart> userCarts = (List<UserCart>) session.getAttribute("userCarts");
 
-        try {
-            List<UserCart> userCartsResponse = mapper.readValue(data, new TypeReference<List<UserCart>>() {});
-
-            List<UserCart> userCarts = new ArrayList<>();
-
-            userCartsResponse.stream().forEach(userCart -> {
-                //Get Useer from the UserCart response
-                User user = this.userService.findById(userCart.getUser().getId());
-                List<CartTemp> cartTemps = new ArrayList<>();
-
-                userCart.getCartTemps().stream().forEach(cartTemp -> {
-                    //Get product from the cartTemp response
-                    Product product = this.productService.findById(cartTemp.getProduct().getId());
-                    int quantity = cartTemp.getQuantity();
-                    Double total = cartTemp.getTotal();
-                    //Set Product and ... into CartTemp
-                    CartTemp cartTempObject = new CartTemp()
-                            .setProduct(product)
-                            .setQuantity(quantity)
-                            .setTotal(total);
-                    //Add CartTemp Object into List
-                    cartTemps.add(cartTempObject);
-                });
-
-                //set User and CartTemp into UserCart
-                UserCart userCartObject = new UserCart()
-                        .setUser(user)
-                        .setCartTemps(cartTemps);
-                //Add UserCart into List
-                userCarts.add(userCartObject);
-            });
-
-            AtomicReference<Double> totalAmount = new AtomicReference<>(0.0);
-            userCarts.forEach(userCart -> {
-                userCart.getCartTemps().forEach(cartTemp -> {
-                    totalAmount.updateAndGet(v -> v + cartTemp.getTotal());
-                });
-            });
+        Double totalAmount = userCarts.stream()
+                .flatMap(userCart -> userCart.getCartTemps().stream())//Get all cartTemps from all userCarts
+                .mapToDouble(CartTemp::getTotal).sum();//get total value for each cartTemp and sum them.
 
 
+            model.addAttribute("addresses", this.addressService.findAll());
+            model.addAttribute("vouchers", this.voucherService.findAll());
+            model.addAttribute("paymentMethods", this.paymentService.findAll());
+            model.addAttribute("default_address", this.addressService.findAll().stream().filter(Address::isStatus).findFirst().get() );
             model.addAttribute("userCarts", userCarts);
             model.addAttribute("totalAmount", totalAmount);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         return "Checkout/checkoutPage";
+    }
+
+    @GetMapping("/address_fragment/{id}")
+    public String showAddressById(@PathVariable Long id, Model model){
+        model.addAttribute("default_address", this.addressService.findById(id));
+
+        return  "Checkout/checkoutPage :: addressFrag";
     }
 
 }
