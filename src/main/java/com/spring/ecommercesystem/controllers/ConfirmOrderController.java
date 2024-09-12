@@ -210,7 +210,7 @@ public class ConfirmOrderController {
             productTotal += (cartTemp.getProduct().getPrice() * cartTemp.getQuantity());
         }
 
-        Double priceIsReduced = (productTotal * order.getVoucher().getPercentageIsReduced())/100;
+        Double priceIsReduced = (order.getVoucher() != null) ? (productTotal * order.getVoucher().getPercentageIsReduced())/100 : 0;
 
         model.addAttribute("userCarts", userCarts);
         model.addAttribute("order", order);

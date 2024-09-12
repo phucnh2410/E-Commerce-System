@@ -3,9 +3,9 @@ $(document).ready(function() {
 });
 
 function showPaymentMethod() {
-    var paymentModal = document.getElementById('payment-modal');
+    const paymentModal = document.getElementById('payment-modal');
 
-    var btnCancel = document.getElementById('btn-cancel-payment');
+    const btnCancel = document.getElementById('btn-cancel-payment');
 
     paymentModal.style.display = "block";
     setTimeout(function () {
@@ -21,16 +21,6 @@ function showPaymentMethod() {
         }, 500); // Khớp với thời gian của transition
     });
 
-    //Ẩn modal khi click ra ngoài modal
-    window.addEventListener("click", function (event) {
-        if (event.target == paymentModal) {
-            paymentModal.classList.remove("show");
-            setTimeout(function () {
-                paymentModal.style.display = "none";
-                // studentForm.reset();
-            }, 500); // Khớp với thời gian của transition
-        }
-    });
 
     //Get the voucher id when choose a voucher
     let selectedPaymentId = null;

@@ -69,8 +69,6 @@ async function paymentAction(){
             finalTotal: finalTotal
         }
 
-        console.log(orderTemp);
-
         if (orderTemp.paymentMethod.id === "3"){//pay with PayPal
             try{
                 // Lưu giá trị vào localStorage vì khi chuyển hướng thì js sẽ bị reload và mất giá trị

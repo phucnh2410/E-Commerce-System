@@ -5,6 +5,7 @@ import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import com.spring.ecommercesystem.entities.Order;
 import com.spring.ecommercesystem.entities.OrderDetail;
+import com.spring.ecommercesystem.entities.Voucher;
 import com.spring.ecommercesystem.services.*;
 import com.spring.ecommercesystem.temp.OrderTemp;
 import com.spring.ecommercesystem.temp.UserCart;
@@ -30,14 +31,16 @@ public class PaymentController {
     private final OrderService orderService;
     private final OrderDetailService orderDetailService;
     private final CartService cartService;
+    private final VoucherService voucherService;
 
     @Autowired
-    public PaymentController(PaypalService paypalService, UserService userService, OrderService orderService, OrderDetailService orderDetailService, CartService cartService) {
+    public PaymentController(PaypalService paypalService, UserService userService, OrderService orderService, OrderDetailService orderDetailService, CartService cartService, VoucherService voucherService) {
         this.paypalService = paypalService;
         this.userService = userService;
         this.orderService = orderService;
         this.orderDetailService = orderDetailService;
         this.cartService = cartService;
+        this.voucherService = voucherService;
     }
 
     @GetMapping("/paypal")
@@ -80,11 +83,13 @@ public class PaymentController {
                     defectiveUserCarts.add(userCart);
                 });
 
+                Voucher voucher = ( (orderTempSession.getVoucher() != null) && !(orderTempSession.getVoucher().equals("")) && (orderTempSession.getVoucher().getId() != null)) ? orderTempSession.getVoucher() : null;
+
     //            //Set an order
                 Order order = new Order()
                         .setAddress(orderTempSession.getAddress())
                         .setPaymentMethod(orderTempSession.getPaymentMethod())
-                        .setVoucher(orderTempSession.getVoucher())
+                        .setVoucher(voucher)
                         .setUser(this.userService.getCurrentUser())
                         .setTotalAmount(orderTempSession.getFinalTotal())
                         .setOrderedDate(Date.valueOf(LocalDate.now(ZoneId.systemDefault())))

@@ -5,7 +5,7 @@ $(document).ready(function() {
 function showAddress(){
     var addressModal = document.getElementById('address-modal');
 
-    var done = document.getElementsByClassName('btn-done')[0];
+    var btnCancel = document.getElementById('btn-cancel-address');
 
     addressModal.style.display = "block";
     setTimeout(function () {
@@ -13,24 +13,13 @@ function showAddress(){
     }, 10); // Đảm bảo rằng lớp 'show' được thêm sau khi display được áp dụng
 
     // Ẩn modal khi click vào nút "done"
-    done.addEventListener("click", function () {
+    btnCancel.addEventListener("click", function () {
         console.log('btn done was clicked');
         addressModal.classList.remove("show");
         setTimeout(function () {
             addressModal.style.display = "none";
             // studentForm.reset();
         }, 500); // Khớp với thời gian của transition
-    });
-
-    //Ẩn modal khi click ra ngoài modal
-    window.addEventListener("click", function (event) {
-        if (event.target == addressModal) {
-            addressModal.classList.remove("show");
-            setTimeout(function () {
-                addressModal.style.display = "none";
-                // studentForm.reset();
-            }, 500); // Khớp với thời gian của transition
-        }
     });
 
 

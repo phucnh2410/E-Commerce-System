@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.ecommercesystem.entities.Order;
 import com.spring.ecommercesystem.entities.OrderDetail;
 import com.spring.ecommercesystem.entities.Product;
+import com.spring.ecommercesystem.entities.Voucher;
 import com.spring.ecommercesystem.services.*;
 import com.spring.ecommercesystem.temp.OrderTemp;
 import com.spring.ecommercesystem.temp.UserCart;
@@ -86,11 +87,13 @@ public class OrderRestController {
                 defectiveUserCarts.add(userCart);
             });
 
+            Voucher voucher = ( (orderTempResponse.getVoucher() != null) && !(orderTempResponse.getVoucher().equals("")) && (orderTempResponse.getVoucher().getId() != null)) ? orderTempResponse.getVoucher() : null;
+
 //            //Set an order
             Order order = new Order()
                     .setAddress(orderTempResponse.getAddress())
                     .setPaymentMethod(orderTempResponse.getPaymentMethod())
-                    .setVoucher(orderTempResponse.getVoucher())
+                    .setVoucher(voucher)
                     .setUser(this.userService.getCurrentUser())
                     .setTotalAmount(orderTempResponse.getFinalTotal())
                     .setOrderedDate(Date.valueOf(LocalDate.now(ZoneId.systemDefault())))

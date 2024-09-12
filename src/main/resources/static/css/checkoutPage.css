@@ -316,7 +316,7 @@ section .payment-methods {
 /* Modal Content */
 .address-modal-content {
     background-color: #fefefe;
-    margin: 5% auto;
+    margin: 3% auto;
     padding: 20px;
     border-radius: 2px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -325,6 +325,28 @@ section .payment-methods {
     transform: translateY(-20px); /* Di chuyển modal lên trên một chút */
     transition: transform 0.3s ease;
 }
+
+/* Giới hạn chiều cao của phần chứa địa chỉ và thêm cuộn dọc */
+.address-modal-content #address-change-form {
+    max-height: 300px; /* Đặt chiều cao tối đa cho phần danh sách địa chỉ */
+    overflow-y: auto;  /* Thêm cuộn dọc khi danh sách địa chỉ vượt quá chiều cao */
+    padding: 5px; /* Tạo không gian cho thanh cuộn */
+}
+
+/* Tùy chỉnh thanh cuộn */
+.address-modal-content #address-change-form::-webkit-scrollbar {
+    width: 8px; /* Đặt độ rộng cho thanh cuộn */
+}
+
+.address-modal-content #address-change-form::-webkit-scrollbar-thumb {
+    background-color: #ccc; /* Màu của thanh cuộn */
+    border-radius: 4px;     /* Bo tròn thanh cuộn */
+}
+
+.address-modal-content #address-change-form::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa; /* Màu của thanh cuộn khi hover */
+}
+
 
 .address-modal-content a{
     text-decoration: none;
@@ -354,8 +376,7 @@ section .payment-methods {
 }
 
 .address-modal-content a .address-item:focus{
-    /*border: 1px solid orangered;*/
-    outline: 2px solid orangered; /* Viền màu cam */
+    outline: 1px solid orangered; /* Viền màu cam */
     outline-offset: 2px;
 
 }
@@ -378,23 +399,6 @@ section .payment-methods {
     border-radius: 2px;
     color: rgb(110, 107, 107);
 }
-
-/*.modal-content .form-btn a{*/
-/*    font-weight: 300;*/
-/*    margin-right: 13px;*/
-/*    width: 130px;*/
-/*    height: 28px;*/
-/*    border: 1px solid #808080;*/
-/*    background-color: #fff;*/
-/*    border-radius: 2px;*/
-/*    color: rgb(110, 107, 107);*/
-/*    text-decoration: none;*/
-/*    text-align: center;*/
-/*}*/
-/*.modal-content .form-btn .btn-view{*/
-/*    margin-top: -5px;*/
-/*    width: 160px;*/
-/*}*/
 
 .address-modal-content .form-btn button:hover{
     background-color: rgb(248, 240, 230);
@@ -427,7 +431,7 @@ section .payment-methods {
 /* Modal Content */
 .voucher-modal-content {
     background-color: #fefefe;
-    margin: 5% auto;
+    margin: 20% auto;
     padding: 20px;
     border-radius: 2px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -435,6 +439,27 @@ section .payment-methods {
     max-width: 700px;
     transform: translateY(-20px); /* Di chuyển modal lên trên một chút */
     transition: transform 0.3s ease;
+}
+
+/* Giới hạn chiều cao của phần chứa địa chỉ và thêm cuộn dọc */
+.voucher-modal-content #voucher-change-form {
+    max-height: 300px; /* Đặt chiều cao tối đa cho phần danh sách địa chỉ */
+    overflow-y: auto;  /* Thêm cuộn dọc khi danh sách địa chỉ vượt quá chiều cao */
+    padding: 5px; /* Tạo không gian cho thanh cuộn */
+}
+
+/* Tùy chỉnh thanh cuộn */
+.voucher-modal-content #voucher-change-form::-webkit-scrollbar {
+    width: 8px; /* Đặt độ rộng cho thanh cuộn */
+}
+
+.voucher-modal-content #voucher-change-form::-webkit-scrollbar-thumb {
+    background-color: #ccc; /* Màu của thanh cuộn */
+    border-radius: 4px;     /* Bo tròn thanh cuộn */
+}
+
+.voucher-modal-content #voucher-change-form::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa; /* Màu của thanh cuộn khi hover */
 }
 
 .voucher-modal-content a{
@@ -512,6 +537,7 @@ section .payment-methods {
     padding-top: 60px;
     opacity: 0; /* Bắt đầu với độ mờ */
     transition: opacity 0.5s ease;
+
 }
 
 /* Show Modal */
@@ -523,7 +549,9 @@ section .payment-methods {
 /* Modal Content */
 .payment-modal-content {
     background-color: #fefefe;
-    margin: 5% auto;
+    margin: 25% auto;
+    left: 0;
+    top: 0;
     padding: 20px;
     border-radius: 2px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -531,6 +559,27 @@ section .payment-methods {
     max-width: 500px;
     transform: translateY(-20px); /* Di chuyển modal lên trên một chút */
     transition: transform 0.3s ease;
+}
+
+/* Giới hạn chiều cao của phần chứa địa chỉ và thêm cuộn dọc */
+.payment-modal-content #payment-change-form {
+    max-height: 300px; /* Đặt chiều cao tối đa cho phần danh sách địa chỉ */
+    overflow-y: auto;  /* Thêm cuộn dọc khi danh sách địa chỉ vượt quá chiều cao */
+    padding: 5px; /* Tạo không gian cho thanh cuộn */
+}
+
+/* Tùy chỉnh thanh cuộn */
+.payment-modal-content #payment-change-form::-webkit-scrollbar {
+    width: 8px; /* Đặt độ rộng cho thanh cuộn */
+}
+
+.payment-modal-content #payment-change-form::-webkit-scrollbar-thumb {
+    background-color: #ccc; /* Màu của thanh cuộn */
+    border-radius: 4px;     /* Bo tròn thanh cuộn */
+}
+
+.payment-modal-content #payment-change-form::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa; /* Màu của thanh cuộn khi hover */
 }
 
 .payment-modal-content a{

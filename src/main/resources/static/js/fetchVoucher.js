@@ -23,16 +23,16 @@ function showVoucher() {
         }, 500); // Khớp với thời gian của transition
     });
 
-    //Ẩn modal khi click ra ngoài modal
-    window.addEventListener("click", function (event) {
-        if (event.target == voucherModal) {
-            voucherModal.classList.remove("show");
-            setTimeout(function () {
-                voucherModal.style.display = "none";
-                // studentForm.reset();
-            }, 500); // Khớp với thời gian của transition
-        }
-    });
+    // //Ẩn modal khi click ra ngoài modal
+    // window.addEventListener("click", function (event) {
+    //     if (event.target == voucherModal) {
+    //         voucherModal.classList.remove("show");
+    //         setTimeout(function () {
+    //             voucherModal.style.display = "none";
+    //             // studentForm.reset();
+    //         }, 500); // Khớp với thời gian của transition
+    //     }
+    // });
 
     //Get the voucher id when choose a voucher
     let selectedVoucherId = null;

@@ -180,32 +180,6 @@
                                 <a href="#" onclick="paymentAction()">Checkout</a>
                             </button>
                         </div>
-<!--                        <form th:action="@{/save}" method="POST">-->
-<!--                            &lt;!&ndash; Hidden input for address ID &ndash;&gt;-->
-<!--                            <input type="hidden" id="data-address-id" name="addressId" th:value="${default_address.id}" />-->
-
-<!--                            &lt;!&ndash; Hidden input for voucher ID &ndash;&gt;-->
-<!--                            <input type="hidden" id="data-voucher-id" name="voucherId" />-->
-
-<!--                            &lt;!&ndash; Hidden input for payment method ID &ndash;&gt;-->
-<!--                            <input type="hidden" value="1" id="data-payment-id" name="paymentMethodId" />-->
-
-<!--                            &lt;!&ndash; Hidden input for total price &ndash;&gt;-->
-<!--                            <input type="hidden" id="final-total" name="finalTotal" th:value="${totalAmount}" />-->
-
-<!--                            &lt;!&ndash; Loop through userCarts and generate inputs for each seller and their products &ndash;&gt;-->
-<!--                            <div th:each="seller : ${userCarts}">-->
-<!--                                <input type="hidden" name="sellers[${sellerStat.index}].sellerId" th:value="${seller.user.id}" />-->
-<!--                                <div th:each="item, itemStat : ${seller.cartTemps}">-->
-<!--                                    <input type="hidden" name="sellers[${sellerStat.index}].products[${itemStat.index}].productId" th:value="${item.product.id}" />-->
-<!--                                    <input type="hidden" name="sellers[${sellerStat.index}].products[${itemStat.index}].quantity" th:value="${item.quantity}" />-->
-<!--                                    <input type="hidden" name="sellers[${sellerStat.index}].products[${itemStat.index}].total" th:value="${item.total}" />-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-<!--                            &lt;!&ndash; Checkout button &ndash;&gt;-->
-<!--                            <button type="submit">Checkout</button>-->
-<!--                        </form>-->
                     </div>
                 </div>
             </section>
@@ -257,28 +231,30 @@
         <section>
             <div id="address-modal" class="address-modal">
                 <div class="address-modal-content">
-                    <div id="address-change-form">
-                        <div th:if="${addresses}" th:each="address : ${addresses}">
-                            <a href="#">
-                                <div class="address-item" tabindex="0" th:data-address-id="${address.id}">
-                                    <div class="recipient-name" th:text="${address.recipientName}">Ngo Huynh Phuc</div>
-                                    <div class="recipient-phone" th:text="${address.phoneNumber}">08358235823</div>
-                                    <div class="recipient-street"  th:text="${address.street}">Cach Mang Thang 8</div>
-                                    <div class="recipient-ward"  th:text="${address.wardAndCommune}">My Phuoc</div>
-                                    <div class="recipient-district"  th:text="${address.district}">Ben Cat</div>
-                                    <div class="recipient-city"  th:text="${address.city}">Binh Duong</div>
-                                    <div class="recipient-country"  th:text="${address.country}">Vietnam</div>
-                                </div>
-                            </a>
+                    <div>
+                        <div  id="address-change-form">
+                            <div th:if="${addresses}" th:each="address : ${addresses}">
+                                <a href="#">
+                                    <div class="address-item" tabindex="0" th:data-address-id="${address.id}">
+                                        <div class="recipient-name" th:text="${address.recipientName}">Ngo Huynh Phuc</div>
+                                        <div class="recipient-phone" th:text="${address.phoneNumber}">08358235823</div>
+                                        <div class="recipient-street"  th:text="${address.street}">Cach Mang Thang 8</div>
+                                        <div class="recipient-ward"  th:text="${address.wardAndCommune}">My Phuoc</div>
+                                        <div class="recipient-district"  th:text="${address.district}">Ben Cat</div>
+                                        <div class="recipient-city"  th:text="${address.city}">Binh Duong</div>
+                                        <div class="recipient-country"  th:text="${address.country}">Vietnam</div>
+                                    </div>
+                                </a>
 
-                            <a href="#" class="set-default-btn">Set Default</a>
+                                <a href="#" class="set-default-btn">Set Default</a>
+                            </div>
                         </div>
 
                         <!-- Modal Footer -->
                         <div class="modal-footer">
                             <div class="form-btn">
                                 <a id="btn-opt-address"><button class="btn-ok" id="btn-address-ok" type="button">OK</button></a>
-                                <a href="#"> <button class="btn-done" type="button">Cancel</button> </a>
+                                <a href="#"> <button id="btn-cancel-address" type="button">Cancel</button> </a>
                             </div>
                         </div>
 
@@ -291,15 +267,17 @@
         <section>
             <div id="voucher-modal" class="voucher-modal">
                 <div class="voucher-modal-content">
-                    <div id="voucher-change-form">
-                        <div th:if="${vouchers}" th:each="voucher : ${vouchers}">
-                            <a href="#">
-                                <div class="voucher-item" tabindex="0" th:data-voucher-id="${voucher.id}">
-                                    <div class="voucher-des" th:text="${voucher.description}">Ngo Huynh Phuc</div>
-                                    <div class="voucher-percentage" th:data-voucher-percent="${voucher.id}" th:text="${voucher.percentageIsReduced}">08358235823</div>
-                                    <div class="voucher-time"  th:text="${voucher.deadline}">Cach Mang Thang 8</div>
-                                </div>
-                            </a>
+                    <div>
+                        <div id="voucher-change-form">
+                            <div th:if="${vouchers}" th:each="voucher : ${vouchers}">
+                                <a href="#">
+                                    <div class="voucher-item" tabindex="0" th:data-voucher-id="${voucher.id}">
+                                        <div class="voucher-des" th:text="${voucher.description}">Ngo Huynh Phuc</div>
+                                        <div class="voucher-percentage" th:data-voucher-percent="${voucher.id}" th:text="${voucher.percentageIsReduced}">08358235823</div>
+                                        <div class="voucher-time"  th:text="${voucher.deadline}">Cach Mang Thang 8</div>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
 
                         <!-- Modal Footer -->
@@ -318,7 +296,7 @@
         <!-- Payment method popup-->
         <section>
             <div id="payment-modal" class="payment-modal">
-                <div class="payment-modal-content">
+                <div class="payment-modal-content" id="payment-modal-content">
                     <div id="payment-change-form">
                         <div th:if="${paymentMethods}" th:each="payment : ${paymentMethods}">
                             <a href="#">

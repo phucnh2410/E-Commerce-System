@@ -159,11 +159,11 @@
                         <div style="color: orangered; font-size: 20px; font-weight: 400;">Total amount: </div>
                     </div>
                     <div class="col-6 col-md-2 payment-value">
-                        <div class="total-item" th:text="'&#36;' +${productTotal}">$11000</div>
+                        <div class="total-item" th:text="'$' +${productTotal}">$11000</div>
                         <div class="shipping-fee">$60</div>
-                        <div class="voucher" th:text="'-&#36;' +${priceIsReduced}"></div>
+                        <div class="voucher" th:text="'-$' +${priceIsReduced}"></div>
                         <div class="payment-method" th:text="${order.paymentMethod.name}"></div>
-                        <div style="color: orangered; font-size: 20px; font-weight: 400;" id="payment-total" class="payment-total" th:text="'&#36;' +${productTotal - priceIsReduced}"></div>
+                        <div style="color: orangered; font-size: 20px; font-weight: 400;" id="payment-total" class="payment-total" th:text="'$' + ${productTotal - priceIsReduced}"></div>
                     </div>
                 </div>
                 <div class="row">
