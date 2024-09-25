@@ -62,7 +62,7 @@
                     <td th:text="${product.name}"></td>
                     <td th:text="${product.category.name}"></td>
                     <td th:text="${product.brand}"></td>
-                    <td th:text="'&#36;' +${product.price}"></td>
+                    <td th:text="'$' +${product.price}"></td>
                     <td th:text="${product.stock}"></td>
 <!--                    <td th:text="${product.}">Sample Image</td>-->
                     <td>
@@ -150,6 +150,7 @@
         var editButtons = document.querySelectorAll(".btn-edit");
         var modal = document.getElementById("myModal");
         var done = document.getElementsByClassName("btn-done")[0];
+        const messageElement = document.getElementById('product-message');
         // var studentForm = document.getElementById("studentForm");
 
         if (addButton) {
@@ -168,22 +169,23 @@
         // Ẩn modal khi click vào nút "done"
         done.addEventListener("click", function () {
             modal.classList.remove("show");
+            modal.style.display = "none";
             setTimeout(function () {
-                modal.style.display = "none";
+                messageElement.textContent = '';
                 // studentForm.reset();
             }, 500); // Khớp với thời gian của transition
         });
 
-        // Ẩn modal khi click ra ngoài modal
-        window.addEventListener("click", function (event) {
-            if (event.target == modal) {
-                modal.classList.remove("show");
-                setTimeout(function () {
-                    modal.style.display = "none";
-                    // studentForm.reset();
-                }, 500); // Khớp với thời gian của transition
-            }
-        });
+        // // Ẩn modal khi click ra ngoài modal
+        // window.addEventListener("click", function (event) {
+        //     if (event.target == modal) {
+        //         modal.classList.remove("show");
+        //         setTimeout(function () {
+        //             modal.style.display = "none";
+        //             // studentForm.reset();
+        //         }, 500); // Khớp với thời gian của transition
+        //     }
+        // });
     });
 </script>
 

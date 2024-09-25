@@ -36,7 +36,7 @@ public class CategoryRestController {
         List<Category> categories = this.categoryService.findAll();
 
         List<Category> categoriesApproved  = categories.stream()
-                .filter(category -> category.getStatus() == Category.Status.approved)//Get all categories with the status is approved
+                .filter(category -> category.getStatus() == Category.Status.Approved)//Get all categories with the status is approved
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(categoriesApproved);
@@ -52,7 +52,7 @@ public class CategoryRestController {
     public ResponseEntity<Map<String, Object>> createCategory(@PathVariable Long id, @RequestBody Category category){
         Map<String, Object> response = new HashMap<>();
 
-        category.setStatus(Category.Status.preparing);
+        category.setStatus(Category.Status.Pending);
         User seller = this.userService.findById(id);
         try{
             this.categoryService.saveAndUpdate(category);
@@ -80,10 +80,10 @@ public class CategoryRestController {
 
         try{
             if (status.equals("approved")){
-                category.setStatus(Category.Status.approved);
+                category.setStatus(Category.Status.Approved);
                 response.put("message", "The "+category.getName()+" category has been approved");
             } else if (status.equals("reject")){
-                category.setStatus(Category.Status.reject);
+                category.setStatus(Category.Status.Reject);
                 response.put("message", "The "+category.getName()+" category has been rejected, This one will be removed");
             }
 

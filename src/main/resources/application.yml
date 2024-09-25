@@ -5,8 +5,6 @@ spring:
     password: 12345678
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-
-
 #  jpa:
 #    hibernate:
 #      ddl-auto: update
@@ -16,6 +14,10 @@ spring:
 #        format_sql: true
 #    database: mysql
 #    database-platform: org.hibernate.dialect.MySQLDialect
+
+
+
+
 
 
 

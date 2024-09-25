@@ -1,8 +1,6 @@
 package com.spring.ecommercesystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,9 +17,9 @@ import java.util.List;
 public class Category implements Serializable {
     private static final long serialVersionUID = 5942615693414973512L;
     public enum Status{
-        reject,
-        approved,
-        preparing
+        Reject,
+        Approved,
+        Pending
     }
 
 
@@ -36,6 +34,7 @@ public class Category implements Serializable {
     private String description;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 

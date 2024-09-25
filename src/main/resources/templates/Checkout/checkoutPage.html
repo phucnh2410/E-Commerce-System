@@ -269,12 +269,12 @@
                 <div class="voucher-modal-content">
                     <div>
                         <div id="voucher-change-form">
-                            <div th:if="${vouchers}" th:each="voucher : ${vouchers}">
+                            <div th:if="${vouchers}" th:each="voucherDetail : ${vouchers}">
                                 <a href="#">
-                                    <div class="voucher-item" tabindex="0" th:data-voucher-id="${voucher.id}">
-                                        <div class="voucher-des" th:text="${voucher.description}">Ngo Huynh Phuc</div>
-                                        <div class="voucher-percentage" th:data-voucher-percent="${voucher.id}" th:text="${voucher.percentageIsReduced}">08358235823</div>
-                                        <div class="voucher-time"  th:text="${voucher.deadline}">Cach Mang Thang 8</div>
+                                    <div class="voucher-item" tabindex="0" th:data-voucher-id="${voucherDetail.voucher.id}">
+                                        <div class="voucher-des" th:text="${voucherDetail.voucher.description}">Ngo Huynh Phuc</div>
+                                        <div class="voucher-percentage" th:data-voucher-percent="${voucherDetail.voucher.id}" th:text="${voucherDetail.voucher.percentageIsReduced}">08358235823</div>
+<!--                                        <div class="voucher-time"  th:text="${voucher.deadline}">Cach Mang Thang 8</div>-->
                                     </div>
                                 </a>
                             </div>

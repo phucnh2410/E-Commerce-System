@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.com">
+<html lang="en" xmlns:th="https://www.thymeleaf.com" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="UTF-8">
@@ -19,7 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- Icons link -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
@@ -35,11 +35,11 @@
         <h1>Admin Page</h1>
     </div>
     <div class="container">
-
         <nav class="admin-navbar">
             <ul class="tabs">
                 <li class="tab-link active" data-tab="orders-management">Order Management</li>
-                <li class="tab-link" data-tab="account-management">Account Management</li>
+                <li class="tab-link" data-tab="vouchers-management">Voucher Management</li>
+                <li class="tab-link" data-tab="accounts-management">Account Management</li>
                 <li class="tab-link" data-tab="categories-management">Category Management</li>
                 <li class="tab-link" id="data-tab-statistics" data-tab="statistics-management">Statistic Management</li>
             </ul>
@@ -51,6 +51,11 @@
                     <div class="title">
                         Order Management
                     </div>
+
+                    <div class="search-order-container">
+                        <input id="search-order-input" class="search-order" type="text" oninput="getOrderById()" placeholder="Searching order code. . .">
+                        <button class="search-order-btn"><i class='bx bx-search'></i></button>
+                    </div>
                 </div>
                 <div class="horizontal-line"></div>
                 <table class="orderTable">
@@ -59,12 +64,12 @@
                         <th>ID</th>
                         <th>Ordered Date</th>
                         <th>Customer</th>
-                        <th>Status</th>
                         <th>Payment</th>
                         <th>Products</th>
                         <th>Vchrs</th>
-<!--                        <th>Shipping Fee</th>-->
                         <th>Total</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody id="orderManagement" th:fragment="orderManagementFrag">
@@ -72,7 +77,6 @@
                             <td><a th:href="@{/order(id=${order.id}) }"  th:text="${order.id}"></a></td>
                             <td th:text="${order.orderedDate}"></td>
                             <td th:text="${order.user.fullName}"></td>
-                            <td th:text="${order.status}"></td>
                             <td th:text="${order.paymentMethod.name}"></td>
                             <td class="productDetail">
                                 <table class="productTable">
@@ -82,29 +86,155 @@
                                             <td th:text="${orderDetail.product.name}"></td>
                                             <td th:text="'$'+ ${orderDetail.product.price}"></td>
                                             <td th:text="'x'+ ${orderDetail.productQuantity}"></td>
-            <!--                                <td th:text="${orderDetail.productQuantity}"></td>-->
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
-                            <td th:text="'-'+ ${order.voucher.percentageIsReduced} +'%'"></td>
-    <!--                        <td th:text="${order.phoneNumber}"></td>-->
+                            <td th:text="${ (order.voucher != null) ? ('-' + order.voucher.percentageIsReduced + '%') : ('-0%') }"></td>
                             <td th:text="'$'+ ${order.totalAmount}"></td>
-                            <!--                    <td th:text="${product.}">Sample Image</td>-->
-                            <!--                        <td>-->
-                            <!--                            <a class="btn-edit" href="javascript:void(0);" th:onclick="|showFormUpdate(${product.id});|"><i class='bx bxs-edit' ></i></a>-->
-                            <!--                            <a class="btn-delete" href="javascript:void(0);" th:onclick="|showDeleteConfirmation(${product.id});|"><i class='bx bx-trash'></i></a>-->
-                            <!--                        </td>-->
+                            <td th:text="${order.status}"></td>
+                            <td>
+                                <a th:if="${order.status.name == 'Pending'}" class="btn-edit" href="javascript:void(0);" th:onclick="|updateOrderStatus(${order.id}, 'confirm');|" title="Confirm this order"><i class='bx bx-check-square'></i></a>
+                                <a th:if="${order.status.name == 'Confirmed'}" class="btn-edit" href="javascript:void(0);" th:onclick="|updateOrderStatus(${order.id}, 'delivering');|" title="Update to 'Shipping' status"><i class='bx bxs-truck'></i></a>
+                                <a th:if="${order.status.name == 'Delivering'}" class="btn-delete" href="javascript:void(0);" th:onclick="|updateOrderStatus(${order.id}, 'received');|" title="Update to 'Received' status"><i class='bx bx-check'></i></a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
+
+                <div id="message-order-searching-body" th:fragment="orderMessageFrag">
+                    <p id="message-order-searching" th:text="${message}"></p>
+                </div>
             </section>
         </div>
+
+<!--        Voucher Management-->
+        <div id="vouchers-management" class="tab-content">
+            <section class="voucher-management">
+                <div class="header-management">
+                    <div class="title">
+                        Events Management
+                    </div>
+                </div>
+                <div class="horizontal-line"></div>
+
+                <nav class="vouchers-navbar">
+                    <ul class="tabs">
+                        <li class="voucher-tab-link active" data-tab="new-voucher">New Voucher</li>
+                        <li class="voucher-tab-link" data-tab="published-voucher">Published Voucher</li>
+                    </ul>
+                </nav>
+
+                <!--       NEW   VOUCHER-->
+                <div id="new-voucher" class="voucher-tab-content active">
+                    <div>
+                        <button id="add-voucher-btn" class="add-btn" onclick="showFormAddVoucher()">Add</button>
+                        <button id="publish-voucher-btn" class="publish-btn" onclick="publishAllVoucher()">Publish</button>
+                    </div>
+
+                    <div id="new-voucher-table-container" class="table-container">
+                        <!-- Thêm bảng danh sách seller ở đây -->
+                        <table id="new-voucher-table" class="voucher-table">
+                            <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Discount</th>
+                                <th>Customer</th>
+                                <th>Start Date</th>
+                                <th>Expiry Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="new-voucher-body" th:fragment="newVoucherFrag">
+                                <tr th:if="${vouchers}" th:each="voucher : ${vouchers}">
+                                    <td th:text="${voucher.description}"></td>
+                                    <td th:text="${voucher.quantity}"></td>
+                                    <td th:text="${voucher.percentageIsReduced}+'%'"></td>
+                                    <td th:text="${voucher.customerType}"></td>
+                                    <td th:text="${voucher.startDate}"></td>
+                                    <td th:text="${voucher.expiryDate}"></td>
+                                    <td th:text="${voucher.status}"></td>
+                                    <td>
+                                        <a style="" href="javascript:void(0);" th:onclick="|publishVoucherById(${voucher.id});|"><i class='bx bx-right-top-arrow-circle'></i></a>
+                                        <a style="" href="javascript:void(0);" th:onclick="|showFormUpdateVoucher(${voucher.id});|"><i class='bx bxs-edit' ></i></a>
+                                        <a style="" href="javascript:void(0);" th:onclick="|deleteVoucher(${voucher.id});|"><i class='bx bxs-trash' ></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+<!--                PUBLISHED VOUCHER-->
+                <div id="published-voucher" class="voucher-tab-content">
+                    <div id="published-voucher-table-container" class="table-container">
+                        <!-- Thêm bảng danh sách seller ở đây -->
+                        <table id="published-voucher-table" class="voucher-table">
+                            <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Discount</th>
+                                <th>Customer</th>
+                                <th>Start Date</th>
+                                <th>Expiry Date</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody id="published-voucher-body" th:fragment="publishedVoucherFrag">
+                            <tr th:if="${vouchers}" th:each="voucher : ${vouchers}">
+                                <td th:text="${voucher.description}"></td>
+                                <td th:text="${voucher.quantity}"></td>
+                                <td th:text="${voucher.percentageIsReduced}+'%'"></td>
+                                <td th:text="${voucher.customerType}"></td>
+                                <td th:text="${voucher.startDate}"></td>
+                                <td th:text="${voucher.expiryDate}"></td>
+                                <td th:text="${voucher.status}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </section>
+        </div>
+
+        <script>
+            //Voucher navbar
+            document.addEventListener('DOMContentLoaded', () => {
+                const tabs = document.querySelectorAll('.voucher-tab-link');
+                const contents = document.querySelectorAll('.voucher-tab-content');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Remove active class from all tabs and contents
+                        tabs.forEach(t => t.classList.remove('active'));
+                        contents.forEach(c => c.classList.remove('active'));
+
+                        // Add active class to clicked tab and corresponding content
+                        const target = document.getElementById(tab.dataset.tab);
+                        tab.classList.add('active');
+                        target.classList.add('active');
+
+                        // Hiển thị bảng và biểu đồ tương ứng khi chọn tab
+                        if (tab.dataset.tab === 'new-voucher') {
+                            getVoucherByStatus('New').then(r => {});
+                        } else if (tab.dataset.tab === 'published-voucher') {
+                            getVoucherByStatus('Published').then(r => {});
+                        }
+                    });
+                });
+            });
+        </script>
 
 
 
     <!--    Account Management-->
-        <div id="account-management" class="tab-content">
+        <div id="accounts-management" class="tab-content">
             <section class="account-management">
                 <div class="header-management">
                     <div class="title">
@@ -112,7 +242,7 @@
                     </div>
                 </div>
                 <div class="horizontal-line"></div>
-                <table>
+                <table class="account-table">
                     <thead>
                     <tr>
                         <th>User ID</th>
@@ -212,7 +342,7 @@
                     <h2>Seller</h2>
                     <div id="seller-table-container" class="table-container">
                         <!-- Thêm bảng danh sách seller ở đây -->
-                        <table id="seller-table">
+                        <table id="seller-table" class="seller-table">
                             <thead>
                             <tr>
                                 <th>User ID</th>
@@ -246,7 +376,7 @@
                     <h2>Customer</h2>
                     <div id="customer-table-container" class="table-container">
                         <!-- Thêm bảng danh sách customer ở đây -->
-                        <table id="customer-table">
+                        <table id="customer-table" class="customer-table">
                             <thead>
                             <tr>
                                 <th>ID</th>
@@ -281,7 +411,7 @@
                     <h2>Category</h2>
                     <div id="category-table-container" class="table-container">
                         <!-- Thêm bảng danh sách customer ở đây -->
-                        <table id="category-table">
+                        <table id="category-table" class="category-table">
                             <thead>
                             <tr>
                                 <th>ID</th>
@@ -313,10 +443,99 @@
 
             </section>
         </div>
+
+
+<!--        Popup section-->
+        <section>
+            <div id="voucher-modal" class="modal">
+                <div class="modal-content">
+                    <!-- <span class="close">&times;</span> -->
+                    <h5>Add or Edit</h5>
+                    <form id="product-form" action="#" method="post">
+                        <div class="row">
+                            <div class="form-group row col-md-4">
+                                <div class="form-group">
+                                    <label >Description:</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Quantity:</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Discount:</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Customer Type:</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Start Date:</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Expiry Date:</label>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row col-md-8">
+                                <input type="hidden" id="voucher-id">
+                                <input type="hidden" id="voucher-status">
+
+                                <div class="form-group">
+                                    <input type="text" id="voucher-description" placeholder="Description">
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="number" min="1" value="1" id="voucher-quantity" placeholder="Number of voucher">
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="number" min="1" max="100" value="1" id="voucher-discount" placeholder="Percentage is reduced">
+                                </div>
+
+                                <div class="form-group">
+                                    <select name="customer-type" id="voucher-customer-type">
+                                        <option value="NEW">New</option>
+                                        <option value="SILVER">Silver</option>
+                                        <option value="GOLD">Gold</option>
+                                        <option value="DIAMOND">Diamond</option>
+                                        <option value="VIP">VIP</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="date" id="voucher-start-date">
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="date" id="voucher-expiry-date">
+                                </div>
+                            </div>
+
+                            <div>
+                                <p id="voucher-message" class="message"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-btn">
+                            <button id="btn-save" type="button" onclick="addNewVoucher(event)">Save</button>
+                            <button class="voucher-done-btn" type="button">Done</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </section>
     </div>
 </main>
 
 <!--<footer th:replace="fragments/footer :: footer"></footer>-->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     //admin navbar
@@ -335,7 +554,36 @@
                 tab.classList.add('active');
                 target.classList.add('active');
 
-                if (tab.dataset.tab === 'statistics-management'){
+                if (tab.dataset.tab === 'orders-management'){
+                    getAllOrders().then(r => {});
+                }if (tab.dataset.tab === 'vouchers-management'){
+                    getVoucherByStatus('New').then(r => {});
+                }
+
+                if (tab.dataset.tab === 'accounts-management'){
+                    getAllUsers().then(r => {
+                        const userImgAdminPage =  document.querySelectorAll('.user-img');
+
+                        if (userImgAdminPage){
+                            userImgAdminPage.forEach(async (userAvatar) =>{
+                                const userId = userAvatar.getAttribute("data-user-id");
+                                const fileName = userAvatar.getAttribute("data-file-name");
+
+                                try {
+                                    await getUserAvatar(userId, fileName, userAvatar);
+                                } catch (error) {
+                                    console.error(`There was a problem with the get product cart image operation for product ID ${productId}:`, error);
+                                }
+                            });
+                        }else {
+                            console.log("class 'product-cart-image' does not exist!!!");
+                        }
+                    });
+                }
+
+                if (tab.dataset.tab === 'categories-management'){
+                    getAllCategories().then(r => {});
+                }if (tab.dataset.tab === 'statistics-management'){
                     getAllSeller().then(r => {});
                 }
             });
@@ -374,6 +622,10 @@
     });
 </script>
 
+<!--voucher-->
+<script src="/js/fetchVoucher.js"></script>
+<!--Order-->
+<script src="/js/fetchOrderManagement.js"></script>
 
 <!--Admin Page-->
 <script src="/js/fetchAdminPage.js"></script>
@@ -388,7 +640,7 @@
 <script src="/js/fetchImageToView.js"></script>
 <!--Header and Navbar-->
 <script src="/js/searchAnimation.js"></script>
-<script src="/js/fetchCategoryInNavbar.js"></script>
+<!--<script src="/js/fetchCategoryInNavbar.js"></script>-->
 <script src="/js/scrollHeader.js"></script>
 <script src="/js/showMenu.js"></script>
 <script src="/js/submenu.js"></script>

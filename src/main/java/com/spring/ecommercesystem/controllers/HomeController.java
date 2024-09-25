@@ -1,9 +1,6 @@
 package com.spring.ecommercesystem.controllers;
 
-import com.spring.ecommercesystem.entities.Feedback;
-import com.spring.ecommercesystem.entities.OrderDetail;
-import com.spring.ecommercesystem.entities.Product;
-import com.spring.ecommercesystem.entities.User;
+import com.spring.ecommercesystem.entities.*;
 import com.spring.ecommercesystem.services.*;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +18,7 @@ import org.springframework.web.service.annotation.GetExchange;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -88,8 +86,11 @@ public class HomeController {
 
     @GetMapping("/profile")
     public String profile(Model model){
-//        User user = this.userService.getCurrentUser();
-        model.addAttribute("user", this.userService.getCurrentUser());
+        User user = this.userService.getCurrentUser();
+        List<VoucherDetail> vouchersOwnedUnused = user.getVoucherDetails().stream().filter(voucherDetail -> voucherDetail.getStatus() == VoucherDetail.Status.Unused).collect(Collectors.toList());
+        model.addAttribute("user", user);
+        model.addAttribute("numberOfOrder", user.getOrders().size());
+        model.addAttribute("numberOfVoucher", vouchersOwnedUnused.size());
         return "Home/profile";
     }
 
@@ -118,6 +119,17 @@ public class HomeController {
             user.setAvatar(fileName);
             user.setPassword(userDB.getPassword());
             user.setRole(userDB.getRole());
+            user.setExpenditure(userDB.getExpenditure());
+            user.setCreatedDate(userDB.getCreatedDate());
+
+            user.setCustomerType(userDB.getCustomerType());
+
+            if (user.getDateOfBirth() == null){
+                user.setDateOfBirth(userDB.getCreatedDate());
+            }else {
+                user.setDateOfBirth(userDB.getDateOfBirth());
+            }
+
             this.userService.saveAndUpdate(user);
 
             //Save new image into server folder
@@ -129,6 +141,17 @@ public class HomeController {
                 user.setAvatar(null);
             }
             user.setAvatar(userDB.getAvatar());
+            user.setPassword(userDB.getPassword());
+            user.setRole(userDB.getRole());
+            user.setExpenditure(userDB.getExpenditure());
+            user.setCreatedDate(userDB.getCreatedDate());
+            user.setCustomerType(userDB.getCustomerType());
+
+            if (user.getDateOfBirth() == null){
+                user.setDateOfBirth(userDB.getCreatedDate());
+            }else {
+                user.setDateOfBirth(userDB.getDateOfBirth());
+            }
         }
 
         this.userService.saveAndUpdate(user);
@@ -140,6 +163,7 @@ public class HomeController {
         User user = this.userService.findById(id);
         List<Product> products = user.getProducts();
         model.addAttribute("products", products);
+        model.addAttribute("totalProduct", products.size());
         model.addAttribute("user", user);
 
         return "Shop/shopManagement";

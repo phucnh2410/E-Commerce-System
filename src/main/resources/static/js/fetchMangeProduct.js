@@ -155,7 +155,7 @@ async function saveProduct(event){
     }
 
     if (!productFile){
-        messageElement.textContent = "Please the Image of product";
+        messageElement.textContent = "Please choose the Image of product";
         messageElement.style.color = 'red';
         return;
     }else if (!isValidImage(productFile)) {
@@ -163,6 +163,7 @@ async function saveProduct(event){
         messageElement.style.color = 'red';
         return;
     }
+
     //Description
     if (!productDescription.value){
         messageElement.textContent = "Please enter the Description of product";
@@ -208,7 +209,6 @@ async function saveProduct(event){
                 productPrice.value = '';
                 productStock.value = '';
                 productDescription.value = '';
-                // productName.value = '';
 
                 await getAllProduct();
             } else {
@@ -223,7 +223,6 @@ async function saveProduct(event){
     }catch (error){
         console.error('There was a problem with the Add product operation:', error);
     }
-
 }
 
 async function showFormUpdate(id){
@@ -252,14 +251,14 @@ async function showFormUpdate(id){
         const productResponse = await response.json();
 
         //Show data just have fetched to input tags
-        editButtons.forEach(function (editButton){
-            editButton.addEventListener("click", function (){
+        // editButtons.forEach(function (editButton){
+        //     editButton.addEventListener("click", function (){
                 modal.style.display = "block";
                 setTimeout(function () {
                     modal.classList.add("show");
                 }, 10);
-            });
-        });
+        //     });
+        // });
 
         productId.value = productResponse.id;
         productName.value = productResponse.name;

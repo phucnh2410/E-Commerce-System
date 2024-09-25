@@ -9,6 +9,7 @@ import com.spring.ecommercesystem.services.OrderService;
 import com.spring.ecommercesystem.services.ProductService;
 import com.spring.ecommercesystem.services.UserService;
 import com.spring.ecommercesystem.temp.CartTemp;
+//import com.spring.ecommercesystem.temp.OrderTemp;
 import com.spring.ecommercesystem.temp.OrderTemp;
 import com.spring.ecommercesystem.temp.UserCart;
 import jakarta.websocket.server.PathParam;
@@ -56,7 +57,7 @@ public class ConfirmOrderController {
                     .setId(order.getId())
                     .setStatus(order.getStatus());
 
-            //get Orderdetail to get Products and quantity each product
+            //get orderDetail to get Products and quantity each product
             List<Product> products = new ArrayList<>();
             order.getOrderDetails().forEach(orderDetail -> {
                 Product product = orderDetail.getProduct();
@@ -112,7 +113,7 @@ public class ConfirmOrderController {
         User currentUser = this.userService.getCurrentUser();
 
         List<Order> orders = currentUser.getOrders();
-        List<Order> preparingOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.pending_confirmation).collect(Collectors.toList());
+        List<Order> preparingOrders = orders.stream().filter(order -> (order.getStatus() == Order.Status.Pending) || (order.getStatus() == Order.Status.Confirmed)).collect(Collectors.toList());
         List<OrderTemp> orderTemps = sortOrder(preparingOrders);
 
 //        model.addAttribute("orders", orders);
@@ -125,7 +126,7 @@ public class ConfirmOrderController {
         User currentUser = this.userService.getCurrentUser();
 
         List<Order> orders = currentUser.getOrders();
-        List<Order> deliveringOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.delivering).collect(Collectors.toList());
+        List<Order> deliveringOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.Delivering).collect(Collectors.toList());
         List<OrderTemp> orderTemps = sortOrder(deliveringOrders);
 
 //        model.addAttribute("orders", orders);
@@ -138,7 +139,7 @@ public class ConfirmOrderController {
         User currentUser = this.userService.getCurrentUser();
 
         List<Order> orders = currentUser.getOrders();
-        List<Order> receivedOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.received).collect(Collectors.toList());
+        List<Order> receivedOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.Received).collect(Collectors.toList());
         List<OrderTemp> orderTemps = sortOrder(receivedOrders);
 
 //        model.addAttribute("orders", orders);
@@ -151,7 +152,7 @@ public class ConfirmOrderController {
         User currentUser = this.userService.getCurrentUser();
 
         List<Order> orders = currentUser.getOrders();
-        List<Order> canceledOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.canceled).collect(Collectors.toList());
+        List<Order> canceledOrders = orders.stream().filter(order -> order.getStatus() == Order.Status.Canceled).collect(Collectors.toList());
         List<OrderTemp> orderTemps = sortOrder(canceledOrders);
 
 //        model.addAttribute("orders", orders);

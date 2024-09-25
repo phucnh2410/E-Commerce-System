@@ -1,8 +1,11 @@
 package com.spring.ecommercesystem.securities;
 
 import com.spring.ecommercesystem.entities.User;
+import com.spring.ecommercesystem.entities.Voucher;
 import com.spring.ecommercesystem.services.RoleService;
 import com.spring.ecommercesystem.services.UserService;
+import com.spring.ecommercesystem.services.VoucherDetailService;
+import com.spring.ecommercesystem.services.VoucherService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,8 +23,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -31,6 +36,12 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private VoucherService voucherService;
+
+    @Autowired
+    private VoucherDetailService voucherDetailService;
 
     Logger logger = LoggerFactory.getLogger(OAuth2AuthenticationSuccessHandler.class);
 
@@ -50,11 +61,16 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
             User newUser = new User();
             newUser.setEmail(email);
             newUser.setFullName(fullName);
+            newUser.setCreatedDate(new Date(System.currentTimeMillis()));
+            newUser.setCustomerType(User.CustomerType.NEW);
+            newUser.setExpenditure(0.0);
             //Don't need set password, because system will authenticate by GG token
             newUser.setAvatar(picture);
             newUser.setRole(this.roleService.findById(2L));
 
             this.userService.saveAndUpdate(newUser);
+            List<Voucher> vouchers = this.voucherService.findAll().stream().filter(voucher -> voucher.getStatus() == Voucher.Status.Published).collect(Collectors.toList());;
+            this.voucherDetailService.collectingVoucherForCustomer(newUser, vouchers);
 
             //If the user authenticated by GG but user is not found in the DB, Updating the role and permission for New User in the Security Context
             authorities.add(new SimpleGrantedAuthority(newUser.getRole().getName()));

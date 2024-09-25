@@ -54,8 +54,6 @@ function canceledOrderEvent(orderId, status){
 }
 
 async function updateOrderStatus(orderId, status){
-    console.log("order id: " + orderId);
-    console.log("status: "+status);
     let messageElement = '';
     try {
         const response = await fetch('/api/order/update_status/'+orderId+'/'+status, {
@@ -68,7 +66,7 @@ async function updateOrderStatus(orderId, status){
             messageElement = result.message;
             // messageElement.style.color = 'green';
 
-            await getPendingOrder();
+            await getAllOrders();
         }else {
             messageElement = result.message;
         }

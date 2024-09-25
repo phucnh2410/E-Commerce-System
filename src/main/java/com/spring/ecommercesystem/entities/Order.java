@@ -1,6 +1,7 @@
 package com.spring.ecommercesystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
@@ -17,12 +18,11 @@ import java.util.List;
 public class Order {
 
     public enum Status{
-        pending_confirmation,
-        confirmed,
-        preparing,
-        delivering,
-        received,
-        canceled
+        Pending,
+        Confirmed,
+        Delivering,
+        Received,
+        Canceled
     }
 
     @Id
@@ -45,6 +45,7 @@ public class Order {
     private Date receivedDate;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column(name = "total_amount")
@@ -52,13 +53,14 @@ public class Order {
 
     //One to many
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST,
-            CascadeType.REFRESH}, orphanRemoval = true)
+            CascadeType.REFRESH})
     @JsonManagedReference("order-order_details")
     private List<OrderDetail> orderDetails;
 
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST,
             CascadeType.REFRESH})
     @JsonManagedReference("order-feedbacks")
+//    @JsonIgnore
     private List<Feedback> feedbacks;
 
     //many to One

@@ -14,7 +14,6 @@ function showAddress(){
 
     // Ẩn modal khi click vào nút "done"
     btnCancel.addEventListener("click", function () {
-        console.log('btn done was clicked');
         addressModal.classList.remove("show");
         setTimeout(function () {
             addressModal.style.display = "none";

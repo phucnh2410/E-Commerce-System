@@ -2,10 +2,7 @@ package com.spring.ecommercesystem.restController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spring.ecommercesystem.entities.Order;
-import com.spring.ecommercesystem.entities.OrderDetail;
-import com.spring.ecommercesystem.entities.Product;
-import com.spring.ecommercesystem.entities.Voucher;
+import com.spring.ecommercesystem.entities.*;
 import com.spring.ecommercesystem.services.*;
 import com.spring.ecommercesystem.temp.OrderTemp;
 import com.spring.ecommercesystem.temp.UserCart;
@@ -18,10 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -45,8 +39,10 @@ public class OrderRestController {
 
     private final CartService cartService;
 
+    private final VoucherDetailService voucherDetailService;
+
     @Autowired
-    public OrderRestController(OrderService orderService, AddressService addressService, PaymentMethodService paymentService, VoucherService voucherService, UserService userService, ProductService productService, OrderDetailService orderDetailService, CartService cartService) {
+    public OrderRestController(OrderService orderService, AddressService addressService, PaymentMethodService paymentService, VoucherService voucherService, UserService userService, ProductService productService, OrderDetailService orderDetailService, CartService cartService, VoucherDetailService voucherDetailService) {
         this.orderService = orderService;
         this.addressService = addressService;
         this.paymentService = paymentService;
@@ -55,10 +51,11 @@ public class OrderRestController {
         this.productService = productService;
         this.orderDetailService = orderDetailService;
         this.cartService = cartService;
+        this.voucherDetailService = voucherDetailService;
     }
 
     @GetMapping("/repurchase_order/{id}")
-    public ResponseEntity<List<Long>> repurchaseOrder (@PathVariable Long id){
+    public ResponseEntity<List<Long>> repurchaseOrder (@PathVariable Long id) {
         Order order = this.orderService.findById(id);
         List<OrderDetail> orderDetails = order.getOrderDetails();
 
@@ -97,10 +94,9 @@ public class OrderRestController {
                     .setUser(this.userService.getCurrentUser())
                     .setTotalAmount(orderTempResponse.getFinalTotal())
                     .setOrderedDate(Date.valueOf(LocalDate.now(ZoneId.systemDefault())))
-                    .setStatus(Order.Status.pending_confirmation);
+                    .setStatus(Order.Status.Pending);
             //Save an order
             this.orderService.saveAndUpdate(order);
-
 
             //Create list of orderDetail
             List<OrderDetail> orderDetails = new ArrayList<>();
@@ -114,6 +110,19 @@ public class OrderRestController {
 
             order.setOrderDetails(orderDetails);
             this.orderService.saveAndUpdate(order);
+
+            if (voucher != null) {
+                //reset voucherDetail status
+                List<VoucherDetail> voucherDetails = this.userService.getCurrentUser().getVoucherDetails();
+                VoucherDetail voucherDetail = voucherDetails.stream().filter(v -> v.getVoucher().getId().equals(voucher.getId())).findFirst().orElse(null);
+
+                if (voucherDetail != null) {
+                    voucherDetail.setStatus(VoucherDetail.Status.Used);
+                    this.voucherDetailService.saveAndUpdate(voucherDetail);
+                }else {
+                    System.out.println("VoucherDetail not found for the given voucher");
+                }
+            }
 
             //Handle cart after ordered successful
             if (orderDetails.size() == this.cartService.getTotalItemsInCart()){
@@ -137,7 +146,6 @@ public class OrderRestController {
 
             //Delete data in the session when user ordered successful.
             session.removeAttribute("userCarts");
-
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -178,20 +186,24 @@ public class OrderRestController {
         }
 
         if (status.equals("cancel")){
-            order.setStatus(Order.Status.canceled);
-            order.setCanceledDate(Date.valueOf(LocalDate.now(ZoneId.systemDefault())));
+            order.setStatus(Order.Status.Canceled);
+            order.setCanceledDate(new Date(System.currentTimeMillis()));
+            this.orderService.saveAndUpdate(order);
             response.put("message", "This order has been cancelled successfully");
         }else if (status.equals("confirm")){
-            order.setStatus(Order.Status.confirmed);
-            order.setConfirmedDate(Date.valueOf(LocalDate.now(ZoneId.systemDefault())));
+            order.setStatus(Order.Status.Confirmed);
+            order.setConfirmedDate(new Date(System.currentTimeMillis()));
+            this.orderService.saveAndUpdate(order);
             response.put("message", "This order has been confirmed");
         }else if (status.equals("delivering")){
-            order.setStatus(Order.Status.delivering);
-            order.setDeliveredDate(Date.valueOf(LocalDate.now(ZoneId.systemDefault())));
+            order.setStatus(Order.Status.Delivering);
+            order.setDeliveredDate(new Date(System.currentTimeMillis()));
+            this.orderService.saveAndUpdate(order);
             response.put("message", "Order status updated to delivering");
         }else if (status.equals("received")){
-            order.setStatus(Order.Status.received);
-            order.setReceivedDate(Date.valueOf(LocalDate.now(ZoneId.systemDefault())));
+            order.setStatus(Order.Status.Received);
+            order.setReceivedDate(new Date(System.currentTimeMillis()));
+            this.orderService.saveAndUpdate(order);
             //Update stock when the order was received
             List<OrderDetail> items = order.getOrderDetails();
             items.stream().forEach(item -> {
@@ -201,13 +213,45 @@ public class OrderRestController {
                 product.setStock(product.getStock() - quantity);
                 this.productService.saveAndUpdate(product);
             });
+
+            User user = this.userService.findById(order.getUser().getId());
+            //update expenditure of this customer
+            Double oldExpenditure = this.orderService.autoCalculatingExpenditure(user);
+            user.setExpenditure(oldExpenditure);
+            this.userService.saveAndUpdate(user);
+
+            //Categorizing customer
+            if ( (user.getExpenditure() >= 200.0) && (user.getCustomerType() == User.CustomerType.NEW) ){
+                List<Voucher> vouchers = this.voucherService.findAll();
+                user.setCustomerType(User.CustomerType.SILVER);
+                this.userService.saveAndUpdate(user);
+                //Re-collect voucher for VIP customer
+                this.voucherDetailService.collectingVoucherForCustomer(user, vouchers);
+            }else if ( (user.getExpenditure()) >= 500.0 && (user.getCustomerType() == User.CustomerType.SILVER)){
+                List<Voucher> vouchers = this.voucherService.findAll();
+                user.setCustomerType(User.CustomerType.GOLD);
+                this.userService.saveAndUpdate(user);
+                //Re-collect voucher for VIP customer
+                this.voucherDetailService.collectingVoucherForCustomer(user, vouchers);
+            }else if ( (user.getExpenditure()) >= 2000.0 && (user.getCustomerType() == User.CustomerType.GOLD)){
+                List<Voucher> vouchers = this.voucherService.findAll();
+                user.setCustomerType(User.CustomerType.DIAMOND);
+                this.userService.saveAndUpdate(user);
+                //Re-collect voucher for VIP customer
+                this.voucherDetailService.collectingVoucherForCustomer(user, vouchers);
+            }else if ( (user.getExpenditure()) >= 20000.0 && (user.getCustomerType() == User.CustomerType.DIAMOND)){
+                List<Voucher> vouchers = this.voucherService.findAll();
+                user.setCustomerType(User.CustomerType.VIP);
+                this.userService.saveAndUpdate(user);
+                //Re-collect voucher for VIP customer
+                this.voucherDetailService.collectingVoucherForCustomer(user, vouchers);
+            }
+
+
             response.put("message", "Order has been received successfully");
         }
 
-        this.orderService.saveAndUpdate(order);
         response.put("order", order);
-
-
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

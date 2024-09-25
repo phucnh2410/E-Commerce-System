@@ -31,6 +31,8 @@ public class ProductRestController {
 
     private final UserService userService;
 
+    private String DIRECTORY = "src/main/resources/static/productImg/";
+
     @Autowired
     public ProductRestController(CategoryService categoryService, ProductService productService, UserService userService) {
         this.categoryService = categoryService;
@@ -40,8 +42,8 @@ public class ProductRestController {
 
     @GetMapping
     public ResponseEntity<List<Product>> allProducts(){
-        User currentUser = this.userService.getCurrentUser();
-        List<Product> products = currentUser.getProducts();
+        User currentSeller = this.userService.getCurrentUser();
+        List<Product> products = currentSeller.getProducts();
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
@@ -59,15 +61,12 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addProduct(@RequestPart(value = "product") Product product, @RequestPart(value = "product-file", required = false) MultipartFile file) throws IOException{
+    public ResponseEntity<Map<String, Object>> addProduct(@RequestPart(value = "product") Product product, @RequestPart(value = "product-file", required = false) MultipartFile file){
         Map<String, Object> response = new HashMap<>();
 
         if (product == null){
             System.out.println("Product received is null!!!");
         }
-
-        System.out.println("Received Product: " + product);
-        System.out.println("Received Product: " + product.getId());
 
         //Update
         if (product.getId() != null){
@@ -77,7 +76,7 @@ public class ProductRestController {
                 //Delete old image
                 String oldImageName = oldProduct.getProductImg();
                 if (oldImageName != null || !oldImageName.isEmpty()){
-                    String oldImagePath = "src/main/resources/static/productImg/" +oldProduct.getId()+ "/" +oldImageName;
+                    String oldImagePath = DIRECTORY + oldProduct.getId()+ "/" +oldImageName; // String oldImagePath = "src/main/resources/static/productImg/" +oldProduct.getId()+ "/" +oldImageName;
                     File oldFile = new File(oldImagePath);
                     if (oldFile.exists()){
                         oldFile.delete();
@@ -88,8 +87,8 @@ public class ProductRestController {
                 String fileName = StringUtils.cleanPath(file.getOriginalFilename());
                 product.setProductImg(fileName);
                 product.setUser(this.userService.getCurrentUser());
-                product.setCreateAt(Date.valueOf(LocalDate.now(ZoneId.systemDefault())));
-                String uploadDirectory = "src/main/resources/static/productImg/" + product.getId();
+                product.setCreateAt(new Date(System.currentTimeMillis()));
+                String uploadDirectory = DIRECTORY + product.getId(); // String uploadDirectory = "src/main/resources/static/productImg/" + product.getId();
                 FileUpload.saveFile(uploadDirectory, fileName, file);
                 this.productService.saveAndUpdate(product);
 
@@ -107,12 +106,15 @@ public class ProductRestController {
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             product.setProductImg(fileName);
             product.setUser(this.userService.getCurrentUser());
+            product.setCreateAt(new Date(System.currentTimeMillis()));
+
             this.productService.saveAndUpdate(product);
-            String uploadDirectory = "src/main/resources/static/productImg/" + product.getId();
+            String uploadDirectory = DIRECTORY + product.getId();
             FileUpload.saveFile(uploadDirectory, fileName, file);
 
             response.put("message", product.getName()+" was added successfully!!!");
             response.put("product", product);
+
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

@@ -8,6 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <title>Profile Page</title>
@@ -26,26 +29,134 @@
 <body>
 <header th:replace="fragments/header :: header"></header>
 <main>
+<!--    <section>-->
+<!--        <div class="profile">-->
+<!--            <div class="profile-detail">-->
+<!--                <div class="title">-->
+<!--                    Profile Management-->
+<!--                </div>-->
+<!--                <div class="horizontal-line"></div>-->
+
+<!--                <form action="#" th:action="@{/save/profile}" th:object="${user}" method="post" class="profile-form" enctype="multipart/form-data">-->
+<!--                    <div class="row">-->
+<!--                        <input type="hidden" th:field="*{id}">-->
+
+<!--                        <div class="form-group row col-md-3">-->
+<!--                            <div class="account-info-image">-->
+<!--                                <div class="account-image">-->
+<!--                                    <img id="avatar-profile" th:data-user-id="${user.id}" th:data-file-name="${user.avatar}"  width="100px" height="100px" alt="" onerror="onError(event)">-->
+<!--                                </div>-->
+<!--                                <div class="change-image-btn">-->
+<!--                                    <input type="hidden" th:field="*{avatar}">-->
+<!--                                    <input type="file" id="imageInput" name="avatar-file" >-->
+<!--                                    <label for="imageInput">Choose file</label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        <script>-->
+<!--                            const imageProfile = document.getElementById('avatar-profile');-->
+<!--                            const imageHeader = document.getElementById('avatar-header');-->
+<!--                            const fileInput = document.getElementById('imageInput');-->
+
+<!--                            fileInput.addEventListener("change", () => {-->
+<!--                                imageProfile.src = URL.createObjectURL(fileInput.files[0])-->
+<!--                                imageHeader.src = URL.createObjectURL(fileInput.files[0])-->
+<!--                            });-->
+<!--                        </script>-->
+
+<!--                        <div class="form-group row col-md-9">-->
+<!--                            <div class="account-info-detail">-->
+
+<!--                                <div class="col-12 col-md-12">-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-12 col-md-2">-->
+<!--                                            <label for="">Full name:</label>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-12 col-md-10">-->
+<!--                                            <input type="text" th:field="*{fullName}" placeholder="">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                                <div class="col-12 col-md-12">-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-12 col-md-2">-->
+<!--                                            <label for="">Email:</label>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-12 col-md-10">-->
+<!--                                            <input type="text" th:field="*{email}" placeholder="" readonly>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                                <div class="col-12 col-md-12">-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-12 col-md-2">-->
+<!--                                            <label for="">Phone number:</label>-->
+<!--                                        </div>-->
+
+<!--                                        <div class="col-12 col-md-10">-->
+<!--                                            <input type="text" th:field="*{phoneNumber}" placeholder="">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                                <div class="col-12 col-md-12">-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-12 col-md-2">-->
+<!--                                            <label for="">Gender:</label>-->
+
+<!--                                        </div>-->
+
+<!--                                        <div class="col-12 col-md-10">-->
+<!--                                            &lt;!&ndash; <input type="text" placeholder=""> &ndash;&gt;-->
+<!--                                            <select name="" id="" >-->
+<!--                                                <option value="">Choose your gender</option>-->
+<!--                                                <option value="">Male</option>-->
+<!--                                                <option value="">Female</option>-->
+<!--                                                <option value="">Others</option>-->
+<!--                                            </select>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                                <div class="col-12 col-md-12">-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-12 col-md-2">-->
+<!--                                            <label for="">Date of birth:</label>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-12 col-md-10">-->
+<!--                                            <input type="date" th:field="*{dateOfBirth}" placeholder="">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <button class="save-btn">Save</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+
     <section>
-        <div class="profile">
-            <div class="profile-detail">
-                <div class="title">
-                    Profile Management
-                </div>
-                <div class="horizontal-line"></div>
-
+        <div class="profile-summary">
+            <div class="container">
+                <h2>Profile Management</h2>
                 <form action="#" th:action="@{/save/profile}" th:object="${user}" method="post" class="profile-form" enctype="multipart/form-data">
-                    <div class="row">
-                        <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{id}">
 
+                    <div class="profile-info">
                         <div class="form-group row col-md-3">
                             <div class="account-info-image">
                                 <div class="account-image">
-                                    <img id="avatar-profile" th:data-user-id="${user.id}" th:data-file-name="${user.avatar}"  width="100px" height="100px" alt="" onerror="onError(event)">
+                                    <img id="avatar-profile" th:data-user-id="${user.id}" th:data-file-name="${user.avatar}" width="100px" height="100px" alt="" onerror="onError(event)">
                                 </div>
                                 <div class="change-image-btn">
                                     <input type="hidden" th:field="*{avatar}">
-                                    <input type="file" id="imageInput" name="avatar-file" >
+                                    <input type="file" id="imageInput" name="avatar-file">
                                     <label for="imageInput">Choose file</label>
                                 </div>
                             </div>
@@ -53,98 +164,123 @@
 
                         <script>
                             const imageProfile = document.getElementById('avatar-profile');
-                            const imageHeader = document.getElementById('avatar-header');
                             const fileInput = document.getElementById('imageInput');
 
                             fileInput.addEventListener("change", () => {
-                                imageProfile.src = URL.createObjectURL(fileInput.files[0])
-                                imageHeader.src = URL.createObjectURL(fileInput.files[0])
+                                imageProfile.src = URL.createObjectURL(fileInput.files[0]);
                             });
                         </script>
 
                         <div class="form-group row col-md-9">
                             <div class="account-info-detail">
-
-                                <div class="col-12 col-md-12">
-                                    <div class="row">
-                                        <div class="col-12 col-md-2">
-                                            <label for="">Full name:</label>
-                                        </div>
-                                        <div class="col-12 col-md-10">
-                                            <input type="text" th:field="*{fullName}" placeholder="">
-                                        </div>
-                                    </div>
+                                <div class="info-item">
+                                    <label for="fullName">Full Name:</label>
+                                    <input type="text" th:field="*{fullName}" id="fullName" placeholder="">
                                 </div>
 
-                                <div class="col-12 col-md-12">
-                                    <div class="row">
-                                        <div class="col-12 col-md-2">
-                                            <label for="">Email:</label>
-                                        </div>
-                                        <div class="col-12 col-md-10">
-                                            <input type="text" th:field="*{email}" placeholder="" readonly>
-                                        </div>
-                                    </div>
+                                <div class="info-item">
+                                    <label for="email">Email:</label>
+                                    <input type="text" th:field="*{email}" id="email" placeholder="" readonly>
                                 </div>
 
-                                <div class="col-12 col-md-12">
-                                    <div class="row">
-                                        <div class="col-12 col-md-2">
-                                            <label for="">Phone number:</label>
-                                        </div>
-
-                                        <div class="col-12 col-md-10">
-                                            <input type="text" th:field="*{phoneNumber}" placeholder="">
-                                        </div>
-                                    </div>
+                                <div class="info-item">
+                                    <label for="phoneNumber">Phone Number:</label>
+                                    <input type="text" th:field="*{phoneNumber}" id="phoneNumber" placeholder="">
                                 </div>
 
-                                <div class="col-12 col-md-12">
-                                    <div class="row">
-                                        <div class="col-12 col-md-2">
-                                            <label for="">Gender:</label>
-
-                                        </div>
-
-                                        <div class="col-12 col-md-10">
-                                            <!-- <input type="text" placeholder=""> -->
-                                            <select name="" id="" >
-                                                <option value="">Choose your gender</option>
-                                                <option value="">Male</option>
-                                                <option value="">Female</option>
-                                                <option value="">Others</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                <div class="info-item">
+                                    <label for="gender">Gender:</label>
+                                    <select name="gender" id="gender" th:field="*{gender}">
+                                        <option th:value="${T(com.spring.ecommercesystem.entities.User$Gender).Male}"
+                                                th:text="${T(com.spring.ecommercesystem.entities.User$Gender).Male}">Male</option>
+                                        <option th:value="${T(com.spring.ecommercesystem.entities.User$Gender).Female}"
+                                                th:text="${T(com.spring.ecommercesystem.entities.User$Gender).Female}">Female</option>
+                                        <option th:value="${T(com.spring.ecommercesystem.entities.User$Gender).Other}"
+                                                th:text="${T(com.spring.ecommercesystem.entities.User$Gender).Other}">Other</option>
+                                    </select>
                                 </div>
 
-                                <div class="col-12 col-md-12">
-                                    <div class="row">
-                                        <div class="col-12 col-md-2">
-                                            <label for="">Date of birth:</label>
-                                        </div>
-                                        <div class="col-12 col-md-10">
-                                            <input type="date" th:field="*{dateOfBirth}" placeholder="">
-                                        </div>
-                                    </div>
+                                <div class="info-item">
+                                    <label for="dateOfBirth">Date of Birth:</label>
+                                    <input type="date" th:field="*{dateOfBirth}" id="dateOfBirth" placeholder="">
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
-                    <!-- Save Button -->
-<!--                    <div>-->
-<!--                        <a th:href="@{/shop(id=${user.id})}" sec:authorize="hasAnyRole('SELLER')">Manage Your Shop</a>-->
-<!--                    </div>-->
                     <button class="save-btn">Save</button>
-
                 </form>
-
             </div>
         </div>
-
     </section>
+
+
+
+    <!-- Profile Section -->
+    <section id="profile-summary" class="profile-summary">
+        <div class="container">
+            <h2>Summary</h2>
+            <div class="profile-info">
+                <div class="info-item">
+                    <a th:href="@{/order/list}">
+                        <h3>Total Orders</h3>
+                        <p id="total-orders" class="total-orders" th:text="${numberOfOrder}"></p>
+                    </a>
+                </div>
+                <div class="info-item">
+                    <h3>Total Expenditure</h3>
+                    <p id="total-expenditure" th:text="'$'+${user.expenditure}">$0.00</p>
+                </div>
+
+                <div class="info-item">
+                    <h3>Remaining vouchers</h3>
+                    <p id="total-vouchers" th:text="${numberOfVoucher}">0</p>
+                </div>
+
+                <div class="info-item">
+                    <h3>Account Class</h3>
+                    <div id="account-type-container" class="account-type-container">
+                        <p id="account-type" class="account-type" th:text="${user.customerType}"></p>
+                    </div>
+<!--                th:class="${user.customerType.name == 'GOLD'} ? 'gold-type' : (user.customerType.name == 'SILVER' ? 'silver-type' : (user.customerType.name == 'DIAMOND' ? 'diamond-type' : (user.customerType.name == 'NEW' ? 'new-type' : (user.customerType.name == 'VIP' ? 'vip-type' : ''))))"-->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var accountTypeElement = document.getElementById('account-type');
+            const accountTypeContainer = document.getElementById('account-type-container')
+
+            if (accountTypeElement) {
+                var accountType = accountTypeElement.textContent.trim();
+
+                switch (accountType) {
+                    case 'GOLD':
+                        accountTypeContainer.classList.add('gold-type');
+                        console.log("GOLD")
+                        break;
+                    case 'SILVER':
+                        accountTypeContainer.classList.add('silver-type');
+                        break;
+                    case 'DIAMOND':
+                        accountTypeContainer.classList.add('diamond-type');
+                        break;
+                    case 'NEW':
+                        accountTypeContainer.classList.add('new-type');
+                        break;
+                    case 'VIP':
+                        accountTypeContainer.classList.add('vip-type');
+                        break;
+                    default:
+                        console.log("Nothing to show!!!")
+                        break;
+                }
+            }
+        });
+    </script>
+
 </main>
 
 <footer th:include="fragments/footer :: footer"></footer>
@@ -153,6 +289,7 @@
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>
 <!--Header and Navbar-->
+<script src="/js/searchAnimation.js"></script>
 <script src="/js/fetchCategoryInNavbar.js"></script>
 <script src="/js/scrollHeader.js"></script>
 <script src="/js/showMenu.js"></script>

@@ -139,7 +139,7 @@ public class CartController {
 
 
             model.addAttribute("addresses", this.addressService.findAll());
-            model.addAttribute("vouchers", this.voucherService.findAll());
+            model.addAttribute("vouchers", this.userService.getCurrentUser().getVoucherDetails().stream().filter(vc -> vc.getStatus().equals(VoucherDetail.Status.Unused)));
             model.addAttribute("paymentMethods", this.paymentService.findAll());
             model.addAttribute("default_address", this.addressService.findAll().stream().filter(Address::isStatus).findFirst().get() );
             model.addAttribute("userCarts", userCarts);

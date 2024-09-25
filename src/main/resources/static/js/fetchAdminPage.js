@@ -1,37 +1,85 @@
 $(document).ready(function() {
 
-    // $('#btn-register').click(function (event){
-    //     event.preventDefault();
-    //     register().then(r => {});
-    // })
-
     getAllOrders().then(r => {});
-    getAllUsers().then(r => {
-        const userImgAdminPage =  document.querySelectorAll('.user-img');
+    // getAllUsers().then(r => {
+    //     const userImgAdminPage =  document.querySelectorAll('.user-img');
+    //
+    //     if (userImgAdminPage){
+    //         userImgAdminPage.forEach(async (userAvatar) =>{
+    //             const userId = userAvatar.getAttribute("data-user-id");
+    //             const fileName = userAvatar.getAttribute("data-file-name");
+    //
+    //             try {
+    //                 await getUserAvatar(userId, fileName, userAvatar);
+    //             } catch (error) {
+    //                 console.error(`There was a problem with the get product cart image operation for product ID ${productId}:`, error);
+    //             }
+    //         });
+    //     }else {
+    //         console.log("class 'product-cart-image' does not exist!!!");
+    //     }
+    // });
 
-        if (userImgAdminPage){
-            userImgAdminPage.forEach(async (userAvatar) =>{
-                const userId = userAvatar.getAttribute("data-user-id");
-                const fileName = userAvatar.getAttribute("data-file-name");
 
-                try {
-                    await getUserAvatar(userId, fileName, userAvatar);
-                } catch (error) {
-                    console.error(`There was a problem with the get product cart image operation for product ID ${productId}:`, error);
-                }
-            });
-        }else {
-            console.log("class 'product-cart-image' does not exist!!!");
-        }
-    });
-
-
-    getAllCategories().then(r => {});
-
-    // getAllSeller().then(r => {});
-    // getAllC().then(r => {});
-
+    // getAllCategories().then(r => {});
 });
+
+let debounceTimeout;
+async function getOrderById(){
+    clearTimeout(debounceTimeout)
+    debounceTimeout = setTimeout(async () => {
+        const orderTableFragment = document.querySelector('#orderManagement');
+        const searchOrderInputElement = document.querySelector('#search-order-input');
+        const messageElementBody = document.getElementById('message-order-searching-body');
+        const messageElement = document.getElementById('message-order-searching');
+
+        function isValidInteger(value){
+            return /^[1-9]\d*$/.test(value);
+        }
+
+        if (!searchOrderInputElement.value) {
+            // messageElementBody.textContent = "";
+            messageElement.textContent = "";
+            await getAllOrders();
+            return
+        }
+
+        if (!isValidInteger(searchOrderInputElement.value)){
+            messageElement.textContent = "Please enter number to search orders";
+            messageElement.style.color = 'red';
+            return;
+        }
+
+        try {
+            const response = await fetch('/admin/orderFragment/' + searchOrderInputElement.value);
+
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+
+            const orders = await response.text();
+
+            // if (orders.includes("No orders found.")) {
+            //     console.log("No order");
+            //     messageElementBody.textContent = "No orders found.";
+            //     messageElementBody.style.color = 'red';
+            //     orderTableFragment.innerHTML = ""; // Delete content in table w Xóa nội dung bảng khi không có đơn hàng
+            //     return;
+            // }
+
+            if (!orderTableFragment) {
+                console.log('Element #productTable not found in the response');
+                return;
+            }
+
+            // messageElement.textContent = ""; // Xóa thông báo nếu tìm thấy đơn hàng
+            orderTableFragment.innerHTML = "";
+            orderTableFragment.innerHTML = orders;
+        } catch (error) {
+            console.error('There was a problem with the fetch orders by id in the Admin operation:', error);
+        }
+    } , 300); // wait 300ms after the user stop to enter, the searching will be handled
+}
 
 async function getAllOrders(){
     const orderFragment = document.querySelector('#orderManagement');
@@ -50,6 +98,33 @@ async function getAllOrders(){
 
         orderFragment.innerHTML = "";
         orderFragment.innerHTML = orders;
+    }catch (error){
+        console.error('There was a problem with the fetch all orders in the Admin operation:', error);
+    }
+}
+
+async function getVoucherByStatus(status){
+    let voucherFragment = null;
+    if (status === 'New'){
+        voucherFragment = document.querySelector('#new-voucher-body');
+    }else if (status === 'Published'){
+        voucherFragment = document.querySelector('#published-voucher-body');
+    }
+
+    try{
+        const response = await fetch('/admin/voucherFragment/'+status);
+
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+
+        const vouchers = await response.text();
+        if (!voucherFragment) {
+            console.log('Element #voucherFragment not found in the response');
+        }
+
+        voucherFragment.innerHTML = "";
+        voucherFragment.innerHTML = vouchers;
     }catch (error){
         console.error('There was a problem with the fetch all orders in the Admin operation:', error);
     }

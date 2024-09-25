@@ -1,21 +1,15 @@
 package com.spring.ecommercesystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalDouble;
-
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 
 @Entity
 @Table(name = "products")
@@ -67,26 +61,143 @@ public class Product implements Serializable {
 //    private Discount discount;
 
     //One to many
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH, CascadeType.REMOVE})
     @JsonManagedReference("product-feedbacks")
     private List<Feedback> feedbacks;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonManagedReference("product-order_details")
     private List<OrderDetail> orderDetails;
 
 
-
     public double getAverageFeedback(){
-        OptionalDouble average = feedbacks.stream().mapToDouble(Feedback::getFeedbackRating).average();
-        double finalAverage = average.orElse(0.0);
+        if ((this.feedbacks == null) ||(this.feedbacks.isEmpty())){
+            return 0.0;
+        }
 
-        return finalAverage;
+        return this.feedbacks.stream().mapToDouble(Feedback::getFeedbackRating).average().getAsDouble();
     }
 
     public int getNumberOfFeedbacks(){
-        return feedbacks.size();
+        if ((this.feedbacks == null) ||(this.feedbacks.isEmpty())){
+            return 0;
+        }
+
+        return this.feedbacks.size();
     }
+
+
+    public Product() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Product setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Product setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Product setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public Product setPrice(Double price) {
+        this.price = price;
+        return this;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public Product setStock(int stock) {
+        this.stock = stock;
+        return this;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public Product setBrand(String brand) {
+        this.brand = brand;
+        return this;
+    }
+
+    public String getProductImg() {
+        return productImg;
+    }
+
+    public Product setProductImg(String productImg) {
+        this.productImg = productImg;
+        return this;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public Product setCreateAt(Date createAt) {
+        this.createAt = createAt;
+        return this;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Product setCategory(Category category) {
+        this.category = category;
+        return this;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Product setUser(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public Product setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+        return this;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public Product setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+        return this;
+    }
+
 
 }

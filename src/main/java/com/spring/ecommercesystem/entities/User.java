@@ -1,5 +1,7 @@
 package com.spring.ecommercesystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,13 +22,21 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User implements Serializable{
+    public enum CustomerType{
+        NEW,
+        SILVER,
+        GOLD,
+        DIAMOND,
+        VIP
+    }
+
+    public enum Gender{
+        Male,
+        Female,
+        Other
+    }
     //-1240413865622714963
     private static final long serialVersionUID = -1240413865622714963L;
-    @Transient
-    public String getAvatarPath(){
-        if (this.id == null || this.avatar == null) return null;
-        return "/userAvatar/" + this.id + "/" + this.avatar;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +56,20 @@ public class User implements Serializable{
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
+
+    @Column(name = "customer_type")
+    @Enumerated(EnumType.STRING)
+    private CustomerType customerType;
+
+    @Column(name = "created_date")
+    private Date createdDate;
+
+    @Column(name = "expenditure")
+    private Double expenditure;
 
     @Column(name = "avatar")
     private String avatar;
@@ -68,12 +92,18 @@ public class User implements Serializable{
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH, CascadeType.REMOVE})
-    @JsonManagedReference("user-feedbacks")
+    @JsonBackReference("user-feedbacks")
     private List<Feedback> feedbacks;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH, CascadeType.REMOVE})
     @JsonManagedReference("user-orders")
     private List<Order> orders;
+
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH, CascadeType.REMOVE})
+    @JsonManagedReference("user-vouchers_detail")
+    private List<VoucherDetail> voucherDetails;
 
 }

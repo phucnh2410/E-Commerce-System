@@ -6,6 +6,7 @@ import com.paypal.base.rest.PayPalRESTException;
 import com.spring.ecommercesystem.entities.Order;
 import com.spring.ecommercesystem.entities.OrderDetail;
 import com.spring.ecommercesystem.entities.Voucher;
+import com.spring.ecommercesystem.entities.VoucherDetail;
 import com.spring.ecommercesystem.services.*;
 import com.spring.ecommercesystem.temp.OrderTemp;
 import com.spring.ecommercesystem.temp.UserCart;
@@ -32,15 +33,17 @@ public class PaymentController {
     private final OrderDetailService orderDetailService;
     private final CartService cartService;
     private final VoucherService voucherService;
+    private final VoucherDetailService voucherDetailService;
 
     @Autowired
-    public PaymentController(PaypalService paypalService, UserService userService, OrderService orderService, OrderDetailService orderDetailService, CartService cartService, VoucherService voucherService) {
+    public PaymentController(PaypalService paypalService, UserService userService, OrderService orderService, OrderDetailService orderDetailService, CartService cartService, VoucherService voucherService, VoucherDetailService voucherDetailService) {
         this.paypalService = paypalService;
         this.userService = userService;
         this.orderService = orderService;
         this.orderDetailService = orderDetailService;
         this.cartService = cartService;
         this.voucherService = voucherService;
+        this.voucherDetailService = voucherDetailService;
     }
 
     @GetMapping("/paypal")
@@ -93,7 +96,7 @@ public class PaymentController {
                         .setUser(this.userService.getCurrentUser())
                         .setTotalAmount(orderTempSession.getFinalTotal())
                         .setOrderedDate(Date.valueOf(LocalDate.now(ZoneId.systemDefault())))
-                        .setStatus(Order.Status.pending_confirmation);
+                        .setStatus(Order.Status.Pending);
                 //Save an order
                 this.orderService.saveAndUpdate(order);
 
@@ -110,6 +113,19 @@ public class PaymentController {
 
                 order.setOrderDetails(orderDetails);
                 this.orderService.saveAndUpdate(order);
+
+                //Handle voucherDetail status
+                if (voucher != null) {
+                    List<VoucherDetail> voucherDetails = this.userService.getCurrentUser().getVoucherDetails();
+                    VoucherDetail voucherDetail = voucherDetails.stream().filter(v -> v.getVoucher().getId().equals(voucher.getId())).findFirst().orElse(null);
+
+                    if (voucherDetail != null) {
+                        voucherDetail.setStatus(VoucherDetail.Status.Used);
+                        this.voucherDetailService.saveAndUpdate(voucherDetail);
+                    }else {
+                        System.out.println("VoucherDetail not found for the given voucher");
+                    }
+                }
 
                 //Handle cart after ordered successful
                 if (orderDetails.size() == this.cartService.getTotalItemsInCart()){
