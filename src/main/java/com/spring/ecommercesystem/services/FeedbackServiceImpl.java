@@ -60,12 +60,15 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         for (Feedback feedback : feedbacksInProduct) {
             //Nếu hợp lệ thì có nghĩa là user này đã feedback cho sp này rồi nếu có feedback thêm nữa thì update lại feedback cũ
-            if (feedback.getProduct().equals(productRequest)) {
-                if (feedback.getUser().equals(this.userService.getCurrentUser())) {
-                    //User này đã feedback cho product nay trong đơn hàng này rồi
-                    if (feedbacksInOrder.contains(feedback)) {
+            if (feedback.getProduct().getId().equals(productRequest.getId())) {
+                if (feedback.getUser().getId().equals(this.userService.getCurrentUser().getId())) {
+
+                    if (feedback.getProduct().getId().equals(productRequest.getId()) && feedback.getUser().getId().equals(this.userService.getCurrentUser().getId()) && feedbacksInOrder.contains(feedback)){
                         return true;
                     }
+//                    if (feedbacksInOrder.contains(feedback)) {//User này đã feedback cho product nay trong đơn hàng này rồi
+//
+//                    }
 
                     //product này đã được feedback ở 1 đơn hàng khác trước đó rồi,
                     // nhưng tới đơn hàng mới này thì customer có thể update lại feedback cho sp này

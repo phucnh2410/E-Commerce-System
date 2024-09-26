@@ -67,7 +67,7 @@ $(document).ready(function() {
 
 
     const productInShop = document.querySelectorAll('.card-img-top');
-    const productDetailImg = document.getElementById('product-detail-img');
+    const productDetailImg = document.getElementById('product-default-img');
     const productCartImg = document.querySelectorAll(".product-cart-image");
     const productCheckoutImg = document.querySelectorAll(".product-checkout-image");
     const productOrderImg = document.querySelectorAll(".product-order-img");
@@ -180,3 +180,34 @@ async function getProductImage(productId, fileName, imageType){
         console.error('There was a problem with the get product image operation:', error);
     }
 }
+
+async function getProductExtraImg(productId){
+    const extraImgElements = document.querySelectorAll('.product-extra-img');
+
+    try {
+        const response = await fetch('/api/download/'+productId);
+
+        if (!response.ok){
+            console.error("Failed to fetch product images");
+            return;
+        }
+
+        const imageUrls = await response.json();
+        if (imageUrls.length === 0) {
+            console.log("No images found for this product");
+            return;
+        }
+
+        for (let i = 0; i < extraImgElements.length; i++){
+            extraImgElements[i].src = imageUrls[i];
+        }
+
+
+    }catch (error){
+        console.error('There was a problem with the get product extra image operation:', error);
+    }
+}
+
+
+
+

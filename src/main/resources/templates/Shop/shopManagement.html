@@ -42,18 +42,21 @@
 
                     <div class="col-md-12">
                         <div class="btn">
-                            <div class="btn-follow" sec:authorize="hasAnyRole('CUSTOMER')">
-                                <a href="#" >Follows</a>
-                            </div>
+<!--                            <div class="btn-follow" sec:authorize="hasAnyRole('CUSTOMER')">-->
+<!--                                <a href="#" >Follows</a>-->
+<!--                            </div>-->
 
                             <div class="btn-chat" sec:authorize="hasAnyRole('CUSTOMER')">
                                 <a href="#">Chat</a>
                             </div>
 
-                            <div class="btn-product" sec:authorize="hasAnyRole('SELLER')">
+<!--                            <div class="btn-product" sec:authorize="hasAnyRole('SELLER')">-->
+<!--                                <a id="add-new-btn" th:href="@{products}">Manage Products</a>-->
+<!--                            </div>-->
+                            <div class="btn-product" sec:authorize="hasRole('SELLER')" th:if="${user.id == currentUser.id}">
                                 <a id="add-new-btn" th:href="@{products}">Manage Products</a>
                             </div>
-                            <div class="btn-request-category" sec:authorize="hasAnyRole('SELLER')">
+                            <div class="btn-request-category" sec:authorize="hasRole('SELLER')" th:if="${user.id == currentUser.id}">
                                 <a id="request-category-btn">Request new category</a>
                             </div>
                         </div>

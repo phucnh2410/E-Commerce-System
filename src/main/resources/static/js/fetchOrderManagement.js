@@ -1,8 +1,10 @@
 $(document).ready(function() {
-    getPendingOrder().then(r => {})
+    const orderManagementTab = document.querySelector('.order-tab-link');
+    if (orderManagementTab) {
+        getPendingOrder().then(r => {});
 
-    getRatingValue();
-
+        getRatingValue();
+    }
 });
 
 async function repurchaseEvent(orderId){
@@ -241,7 +243,6 @@ let orderIdGlobal;
 function clickToCallPopup(productId, orderId, event){
     event.preventDefault();
 
-    // console.log("Product ID: "+productId);
     productIdGlobal = productId;
     orderIdGlobal = orderId;
 
@@ -251,20 +252,20 @@ function clickToCallPopup(productId, orderId, event){
     var done = document.getElementsByClassName("btn-done")[0];
     // var studentForm = document.getElementById("studentForm");
 
-    if (feedbackBtns && feedbackBtns.length > 0) {
-        // Lặp qua tất cả các nút và gắn sự kiện click
-        feedbackBtns.forEach(function(feedbackBtn) { // Thêm vòng lặp để duyệt qua các phần tử
-            feedbackBtn.addEventListener("click", function () {
+    // if (feedbackBtns && feedbackBtns.length > 0) {
+    //     // Lặp qua tất cả các nút và gắn sự kiện click
+    //     feedbackBtns.forEach(function(feedbackBtn) { // Thêm vòng lặp để duyệt qua các phần tử
+    //         feedbackBtn.addEventListener("click", function () {
 
                 modal.style.display = "block";
                 setTimeout(function () {
                     modal.classList.add("show");
                 }, 10); // Đảm bảo rằng lớp 'show' được thêm sau khi display được áp dụng
-            });
-        });
-    } else {
-        console.error("Feedback button not found");
-    }
+    //         });
+    //     });
+    // } else {
+    //     console.error("Feedback button not found");
+    // }
 
     // Ẩn modal khi click vào nút "done"
     done.addEventListener("click", function () {
@@ -279,20 +280,6 @@ function clickToCallPopup(productId, orderId, event){
         }, 500); // Khớp với thời gian của transition
     });
 
-    // Ẩn modal khi click ra ngoài modal
-    window.addEventListener("click", function (event) {
-
-        // productIdGlobal = null;
-        // messageElement.textContent = '';
-
-        if (event.target == modal) {
-            modal.classList.remove("show");
-            setTimeout(function () {
-                modal.style.display = "none";
-                // studentForm.reset();
-            }, 500); // Khớp với thời gian của transition
-        }
-    });
 }
 
 

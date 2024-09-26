@@ -30,8 +30,82 @@
         <section class="product-info">
             <div class="row">
                 <div class="form-group row col-md-5">
-                    <div><img id="product-detail-img" class="product-detail-img" th:data-product-id="${product.id}" th:data-file-name="${product.productImg}" alt="" width="450px" height="450px"></div>
+                    <section class="product-carousel">
+                        <div class="product-image-container">
+                            <!-- Nút điều hướng trước -->
+                            <button class="carousel-btn" id="previous-btn">
+                                <i class="bx bx-left-arrow-alt"></i>
+                            </button>
+
+                            <!-- Khu vực hiển thị ảnh sản phẩm -->
+                            <div class="product-carousel-images" id="product-carousel-images">
+                                <div class="image-scroll-container">
+                                    <img id="product-default-img" class="product-default-img" th:onload="|getProductExtraImg(${product.id});|" th:data-product-id="${product.id}" th:data-file-name="${product.productImg}" alt="" width="450px" height="450px">
+
+                                    <!--Extra Images                                    -->
+                                    <img id="product-extra-img" class="product-extra-img" th:each="extraImage : ${product.productExtraImages}"/>
+                                    <!-- Thêm nhiều ảnh khác nếu cần -->
+                                </div>
+                            </div>
+
+                            <!-- Nút điều hướng sau -->
+                            <button class="carousel-btn" id="next-btn">
+                                <i class="bx bx-right-arrow-alt"></i>
+                            </button>
+                        </div>
+                    </section>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const carouselImages = document.querySelector('.product-carousel-images .image-scroll-container');
+                        const previousBtn = document.getElementById('previous-btn');
+                        const nextBtn = document.getElementById('next-btn');
+                        // const imgWidth = 450; // Kích thước chiều rộng của mỗi ảnh
+                        let imgWidth = 450; // Kích thước chiều rộng của mỗi ảnh
+                        let currentIndex = 0;
+
+                        // Tính số lượng ảnh
+                        const totalImages = document.querySelectorAll('.product-carousel-images img').length;
+
+                        // Hàm cập nhật kích thước ảnh dựa trên kích thước màn hình
+                        function updateImageWidth() {
+                            if (window.matchMedia('(max-width: 768px)').matches) { // Điều kiện responsive
+                                imgWidth = 315; // Kích thước chiều rộng của mỗi ảnh trong chế độ responsive
+                            } else {
+                                imgWidth = 450; // Kích thước chiều rộng của mỗi ảnh khi bình thường
+                            }
+                            updateCarousel(); // Cập nhật carousel với kích thước mới
+                        }
+
+                        function updateCarousel() {
+                            // Di chuyển vùng nhìn đến vị trí ảnh hiện tại
+                            carouselImages.style.transform = `translateX(-${currentIndex * imgWidth}px)`;
+                        }
+
+                        // Xử lý sự kiện khi bấm nút Previous
+                        previousBtn.addEventListener('click', function () {
+                            currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalImages - 1;
+                            updateCarousel();
+                        });
+
+                        // Xử lý sự kiện khi bấm nút Next
+                        nextBtn.addEventListener('click', function () {
+                            currentIndex = (currentIndex < totalImages - 1) ? currentIndex + 1 : 0;
+                            updateCarousel();
+                        });
+
+                        carouselImages.addEventListener('scroll', () => {
+                            previousBtn.disabled = carouselImages.scrollLeft === 0;
+                            nextBtn.disabled = carouselImages.scrollLeft + carouselImages.offsetWidth >= carouselImages.scrollWidth;
+                        });
+
+
+                        updateImageWidth();
+                        // Lắng nghe sự thay đổi kích thước cửa sổ để cập nhật kích thước ảnh
+                        window.addEventListener('resize', updateImageWidth);
+                    });
+                </script>
 
                 <div class="form-group row col-md-7">
 
@@ -40,14 +114,13 @@
                     </div>
 
 
-
                     <div class="rating-average" th:data-rating-average="${ratingAverage}">
                         <span class="number-average" th:text="${ratingAverage}"></span>
 
                         <span class="star-average" data-value="1">&#9733;</span>
                         <span class="star-average" data-value="2">&#9733;</span>
-                        <span class="star-average" data-value="4">&#9733;</span>
                         <span class="star-average" data-value="3">&#9733;</span>
+                        <span class="star-average" data-value="4">&#9733;</span>
                         <span class="star-average" data-value="5">&#9733;</span>
 
                         <span class="number-rating" th:text="'| '+${numberOfRating}+' ratings | ' +${numberOfProductSale} +' sold'"></span>
@@ -116,6 +189,15 @@
                             </div>
                             <div class="buy-btn">
                                 <a href="" class="buy">Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9" sec:authorize="hasRole('SELLER')" th:if="${product.user.id == currentUser.id}">
+                        <div class="product-btn">
+                            <div class="add-more-img">
+<!--                                <i class='bx bx-cart-add'></i>-->
+                                <button class="extra-img" onclick="showFormAddMoreProductImg()">Add image</button>
                             </div>
                         </div>
                     </div>
@@ -192,8 +274,124 @@
 
             </div>
         </section>
-    </div>
 
+
+
+
+        <!-- popup section -->
+        <section>
+            <div id="extraImgModal" class="modal">
+                <div class="modal-content">
+                    <!-- <span class="close">&times;</span> -->
+                    <h5>Add More Image for this product</h5>
+                    <form id="product-form" action="#" method="post">
+                        <div class="row">
+                            <div class="form-group row col-md-12">
+                                <input type="hidden" th:value="${product.id}" id="product-id">
+
+                                <div class="form-group">
+                                    <div class="product-extra-image-container">
+                                        <div class="product-extra-image">
+                                            <img id="product-image-1" class="product-image" width="100px" height="100px" alt="" onerror="onError(event)">
+                                            <img id="product-image-2" class="product-image" width="100px" height="100px" alt="" onerror="onError(event)">
+                                            <img id="product-image-3" class="product-image" width="100px" height="100px" alt="" onerror="onError(event)">
+                                            <img id="product-image-4" class="product-image" width="100px" height="100px" alt="" onerror="onError(event)">
+                                            <img id="product-image-5" class="product-image" width="100px" height="100px" alt="" onerror="onError(event)">
+                                        </div>
+                                        <div class="choose-image-btn">
+                                            <input type="file" id="product-extra-img-file" name="avatar-file" multiple>
+                                            <label for="product-extra-img-file">Choose file</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p id="product-extra-form-message" class="message"></p>
+                            </div>
+                        </div>
+
+                        <script>
+                            // const fileInput = document.getElementById('product-extra-img-file');
+                            // const imageElements = [
+                            //     document.getElementById('product-image-1'),
+                            //     document.getElementById('product-image-2'),
+                            //     document.getElementById('product-image-3'),
+                            //     document.getElementById('product-image-4'),
+                            //     document.getElementById('product-image-5')
+                            // ];
+                            //
+                            // fileInput.addEventListener("change", () => {
+                            //     const files = fileInput.files;
+                            //     const fileCount = Math.min(files.length, imageElements.length); // Giới hạn số lượng file tối đa là 5
+                            //
+                            //     // Reset tất cả hình ảnh trước khi cập nhật
+                            //     imageElements.forEach(img => img.src = '');
+                            //
+                            //     for (let i = 0; i < fileCount; i++) {
+                            //         const file = files[i];
+                            //         const reader = new FileReader();
+                            //
+                            //         reader.onload = (event) => {
+                            //             imageElements[i].src = event.target.result; // Cập nhật src của ảnh
+                            //         };
+                            //
+                            //         reader.readAsDataURL(file); // Đọc file
+                            //     }
+                            // });
+
+                            const messageElement = document.getElementById('product-extra-form-message');
+
+                            const productImgFileInput = document.getElementById("product-extra-img-file");
+
+                            const imageElements = [
+                                document.getElementById('product-image-1'),
+                                document.getElementById('product-image-2'),
+                                document.getElementById('product-image-3'),
+                                document.getElementById('product-image-4'),
+                                document.getElementById('product-image-5')
+                            ];
+
+                            productImgFileInput.addEventListener("change", () =>{
+                                const listFiles = productImgFileInput.files;
+
+                                // Kiểm tra số lượng tệp đã chọn
+                                if (listFiles.length > imageElements.length) {
+                                    messageElement.textContent = `You can only select up to ${imageElements.length} images.`;
+                                    messageElement.style.color = 'red';
+                                    return;
+                                }
+                                // Reset tất cả hình ảnh trước khi cập nhật
+                                imageElements.forEach(img => img.src = '');
+
+                                for (let i = 0; i < listFiles.length; i++) {
+                                    const file = listFiles[i];
+                                    if (!isValidImage(file)) {
+                                        messageElement.textContent = "Please select a valid image file (jpg, jpeg, png, gif, webp)";
+                                        messageElement.style.color = 'red';
+                                        return;
+                                    } else {
+                                        const reader = new FileReader();
+                                        reader.onload = (event) => {
+                                            imageElements[i].src = event.target.result; // Cập nhật src của ảnh
+                                        };
+                                        reader.readAsDataURL(file); // Đọc file
+                                    }
+                                }
+                            });
+                        </script>
+
+                        <div class="form-btn">
+                            <button id="btn-save" type="button" onclick="addMoreProductImg(event)">Save</button>
+                            <button class="more-img-btn-done" type="button">Done</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
 </main>
 <footer th:replace="fragments/footer :: footer"></footer>
 
@@ -235,6 +433,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!--Cart management-->
 <script src="/js/fetchManageCart.js"></script>
+<!--Product extra img-->
+<script src="/js/fetchProductExtraImg.js"></script>
 <!--Image (Product and Avatar)-->
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>

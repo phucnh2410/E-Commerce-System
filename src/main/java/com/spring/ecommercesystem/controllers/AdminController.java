@@ -66,11 +66,9 @@ public class AdminController {
         }else {
 //        List<Order> ordersSorted = orders.stream().sorted(Comparator.comparing(Order::getId).reversed()).collect(Collectors.toList());//descending order
             model.addAttribute("orders", orders);
-
         }
 
         return "Admin/adminDashboard :: orderManagementFrag";
-
     }
 
     @GetMapping("/voucherFragment/{status}")

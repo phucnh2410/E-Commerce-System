@@ -1,36 +1,16 @@
 $(document).ready(function() {
-
-    getAllOrders().then(r => {});
-    // getAllUsers().then(r => {
-    //     const userImgAdminPage =  document.querySelectorAll('.user-img');
-    //
-    //     if (userImgAdminPage){
-    //         userImgAdminPage.forEach(async (userAvatar) =>{
-    //             const userId = userAvatar.getAttribute("data-user-id");
-    //             const fileName = userAvatar.getAttribute("data-file-name");
-    //
-    //             try {
-    //                 await getUserAvatar(userId, fileName, userAvatar);
-    //             } catch (error) {
-    //                 console.error(`There was a problem with the get product cart image operation for product ID ${productId}:`, error);
-    //             }
-    //         });
-    //     }else {
-    //         console.log("class 'product-cart-image' does not exist!!!");
-    //     }
-    // });
-
-
-    // getAllCategories().then(r => {});
+    const adminTabLink = document.querySelector('.tab-link');
+    if (adminTabLink){
+        getAllOrders().then(r => {});
+    }
 });
 
 let debounceTimeout;
-async function getOrderById(){
+async function searchOrderById(){
     clearTimeout(debounceTimeout)
     debounceTimeout = setTimeout(async () => {
         const orderTableFragment = document.querySelector('#orderManagement');
         const searchOrderInputElement = document.querySelector('#search-order-input');
-        const messageElementBody = document.getElementById('message-order-searching-body');
         const messageElement = document.getElementById('message-order-searching');
 
         function isValidInteger(value){
@@ -59,16 +39,8 @@ async function getOrderById(){
 
             const orders = await response.text();
 
-            // if (orders.includes("No orders found.")) {
-            //     console.log("No order");
-            //     messageElementBody.textContent = "No orders found.";
-            //     messageElementBody.style.color = 'red';
-            //     orderTableFragment.innerHTML = ""; // Delete content in table w Xóa nội dung bảng khi không có đơn hàng
-            //     return;
-            // }
-
             if (!orderTableFragment) {
-                console.log('Element #productTable not found in the response');
+                console.log('Element #orderTableFragment not found in the response');
                 return;
             }
 

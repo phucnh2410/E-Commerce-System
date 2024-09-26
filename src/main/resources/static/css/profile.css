@@ -1,6 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+/*New*/
+@import url('https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
+/*Silver*/
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+/*Gold*/
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+/*Diamond*/
+@import url('https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&display=swap');
+/*VIP*/
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
 body {
     margin: 0;
     background-color: #f4f4f4;
@@ -179,34 +191,51 @@ main .container{
 }
 
 .info-item .account-type {
-    font-size: 30px;
-    font-family: "GFS Didot", serif;
-    font-weight: 500;
-    font-style: normal;
-}
-
-/* Màu vàng cho GOLD */
-.info-item .gold-type {
-    background-color: gold;
-}
-
-/* Màu bạc cho SILVER */
-.info-item .silver-type {
-    background-color: silver;
-}
-
-/* Màu xanh dương nhạt cho DIAMOND */
-.info-item .diamond-type {
-    background-color: deepskyblue;
+    padding: 7px;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 20px;
 }
 
 /* Màu xám cho NEW */
 .info-item .new-type {
+    font-family: "Gentium Plus", serif;
+    font-weight: 400;
     background-color: gray;
 }
 
+/* Màu bạc cho SILVER */
+.info-item .silver-type {
+    font-family: "Merriweather", serif;
+    font-weight: 400;
+    background-color: silver;
+    /*    D3D3D3*/
+}
+
+/* Màu vàng cho GOLD */
+.info-item .gold-type {
+    font-family: "Libre Bodoni", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    background-color: #f5d111;
+}
+
+
+/* Màu xanh dương nhạt cho DIAMOND */
+.info-item .diamond-type {
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    background-color: #7851A9;
+/*#7851A9*/
+}
+
+
+
 /* Màu đỏ đậm cho VIP */
 .info-item .vip-type {
+    font-family: "Cinzel Decorative", serif;
+    font-weight: 900;
     background-color: darkred;
 }
 

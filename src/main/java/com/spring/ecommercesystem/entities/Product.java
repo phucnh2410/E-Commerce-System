@@ -61,7 +61,12 @@ public class Product implements Serializable {
 //    private Discount discount;
 
     //One to many
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH, CascadeType.REMOVE})
+    @JsonManagedReference("product-productExtraImages")
+    private List<ProductExtraImage> productExtraImages;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH, CascadeType.REMOVE})
     @JsonManagedReference("product-feedbacks")
     private List<Feedback> feedbacks;
@@ -199,5 +204,12 @@ public class Product implements Serializable {
         return this;
     }
 
+    public List<ProductExtraImage> getProductExtraImages() {
+        return productExtraImages;
+    }
 
+    public Product setProductExtraImages(List<ProductExtraImage> productExtraImages) {
+        this.productExtraImages = productExtraImages;
+        return this;
+    }
 }

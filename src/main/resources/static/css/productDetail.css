@@ -37,6 +37,95 @@ a {
     padding-left: 25px !important;
 }
 
+/**/
+.product-image-container {
+    position: relative;
+    width: 450px;
+    height: 450px;
+    overflow: hidden;
+}
+
+/* Đảm bảo các ảnh ẩn đi khi chưa scroll tới */
+.product-carousel-images {
+    display: flex;
+    overflow-x: hidden; /* Ẩn các ảnh không nằm trong khung nhìn */
+    scroll-snap-type: x mandatory; /* Giúp ảnh dính vào một vị trí khi scroll */
+}
+
+/* Ẩn tất cả ảnh ban đầu */
+.product-carousel-images .image-scroll-container {
+    /*display: flex;*/
+    /*transition: transform 0.3s ease;*/
+    display: flex;
+    scroll-snap-align: start;
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-carousel-images img {
+    /*width: 450px;*/
+    /*height: 450px;*/
+    object-fit: cover;
+    flex: 0 0 auto; /* Không cho phép ảnh mở rộng quá khung */
+    width: 100%; /* Đảm bảo mỗi ảnh chiếm toàn bộ chiều rộng khung */
+
+    flex-shrink: 0; /* Đảm bảo ảnh không bị co lại */
+}
+
+/* Nút điều hướng */
+.product-image-container .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    /*border: none;*/
+    /*cursor: pointer;*/
+    /*padding: 5px;*/
+    /*z-index: 2;*/
+
+    box-shadow: -10px 0 10px rgba(0, 0, 0, 0.08);
+    width: 25px;
+    height: 25px;
+    border: 1px solid transparent;
+    border-radius: 100%;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    z-index: 999;
+}
+
+.product-image-container .carousel-btn i {
+    font-size: 16px;
+    color: rgb(110, 107, 107);
+    transition: transform 0.2s;
+}
+
+.carousel-btn:hover {
+    transform: scale(2);
+}
+
+.carousel-btn:hover i{
+    transform: scale(2);
+}
+
+#previous-btn {
+    left: 10px;
+}
+
+#next-btn {
+    right: 10px;
+}
+
+.carousel-btn i {
+    font-size: 24px;
+    color: #333;
+}
+
+
+/**/
 .product-detail-message{
     display: none;
 }
@@ -65,6 +154,31 @@ a {
     border-radius: 2px;
     padding-top: 4px;
 }
+
+/*.product-btn .add-more-img{*/
+/*    padding: 10px;*/
+/*    width: 150px;*/
+/*    border: 1px solid #808080; !* Màu viền xám *!*/
+/*    background-color: #fff;*/
+/*    border-radius: 2px;*/
+/*}*/
+
+
+.product-btn .extra-img {
+    width: 150px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 4px;
+    color: #555;
+    padding: 7px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.product-btn .extra-img:hover {
+    background-color: #e9e9e9;
+}
+
 
 
 .product-btn div a{
@@ -133,16 +247,16 @@ a {
     display: flex;
     margin-top: 5px;
     margin-left: -12px;
+    padding: 10px;
     color: rgb(110, 107, 107);
 }
 .shop-info .btn .chat-btn{
-    padding-top: auto;
     width: 90px;
     border: 1px solid #808080; /* Màu viền xám */
     background-color: #fff;
     border-radius: 2px;
     margin-right: 10px;
-    padding-top: 5px;
+
 }
 .shop-info .btn .see-shop-btn{
     width: 110px;
@@ -357,10 +471,121 @@ a {
 
 
 
-@media (max-width: 1000px) {
-    .form-group div img{
+.modal {
+    font-weight: 300;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+    opacity: 0; /* Bắt đầu với độ mờ */
+    transition: opacity 0.5s ease;
+}
+
+.modal.show {
+    display: block;
+    opacity: 1; /* Hiển thị modal với độ mờ 1 */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 9% auto;
+    padding: 20px;
+    /* border: 1px solid #888; */
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    width: 100%;
+    width: 590px;
+    border-radius: 5px;
+    transform: translateY(-20px); /* Di chuyển modal lên trên một chút */
+    transition: transform 0.3s ease;
+}
+
+.modal.show .modal-content {
+    transform: translateY(0); /* Đưa modal về vị trí bình thường */
+}
+
+/*.modal-content .row .form-group input{*/
+/*    width: 100%;*/
+/*    height: 75%;*/
+/*    margin-bottom: 15px;*/
+/*}*/
+
+.modal-content .product-extra-image-container {
+    text-align: left;
+}
+
+.modal-content .product-extra-image-container .product-extra-image img {
+    border-radius: 2px;
+    border: 2px solid #ddd;
+}
+
+.modal-content .product-extra-image-container .choose-image-btn {
+    margin-top: 10px;
+}
+
+.modal-content .product-extra-image-container .choose-image-btn input[type="file"] {
+    display: none;
+}
+
+.modal-content .product-extra-image-container .choose-image-btn label {
+    background-color: #fff;
+    color: #555;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+}
+
+.modal-content .product-extra-image-container .choose-image-btn label:hover {
+    background-color: #e9e9e9;
+}
+
+.modal-content .form-btn{
+    margin-top: 20px;
+}
+
+.modal-content .form-btn button{
+    font-weight: 300;
+    margin-right: 13px;
+    width: 100px;
+    border: 1px solid #808080;
+    background-color: #fff;
+    border-radius: 2px;
+    color: rgb(110, 107, 107);
+}
+
+.modal-content .form-btn button:hover{
+    background-color: rgb(248, 240, 230);;
+}
+
+@media (max-width: 450px) {
+
+    .product-image-container {
         width: 315px;
         height: 315px;
+    }
+    .product-carousel-images .image-scroll-container img {
+        width: 315px;
+        height: 315px;
+    }
+
+    .product-carousel-images .image-scroll-container .product-extra-img {
+        width: 315px;
+        height: 315px;
+    }
+
+    #previous-btn {
+        left: 10px;
+    }
+
+    #next-btn {
+        right: 10px;
     }
 
     .product-btn{
@@ -388,6 +613,22 @@ a {
     .description-content .content p {
         margin-left: 0;
         text-align: left;
+    }
+
+    .modal{
+        margin-left: -5px;
+    }
+
+    .modal-content {
+        padding: 5px;
+        width: 100%;
+        width: 370px;
+        border-radius: 2px;
+    }
+
+    .modal-content .product-extra-image-container .product-extra-image img {
+        width: 60px;
+        height: 60px;
     }
 
 

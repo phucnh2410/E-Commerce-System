@@ -245,8 +245,7 @@
     // Optionally, you can disable the buttons when reaching the start/end
     bestSellerCarousel.addEventListener("scroll", () => {
         bestSellerPreviousBtn.disabled = bestSellerCarousel.scrollLeft === 0;
-        bestSellerNextBtn.disabled =
-            bestSellerCarousel.scrollLeft + bestSellerCarousel.offsetWidth >= bestSellerCarousel.scrollWidth;
+        bestSellerNextBtn.disabled = bestSellerCarousel.scrollLeft + bestSellerCarousel.offsetWidth >= bestSellerCarousel.scrollWidth;
     });
 </script>
 
