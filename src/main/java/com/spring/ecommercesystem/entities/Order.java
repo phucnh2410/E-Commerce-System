@@ -16,7 +16,6 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 public class Order {
-
     public enum Status{
         Pending,
         Confirmed,
@@ -28,19 +27,14 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "ordered_date")
     private Date orderedDate;
-
     @Column(name = "confirmed_date")
     private Date confirmedDate;
-
     @Column(name = "canceled_date")
     private Date canceledDate;
-
     @Column(name = "delivered_date")
     private Date deliveredDate;
-
     @Column(name = "received_date")
     private Date receivedDate;
 

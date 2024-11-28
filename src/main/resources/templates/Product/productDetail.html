@@ -5,13 +5,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="icon" th:href="@{/images/SherlockBackgroundLogoBigSize.png}" type="image/x-icon">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <title>Detail page</title>
+    <title th:text="${product.category.name +' '+ product.name}"></title>
+
     <link rel="stylesheet" th:href="@{/css/productDetail.css}" />
     <link rel="stylesheet" th:href="@{/css/header.css}" />
     <link rel="stylesheet" th:href="@{/css/footer.css}" />
@@ -177,18 +181,30 @@
                         <input type="number" id="product-quantity" value="1" min="1" max="999" class="product-quantity">
                     </div>
 
+                    <div class="col-md-9" th:if="${product.stock > 0}">
+                        <p class="product-stock-notice" id="product-stock" th:text="${product.stock} + ' products left' "></p>
+                    </div>
+
+                    <div class="col-md-9" th:if="${product.stock <= 5 && product.stock > 0}">
+                        <p class="product-stock-notice" id="" style="color: darkorange; font-size: 18px">The quantity of products in stock is low.</p>
+                    </div>
+
+                    <div class="col-md-9" th:if="${product.stock == 0}">
+                        <p class="product-stock-notice" id="product-stock-notice" style="color: red; font-size: 19px">Out of stock</p>
+                    </div>
+
                     <div class="col-md-9" >
                         <p class="product-detail-message" id="product-detail-message"></p>
                     </div>
 
-                    <div class="col-md-9" sec:authorize="hasRole('CUSTOMER')">
+                    <div class="col-md-9" sec:authorize="not hasAnyRole('SELLER', 'ADMIN')">
                         <div class="product-btn">
                             <div class="add-cart-btn">
                                 <i class='bx bx-cart-add'></i>
                                 <a class="cart" href="javascript:void(0);" th:onclick="|addProductToCart(${product.id});|">Add To Cart</a>
                             </div>
                             <div class="buy-btn">
-                                <a href="" class="buy">Buy Now</a>
+                                <a class="buy" href="javascript:void(0);" th:onclick="|buyNowAction(${product.id}, ${product.user.id}, ${product.price});|">Buy Now</a>
                             </div>
                         </div>
                     </div>
@@ -233,6 +249,7 @@
             <div class="description-content">
                 <h4 class="description-title">Product Description</h4>
                 <div class="content">
+                    <p th:text="${product.stock} + ' products left' "></p>
                     <p th:text="${product.description}">
 
                     </p>

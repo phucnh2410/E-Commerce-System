@@ -25,7 +25,8 @@ public class ProductExtraImgRestController {
     private final ProductExtraImageService productExtraImageService;
     private final UserService userService;
 
-    private String DIRECTORY = "src/main/resources/static/productExtraImg/";
+//    private String DIRECTORY = "src/main/resources/static/productExtraImg/";//local
+    private String DIRECTORY = "/app/images/productExtraImg/";//Docker
 
     @Autowired
     public ProductExtraImgRestController(ProductService productService, ProductExtraImageService productExtraImageService, UserService userService) {

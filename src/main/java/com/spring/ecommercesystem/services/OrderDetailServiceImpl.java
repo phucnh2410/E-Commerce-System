@@ -47,14 +47,36 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 .setId(key)
                 .setOrder(order)
                 .setProduct(product)
-                .setProductQuantity(quantity);
+                .setProductQuantity(quantity)
+                .setProductStatus(OrderDetail.ProductStatus.Pending);
 
         this.orderDetailRepository.saveAndFlush(orderDetail);
 
         return orderDetail;
     }
 
+    @Override
+    public OrderDetail findByOrderIdAndProductId(Long orderId, Long productId) {
+        return null;
+    }
 
+    @Override
+    public OrderDetail updateStatusForEachProduct(Long orderId, Long productId) {
+        // Tìm OrderDetail theo OrderId và ProductId
+        OrderDetail orderDetail = orderDetailRepository.findOrderDetailByOrderIdAndProductId(orderId, productId);
 
+        if (orderDetail == null) {
+            // Nếu không tìm thấy, có thể ném Exception hoặc trả về null tùy theo yêu cầu
+            System.out.println("OrderDetail not found for orderId " + orderId + " and productId " + productId);
+            return null;
+        }
 
+        // Cập nhật thông tin OrderDetail
+        orderDetail.setProductStatus(OrderDetail.ProductStatus.Confirmed);
+
+        // Lưu lại OrderDetail đã được cập nhật
+        this.orderDetailRepository.saveAndFlush(orderDetail);
+
+        return orderDetail;
+    }
 }

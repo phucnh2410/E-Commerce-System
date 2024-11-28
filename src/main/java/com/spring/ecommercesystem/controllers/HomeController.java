@@ -2,12 +2,14 @@ package com.spring.ecommercesystem.controllers;
 
 import com.spring.ecommercesystem.entities.*;
 import com.spring.ecommercesystem.services.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -30,6 +32,9 @@ public class HomeController {
 
     private final OrderDetailService orderDetailService;
 
+//    private String AVATARPATH = "src/main/resources/static/userAvatar/";//Local
+    private String AVATARPATH = "/app/images/userAvatar/";//Docker
+
 
     @Autowired
     public HomeController(ProductService productService, UserService userService, CategoryService categoryService, OrderDetailService orderDetailService) {
@@ -41,7 +46,8 @@ public class HomeController {
 
 
     @GetMapping("/")
-    public String home(Model model){
+    public String home(HttpSession session, Model model){
+        session.removeAttribute("userCarts");
         //Get all items in the OrderDetail table
         List<OrderDetail> orderDetails = this.orderDetailService.findAllItems();
 
@@ -80,19 +86,81 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login(HttpSession session){
+        session.invalidate();
+        return "Home/loginAndRegister";
+    }
+
+    @GetMapping("/forbidden")
+    public String forbidden(){
+        return "ErrorPage/error403";
+    }
+
+    @GetMapping("/not_found")
+    public String notFound(){
+        return "ErrorPage/error404";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
         return "Home/loginAndRegister";
     }
 
     @GetMapping("/profile")
     public String profile(Model model){
         User user = this.userService.getCurrentUser();
-        List<VoucherDetail> vouchersOwnedUnused = user.getVoucherDetails().stream().filter(voucherDetail -> voucherDetail.getStatus() == VoucherDetail.Status.Unused).collect(Collectors.toList());
-        model.addAttribute("user", user);
-        model.addAttribute("numberOfOrder", user.getOrders().size());
-        model.addAttribute("numberOfVoucher", vouchersOwnedUnused.size());
+
+        Map<String, Object> profileData = this.userService.getProfileData(user);
+        if (user.getRole().getName().equalsIgnoreCase("ROLE_CUSTOMER")) {
+            model.addAttribute("numberOfOrder", profileData.get("numberOfOrder"));
+            model.addAttribute("numberOfVoucher", profileData.get("numberOfVoucher"));
+            model.addAttribute("user",  profileData.get("customer"));
+            return "Home/profile";
+        }
+
+        model.addAttribute("totalRevenue", profileData.get("totalRevenue"));
+        model.addAttribute("totalUnitsSold", profileData.get("totalUnitsSold"));
+        model.addAttribute("totalProducts", profileData.get("totalProducts"));
+        model.addAttribute("totalProductsSold", profileData.get("totalProductsSold"));
+
+        model.addAttribute("user", profileData.get("seller"));
         return "Home/profile";
     }
+
+    @GetMapping("/change-password-form")
+    public String showFormChangePassword(){
+
+        return "Home/changePassword";
+    }
+
+//    @PostMapping("/change-password-save")
+//    public String saveChangePassword(@RequestParam("newPassword") String newPassword, HttpSession session, Model model){
+//        String email = (String) session.getAttribute("emailUserChangePassword");
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//
+//        // Kiểm tra nếu email không có trong session
+//        if (email.equals(null) || email.isEmpty()) {
+//            model.addAttribute("message", "No email found in session. Please try again.");
+//            return "Home/changePassword"; // Trả về trang hiện tại thay vì chuyển hướng
+//        }
+//
+//        // Kiểm tra nếu mật khẩu mới rỗng
+//        if (newPassword.equals(null) || newPassword.isEmpty()) {
+//            model.addAttribute("message", "Please enter a new password.");
+//            return "Home/changePassword"; // Trả về trang hiện tại thay vì chuyển hướng
+//        }
+//
+//        System.out.println("email: "+email);
+//        System.out.println("new pass: "+newPassword);
+//
+//        User user = this.userService.findByEmail(email);
+//        user.setPassword(encoder.encode(newPassword));
+//
+//        this.userService.saveAndUpdate(user);
+//        session.removeAttribute("emailUserChangePassword");
+//        return "redirect:/login";
+//    }
 
     @PostMapping("/save/profile")
     public String updateProfile(@ModelAttribute("user") User user, @RequestParam("avatar-file")MultipartFile file) throws IOException {
@@ -106,7 +174,7 @@ public class HomeController {
             //Delete the old avatar
             String oldAvatarName = userDB.getAvatar();
             if (oldAvatarName != null && !oldAvatarName.isEmpty()){
-                String oldAvatarPath = "src/main/resources/static/userAvatar/" + user.getId() + "/" + oldAvatarName;
+                String oldAvatarPath = AVATARPATH + user.getId() + "/" + oldAvatarName;
                 File oldFile = new File(oldAvatarPath);
                 if (oldFile.exists()){
                     oldFile.delete();
@@ -133,7 +201,7 @@ public class HomeController {
             this.userService.saveAndUpdate(user);
 
             //Save new image into server folder
-            String uploadDirectory = "src/main/resources/static/userAvatar/" + user.getId();
+            String uploadDirectory = AVATARPATH + user.getId();
             FileUpload.saveFile(uploadDirectory, fileName, file);
         }else {
             System.out.println("Multipart file is null!!!");
@@ -170,7 +238,8 @@ public class HomeController {
     }
 
     @GetMapping("/product_detail")
-    public String showProductDetail(Model model, @RequestParam("id") Long id){
+    public String showProductDetail(Model model, @RequestParam("id") Long id, HttpSession session){
+        session.removeAttribute("userCarts");
         Product product = this.productService.findById(id);
 
         //Get all items in orderDetail from the product

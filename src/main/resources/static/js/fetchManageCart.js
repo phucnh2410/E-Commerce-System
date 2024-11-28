@@ -1,6 +1,33 @@
 $(document).ready(function() {
     var selectedSellers = {}; // an object to store seller info
     //Lắng nghe sự kiện thay đổi trên tất cả các checkbox của seller
+    document.querySelector('#checked-all-checkbox').addEventListener('change', function () {
+        var isChecked = this.checked;
+
+        // Chọn hoặc bỏ chọn tất cả các seller-checkbox và product-checkbox
+        document.querySelectorAll('.seller-checkbox').forEach(function (sellerCheckbox) {
+            sellerCheckbox.checked = isChecked; // Chọn tất cả các seller-checkbox
+            var sellerId = sellerCheckbox.getAttribute('data-seller-id');
+
+            // Chọn hoặc bỏ chọn tất cả các product-checkbox của seller đó
+            document.querySelectorAll('.product-checkbox[data-seller-id="' + sellerId + '"]').forEach(function (productCheckbox) {
+                productCheckbox.checked = isChecked;
+            });
+
+            if (isChecked) {
+                // Nếu "Select Alls" được chọn, lấy tất cả các sản phẩm của mỗi seller
+                selectedSellers[sellerId] = getSelectedProducts(sellerId);
+                console.log('Selected products for seller:', selectedSellers[sellerId]);
+            } else {
+                // Nếu "Select Alls" bị bỏ chọn
+                selectedSellers[sellerId] = {};
+                console.log('No products selected for seller ' + sellerId);
+            }
+
+            updateTotalAmount(); // Cập nhật tổng số lượng và giá
+        });
+    });
+
     document.querySelectorAll('.seller-checkbox').forEach(function (sellerCheckbox){
 
         var sellerId = sellerCheckbox.getAttribute('data-seller-id');
@@ -27,7 +54,6 @@ $(document).ready(function() {
             }
 
             updateTotalAmount()
-
         });
     });
 
@@ -79,13 +105,13 @@ function getSelectedProducts(sellerId) {
 
         // Lặp qua tất cả các sản phẩm được tích chọn
         document.querySelectorAll('.product-checkbox:checked').forEach(function (productCheckbox) {
-            var sellerId = productCheckbox.getAttribute('data-seller-id');
-            var productId = productCheckbox.getAttribute('data-product-id');
-            var getQuantityInput = document.querySelector('.quantity-input[data-product-id="' + productId + '"]');
-            var getTotal = document.querySelector('.product-total[data-product-id="' + productId + '"]');
+            const sellerId = productCheckbox.getAttribute('data-seller-id');
+            const productId = productCheckbox.getAttribute('data-product-id');
+            const getQuantityInput = document.querySelector('.quantity-input[data-product-id="' + productId + '"]');
+            const getTotal = document.querySelector('.product-total[data-product-id="' + productId + '"]');
 
-            var productTotal = getTotal ? parseFloat(getTotal.textContent.trim().replace('$', '')) : 0;
-            var productQuantity = getQuantityInput ? parseInt(getQuantityInput.value) : 1;
+            const productTotal = getTotal ? parseFloat(getTotal.textContent.trim().replace('$', '')) : 0;
+            const productQuantity = getQuantityInput ? parseInt(getQuantityInput.value) : 1;
 
             if (!selectedProducts[sellerId]) {
                 selectedProducts[sellerId] = {};
@@ -145,9 +171,14 @@ function transferObject(){
 
 
 async function checkoutAction(){
+    const totalMoneyElement = document.getElementById("totalMoney");
+    const totalMoney = totalMoneyElement ? parseFloat(totalMoneyElement.textContent.trim().replace('$', '')) : 0;
+    if (totalMoney === 0) {
+        console.log("No any product is selected")
+        return;
+    }
     try {
         const data = transferObject();
-
         // const purchaseLink = document.getElementById("purchase-link");
         // if (purchaseLink){
         //     const queryString = new URLSearchParams({ data: JSON.stringify(data) }).toString();
@@ -159,20 +190,21 @@ async function checkoutAction(){
 
         const response = await fetch('/api/cart/store_checkout_info', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
 
-        if (!response.ok){
+        if (!response.ok) {
             const error = await response.text()
             return error;
         }
 
         window.location.href = "/shopping_cart/checkout";
 
-    }catch (error) {
+    } catch (error) {
         console.error('An error with the checkout action operation:', error);
     }
+
 }
 
 async function getCart(){
@@ -196,6 +228,54 @@ async function getCart(){
     }
 }
 
+
+async function buyNowAction(productId, sellerId, price){
+    let productQuantity = 1;
+    const getProductQuantity = document.getElementById("product-quantity");
+    productQuantity = getProductQuantity && getProductQuantity.value ? parseInt(getProductQuantity.value) : 1;
+
+    console.log('Seller id: '+sellerId +' - product id:'+productId + ' - quantity: '+productQuantity +' - price: '+price +' - total: '+price*productQuantity);
+
+    const data = [
+        {
+            user: { id: sellerId },
+            cartTemps: [
+                {
+                    product: { id: productId },
+                    quantity: productQuantity,
+                    total: price * productQuantity
+                }
+            ]
+        }
+    ];
+
+   try{
+       const response = await fetch('/api/cart/store_checkout_info', {
+           method: 'POST',
+           headers: {'Content-Type': 'application/json'},
+           body: JSON.stringify(data)
+       });
+
+       if (!response.ok) {
+           if (response.status === 401){
+               window.location.href = "/login";
+               return;
+           }
+           if (response.status === 403){
+               window.location.href = "/403";
+               return;
+           }
+           const error = await response.text()
+           return error;
+       }
+
+       window.location.href = "/shopping_cart/checkout";
+   }catch (error) {
+       console.error('An error with the checkout action operation:', error);
+   }
+
+}
+
 async function addProductToCart(productId){
     let productQuantity = 1;
     const getProductQuantity = document.getElementById("product-quantity");
@@ -214,6 +294,14 @@ async function addProductToCart(productId){
         const result = await response.json();
 
         if (!response.ok){
+            if (response.status === 401){
+                window.location.href = "/login";
+                return;
+            }
+            if (response.status === 403){
+                window.location.href = "/403";
+                return;
+            }
             messageElement.style.display = 'block';
             messageElement.textContent = result.message;
             messageElement.style.color = 'red';
@@ -234,73 +322,78 @@ async function addProductToCart(productId){
         await showNumberOfProductInCartIcon();
     }catch (error) {
         console.error(`There was a problem with the add product to cart operation:`, error);
-
-        Swal.fire({
-            title: "Error!",
-            text: "Something went wrong.",
-            icon: "error",
-            timer: 1000, // thời gian hiển thị 1 giây (1000ms)
-            showConfirmButton: false // không hiển thị nút bấm xác nhận
-        });
+        //
+        // Swal.fire({
+        //     title: "Error!",
+        //     text: "Something went wrong.",
+        //     icon: "error",
+        //     timer: 1000, // thời gian hiển thị 1 giây (1000ms)
+        //     showConfirmButton: false // không hiển thị nút bấm xác nhận
+        // });
+        // window.location.href = '/login';
     }
 }
 
+let debounceTimeout;
 async function updateQuantity(productId, quantity) {
     const quantityInput = document.getElementById("quantity-input-product-"+productId);
-    const totalAmount = document.getElementById("total-amount-product-"+productId);
+    clearTimeout(debounceTimeout)
+    debounceTimeout = setTimeout(async () => {
+        const totalAmount = document.getElementById("total-amount-product-" + productId);
 
-    const messageElement = document.getElementById('cart-message-'+productId);
+        const messageElement = document.getElementById('cart-message-' + productId);
 
-    try {
-        const response = await fetch("/api/cart/quantity/" + productId +"?quantity="+quantity, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-
-        const result = await response.json();
-
-        if (response.ok){
-            messageElement.textContent = result.message;
-
-            //update data into view
-            quantityInput.value = result.quantity;
-            totalAmount.innerText = '$' + (result.price * result.quantity).toFixed(1);
-
-            // await getCart();
-            const productCartImg = document.querySelectorAll(".product-cart-image");
-
-            if (productCartImg){
-                for (const productCart of productCartImg) {
-                    const productId = productCart.getAttribute("data-product-id");
-                    const fileName = productCart.getAttribute("data-file-name");
-
-                    try {
-                        await getProductImage(productId, fileName, productCart);
-                    } catch (error) {
-                        console.error(`There was a problem with the update quantity operation for product ID ${productId}:`, error);
-                    }
+        try {
+            const response = await fetch("/api/cart/quantity/" + productId + "?quantity=" + quantity, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 }
-            }else {
-                console.log("class 'product-cart-image' does not exist!!!");
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                messageElement.textContent = result.message;
+
+                //update data into view
+                quantityInput.value = result.quantity;
+                totalAmount.innerText = '$' + (result.price * result.quantity).toFixed(1);
+
+                // await getCart();
+                const productCartImg = document.querySelectorAll(".product-cart-image");
+
+                if (productCartImg) {
+                    for (const productCart of productCartImg) {
+                        const productId = productCart.getAttribute("data-product-id");
+                        const fileName = productCart.getAttribute("data-file-name");
+
+                        try {
+                            await getProductImage(productId, fileName, productCart);
+                        } catch (error) {
+                            console.error(`There was a problem with the update quantity operation for product ID ${productId}:`, error);
+                        }
+                    }
+                } else {
+                    console.log("class 'product-cart-image' does not exist!!!");
+                }
             }
-        }
 
-        if (!response.ok){
-            messageElement.textContent = result.message;
-            messageElement.style.color = 'red';
+            if (!response.ok) {
+                messageElement.textContent = result.message;
+                messageElement.style.color = 'red';
 
-            if (result.stock !== undefined){
-                quantityInput.setAttribute('max', result.stock);
-                quantityInput.value = result.stock;
+                if (result.stock !== undefined) {
+                    quantityInput.setAttribute('max', result.stock);
+                    quantityInput.value = result.stock;
+                }
+                return;
             }
-            return;
-        }
 
-    } catch (error) {
-        console.error(`There was a problem with the update quantity from cart operation:`, error);
-    }
+        } catch (error) {
+            console.error(`There was a problem with the update quantity from cart operation:`, error);
+        }
+    }, 1000);
 
 
 }

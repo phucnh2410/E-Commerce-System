@@ -55,6 +55,7 @@ async function searchOrderById(){
 
 async function getAllOrders(){
     const orderFragment = document.querySelector('#orderManagement');
+    console.log("All Order already to show");
 
     try{
         const response = await fetch('/admin/orderFragment');
@@ -76,6 +77,7 @@ async function getAllOrders(){
 }
 
 async function getVoucherByStatus(status){
+    console.log("Voucher already to show");
     let voucherFragment = null;
     if (status === 'New'){
         voucherFragment = document.querySelector('#new-voucher-body');
@@ -104,6 +106,7 @@ async function getVoucherByStatus(status){
 
 async function getAllUsers(){
     const accountFragment = document.querySelector('#accountTable');
+    console.log("All Users already to show");
 
     try{
         const response = await fetch('/admin/accountFragment');
@@ -126,6 +129,7 @@ async function getAllUsers(){
 
 async function getAllCategories(){
     const categoryFragment = document.querySelector('#categoryTable');
+    console.log("All Category already to show");
 
     try{
         const response = await fetch('/admin/categoryFragment');
@@ -149,6 +153,7 @@ async function getAllCategories(){
 /////////////////////////Seller ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function getAllSeller(){
     const sellerFragment = document.querySelector('#seller-body');
+    console.log("Seller statistics already to show");
 
     try{
         const response = await fetch('/admin/sellerFragment');
@@ -171,6 +176,7 @@ async function getAllSeller(){
 /////////////////////////Customer ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function getAllCustomer(){
     const customerFragment = document.querySelector('#customer-body');
+    console.log("Customer statistics already to show");
 
     try{
         const response = await fetch('/admin/customerFragment');
@@ -192,6 +198,7 @@ async function getAllCustomer(){
 
 async function getAllStatisticCategory(){
     const categoryFragment = document.querySelector('#category-body');
+    console.log("Category statistics already to show");
 
     try{
         const response = await fetch('/admin/categoryStatisticFragment');

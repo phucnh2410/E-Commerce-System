@@ -30,23 +30,11 @@ public class CartService {
     }
 
     public Long getUserIdAuthenticate (){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            System.out.println("User is not authenticated!");
-            return null;
-        }
-        try {
-            UserDetails userAuth = (UserDetails) authentication.getPrincipal();
+        User currentUser = this.userService.getCurrentUser();
 
-            Collection<? extends GrantedAuthority> authorities = userAuth.getAuthorities();
-
-            boolean isCustomer = authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_CUSTOMER"));
-            if (isCustomer){
-                return this.userService.getCurrentUser().getId();
-            }
-
-        }catch (ClassCastException e){
-            return null;
+        boolean isCustomer = this.userService.isCustomer();
+        if (isCustomer){
+            return currentUser.getId();
         }
 
         return null;

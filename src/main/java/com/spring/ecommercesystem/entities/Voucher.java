@@ -20,7 +20,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "vouchers")
 public class Voucher {
-
     public enum CustomerType{
         NEW,
         SILVER,
@@ -61,13 +60,6 @@ public class Voucher {
 
     @Column(name = "start_date")
     private Date startDate;
-
-//    public Voucher setDeadline(int daysToAdd) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.add(Calendar.DAY_OF_MONTH, 3);
-//        this.deadline = (Date) calendar.getTime();
-//        return this;
-//    }
 
     //One to many
     @OneToMany(mappedBy = "voucher", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,

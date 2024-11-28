@@ -28,8 +28,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findByName(String name) {
-        return this.productRepository.findProductByNameContainingIgnoreCase(name);
+    public List<Product> findByName(String keyword) {
+        return this.productRepository.findProductByKeyword(keyword);
     }
 
     @Override

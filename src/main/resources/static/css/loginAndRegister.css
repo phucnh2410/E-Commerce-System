@@ -6,6 +6,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    min-width: 320px;
     margin: 0;
     background-color: #f4f4f4; /* Set a background color for better visibility */
 }
@@ -21,7 +22,7 @@ h1{
 
 p{
     font-size: 14px;
-    font-weight: 100px;
+    font-weight: 100;
     line-height: 20px;
     letter-spacing: 0.5px;
     margin: 20px 0 30px;
@@ -40,19 +41,14 @@ a{
 
 .container{
     position: relative;
-    width: 768px;
-    max-width: 100%;
-    min-height: 480px;
+    width: 400px;
+    height: 500px;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2),
     0 10px 10px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     font-family: "Montserrat", sans-serif;
-}
-
-.overlay-container{
-    display: none;
 }
 
 .form-container{
@@ -64,14 +60,98 @@ a{
 
 .sign-in-container{
     left: 0;
-    width: 50%;
+    width: 100%;
     z-index: 2;
 }
 
 .sign-up-container{
     right: 0;
-    width: 50%;
+    width: 100%;
     z-index: 1;
+}
+
+.forgot-password-container{
+    left: 0;
+    width: 100%;
+    z-index: 3;
+}
+
+.forgot-password-container h1{
+    margin-bottom: 25px;
+}
+
+.forgot-password-container input{
+    height: 40px;
+}
+
+/*Loader *******************************/
+/* From Uiverse.io by AbanoubMagdy1 */
+.loader {
+    margin-top: 20px;
+    margin-left: 140px;
+    --dim: 1rem;
+    width: var(--dim);
+    height: var(--dim);
+    position: absolute;
+    animation: spin988 2s linear infinite;
+}
+
+.loader .circle {
+    --color: #333;
+    --dim: 0.3rem;
+    width: var(--dim);
+    height: var(--dim);
+    background-color: var(--color);
+    border-radius: 50%;
+    position: absolute;
+}
+
+.loader .circle:nth-child(1) {
+    top: 0;
+    left: 0;
+}
+
+.loader .circle:nth-child(2) {
+    top: 0;
+    right: 0;
+}
+
+.loader .circle:nth-child(3) {
+    bottom: 0;
+    left: 0;
+}
+
+.loader .circle:nth-child(4) {
+    bottom: 0;
+    right: 0;
+}
+
+@keyframes spin988 {
+    0% {
+        transform: scale(1) rotate(0);
+    }
+
+    20%, 25% {
+        transform: scale(1.3) rotate(90deg);
+    }
+
+    45%, 50% {
+        transform: scale(1) rotate(180deg);
+    }
+
+    70%, 75% {
+        transform: scale(1.3) rotate(270deg);
+    }
+
+    95%, 100% {
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+/***************************************/
+
+.forgot-password-container button{
+    margin-top: 25px;
 }
 
 .form-container form{
@@ -103,6 +183,7 @@ a{
     width: 100%;
     background: #eee;
     border: none;
+    border-radius: 5px;
     padding: 12px 15px;
     margin: 8px 0;
 }
@@ -120,7 +201,7 @@ a{
     margin-bottom: 10px;
 }
 
-button{
+.button-action{
     background: #415a80;
     color: #fff;
     border: 1px solid #4e6281;
@@ -133,17 +214,48 @@ button{
     transition: transform 80ms ease-in;
 }
 
-button:active{
+.button-action:active{
     transform: scale(0.95);
 }
 
-button:focus{
+.button-action:focus{
     outline: none;
 }
 
-button.ghost{
+.button-action.ghost{
     background: transparent;
     border-color: #fff;
+}
+
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+/*.password-container input {*/
+/*    width: 100%;*/
+/*    background: #eee;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    padding: 12px 15px;*/
+/*    margin: 8px 0;*/
+/*}*/
+
+.toggle-password {
+    position: absolute;
+    right: 5px;
+    top: 52%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+
+.toggle-password i {
+    font-size: 19px; /* Điều chỉnh kích thước icon */
+    color: #8a8a8a; /* Màu sắc icon */
 }
 
 .sign-up-container{
@@ -151,74 +263,67 @@ button.ghost{
     opacity: 0;
 }
 
-.overlay-container{
-    display: block;
-    position: absolute;
-    z-index: 100;
-    width: 50%;
-    height: 100%;
-    top: 0;
-    left: 50%;
-    overflow: hidden;
-    transition: transform 0.6s ease-in-out;
-}
-
-.overlay{
-    position: relative;
-    height: 100%;
-    width: 200%;
-    left: -100%;
-    background: linear-gradient(to right, #4e6281, #415a80) no-repeat 0 0 / cover;
-    color: #fff;
-    transform: translateY(0);
-    transition: transform 0.6s ease-in-out;
-}
-
-.overlay-panel{
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0 40px;
-    text-align: center;
-    transform: translateY(0);
-    transition: transform 0.6s ease-in-out;
-}
-
-.overlay-right{
-    right: 0;
-    transform: translateY(0);
-}
-
-.overlay-left{
-    transform: translateY(-20%);
-}
-
 .container.right-panel-active{
     & .sign-in-container{
-        transform: translateY(100%);
-    }
-    & .overlay-container{
         transform: translateX(-100%);
+        opacity: 0;
+        z-index: 1;
     }
-}
 
-.container.right-panel-active{
     & .sign-up-container{
-        transform: translateX(100%);
+        transform: translateX(0);
         opacity: 1;
         z-index: 5;
     }
-    & .overlay{
-        transform: translateX(50%);
+}
+
+
+.container.left-panel-active{
+    & .sign-in-container{
+        transform: translateX(0);
+        opacity: 1;
+        z-index: 5;
     }
 
-    & .overlay-right{
-        transform: translateY(20%);
+    & .sign-up-container{
+        transform: translateX(-100%);
+        opacity: 0;
+        z-index: 1;
     }
 }
+
+.container.forgotPassword-panel-active{
+    & .sign-in-container{
+        transform: translateX(-100%);
+        opacity: 0;
+        z-index: 1;
+    }
+
+    & .forgot-password-container{
+        transform: translateX(0);
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.container.left-panel-active{
+    & .sign-in-container{
+        transform: translateX(0);
+        opacity: 1;
+        z-index: 5;
+    }
+
+    & .forgot-password-container{
+        transform: translateX(-100%);
+        opacity: 0;
+        z-index: 1;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+}
+
+
 

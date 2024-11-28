@@ -19,33 +19,24 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "name")
     private String name;
-
     @Column(name = "description")
     private String description;
-
     @Column(name = "price")
     private Double price;
-
     @Column(name = "stock")
     private int stock;
-
     @Column(name = "brand")
     private String brand;
-
     @Column(name = "product_image")
     private String productImg;
-
     @Column(name = "created_at")
     private Date createAt;
 
     // Many to One
-//    @JsonIgnore
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "category_id")
-//    @JsonManagedReference("category-products")
     @JsonBackReference("category-products")
     private Category category;
 

@@ -57,7 +57,7 @@ public class CategoryRestController {
         try{
             this.categoryService.saveAndUpdate(category);
 
-            this.mailService.sendMail("phuc97336@gmail.com", "Requesting A New Category", "The seller "+seller.getFullName()+" requested a new "+category.getName()+" category, Please act on this request within 14 days on this link: http://localhost:8080/admin");
+            this.mailService.sendRequestByMail("phuc97336@gmail.com", seller.getFullName(), category.getName());
 
             response.put("category", category);
             response.put("message", "Please wait for the admin to approve this category");

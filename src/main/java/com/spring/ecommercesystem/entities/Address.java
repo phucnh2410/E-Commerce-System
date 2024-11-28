@@ -47,9 +47,6 @@ public class Address {
     @Column(name = "status")
     private boolean status;
 
-
-
-
     //Many to one
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.REFRESH})

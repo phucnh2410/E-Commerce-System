@@ -57,12 +57,19 @@ public class SecurityConfiguration {
         httpSecurity.authorizeHttpRequests(configurer -> configurer
                         .requestMatchers("/api/**").permitAll()
 //                        .requestMatchers("/").permitAll()  /product_detail ?id=24   /shop ?id=
-                        .requestMatchers( "/", "/product_detail/**", "/shop/**", "/categories/**", "/products/search/**").permitAll()
+                        .requestMatchers( "/", "/product_detail/**", "/shop/**", "/categories/**", "/products/search/**", "/change-password-form", "/logout").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/icons/**", "/src/main/resources/static/userAvatar/**", "/productExtraImg/**", "/productImg/**").permitAll()
-//                        .requestMatchers("/home/login").permitAll()
-                        .requestMatchers("/logout").permitAll()
+
+                        .requestMatchers("/profile/**", "/save/profile/**").hasAnyRole("CUSTOMER","SELLER")
+//                        .requestMatchers("/", "/product_detail/**", "", "").hasAnyRole("CUSTOMER","SELLER", "ADMIN")
+
+                        .requestMatchers("/shopping_cart/**", "/order/**", "/payment/**").hasRole("CUSTOMER")
+                        .requestMatchers("/products/**", "/products/**").hasRole("SELLER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
-        ).formLogin(
+        )
+        .formLogin(
                 form -> form.loginPage("/login")
                         .loginProcessingUrl("/authenticateTheUser")
                         .defaultSuccessUrl("/", true)
@@ -74,7 +81,7 @@ public class SecurityConfiguration {
                         .permitAll()
         ).exceptionHandling(
                 configurer -> configurer
-                        .accessDeniedPage("/login/403")
+                        .accessDeniedPage("/forbidden")
                         .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))// handle requiring authenticate when the user access
         );
 

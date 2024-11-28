@@ -56,8 +56,10 @@ public class PaymentController {
     public String createPayment(@RequestParam("total") Double total) {
         // total,
         try{
-            String cancelUrl = "http://localhost:8080/shopping_cart/checkout";
-            String successUrl = "http://localhost:8080/payment/paypal/success";
+//            String cancelUrl = "http://localhost:8080/shopping_cart/checkout";//Local
+            String cancelUrl = "https://sherlockstore.shop/shopping_cart/checkout";//Docker
+//            String successUrl = "http://localhost:8080/payment/paypal/success";//Local
+            String successUrl = "https://sherlockstore.shop/payment/paypal/success";//Docker
 
             Payment payment = paypalService.createPayment(total, "USD", "paypal", "sale", "Payment Description", cancelUrl, successUrl);
 

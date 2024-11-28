@@ -5,12 +5,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="icon" th:href="@{/images/SherlockBackgroundLogoBigSize.png}" type="image/x-icon">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <title>Product Management</title>
+    <title>Sherlock Store | Buy and Sell</title>
     <!-- <link rel="stylesheet" th:href="@{/css/shopProfile.css}" /> -->
     <link rel="stylesheet" th:href="@{/css/productManagement.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
@@ -31,52 +34,189 @@
 
 <main>
     <div class="container">
+        <div class="seller-dashboard">
+            <h2>Seller Dashboard</h2>
+                <nav class="seller-dashboard-navbar">
+                    <ul class="tabs">
+                        <li class="seller-dashboard-tab-link active" data-tab="product-sold">Product Sold</li>
+                        <li class="seller-dashboard-tab-link" data-tab="product-management">Product Management</li>
+                    </ul>
+                </nav>
 
-        <section class="shop-info">
-            <div class="header-management">
-                <div class="btn-nav">
-                    <a class="btn-back" id="" th:href="@{/shop(id=${user.id}) }"><i class='bx bx-arrow-back'></i></a>
-                </div>
-                <div class="title">
-                    Product Management
-                </div>
-            </div>
-            <div class="horizontal-line"></div>
-            <div class="btn-add">
-                <a class="" id="add-new-btn">Add New</a>
-            </div>
-            <table>
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Brand</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody id="productTable" th:fragment="productManagementFrag">
-                <tr th:if="${products}" th:each="product : ${products}">
 
-                    <td th:text="${product.name}"></td>
-                    <td th:text="${product.category.name}"></td>
-                    <td th:text="${product.brand}"></td>
-                    <td th:text="'$' +${product.price}"></td>
-                    <td th:text="${product.stock}"></td>
-<!--                    <td th:text="${product.}">Sample Image</td>-->
-                    <td>
-                        <a class="btn-edit" href="javascript:void(0);" th:onclick="|showFormUpdate(${product.id});|"><i class='bx bxs-edit' ></i></a>
-                        <a class="btn-delete" href="javascript:void(0);" th:onclick="|showDeleteConfirmation(${product.id});|"><i class='bx bx-trash'></i></a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
+                <div id="product-sold" class="seller-dashboard-tab-content active">
+                    <div class="product-sold-table" id="product-sold-table"  th:fragment="productSoldFrag">
+                        <!-- Product Sold Header -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 th:text="${totalProductSold} + ' Products Sold'"></h5>
+                            </div>
+                        </div>
+
+                        <!-- First Product Sold -->
+                        <div class="row bg-light py-2 mb-2" th:if="${productDTOs}" th:each="productDTO : ${productDTOs}">
+                            <!-- Image -->
+                            <div class="col-2 col-md-1">
+                                <label for="product-sold-Img" class="form-label">Img</label>
+                                <img id="product-sold-Img" class="product-sold-image" th:data-product-id="${productDTO.id}" th:data-file-name="${productDTO.img}" width="50px" height="50px">
+                            </div>
+
+                            <!-- Product Sold -->
+                            <div class="col-10 col-md-3">
+                                <label for="productSold1" class="form-label">Product Sold</label>
+                                <p id="productSold1" th:text="${productDTO.name}">Macbook Pro 16 inch 2021 M1 Max 16x512GB</p>
+                            </div>
+
+                            <!-- Quantity -->
+                            <div class="col-6 col-md-1">
+                                <label for="quantity1" class="form-label">Qty</label>
+                                <p id="quantity1" th:text="'x' + ${productDTO.qtySold}">x1</p>
+                            </div>
+
+                            <!-- Order ID -->
+                            <div class="col-6 col-md-1">
+                                <label for="orderId1" class="form-label">Ord. ID</label>
+                                <p id="orderId1" th:text="${productDTO.orderId}">54321</p>
+                            </div>
+
+                            <!-- Ordered Date -->
+                            <div class="col-6 col-md-2">
+                                <label for="orderedDate1" class="form-label">Ord. Date</label>
+                                <p id="orderedDate1" th:text="${productDTO.orderedDate}">24/10/2024</p>
+                            </div>
+
+                            <!-- Customer -->
+                            <div class="col-6 col-md-1">
+                                <label for="customer1" class="form-label">Recipient</label>
+                                <p id="customer1" th:text="${productDTO.customerName}">John Doe</p>
+                            </div>
+
+                            <!-- Total -->
+                            <div class="col-6 col-md-1">
+                                <label for="total1" class="form-label">Total</label>
+                                <p id="total1" th:text="'$' + ${productDTO.price * productDTO.qtySold}">Total</p>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-6 col-md-1">
+                                <label th:for="'order-status-' + ${productDTO.orderId} +'-' + ${productDTO.orderId}" class="form-label">Status</label>
+                                <p th:id="'order-status-' + ${productDTO.orderId} +'-' + ${productDTO.id}" th:text="${productDTO.orderStatus}">Delivered</p>
+                            </div>
+
+                            <div class="col-8 col-md-1 d-flex align-items-start">
+                                <a th:if="${productDTO.orderStatus == 'Pending'}" class="btn btn-outline-success" href="javascript:void(0);" th:onclick="|confirmProductForOrder(${productDTO.orderId}, ${productDTO.id});|" title="Confirm">
+                                    <i class='bx bx-check-square'></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div id="product-management" class="seller-dashboard-tab-content">
+                    <div class="product-management-table" id="product-management-table" th:fragment="productManagementFrag">
+                        <div class="row">
+                            <div class="col-8 col-md-11 title-total-product">
+                                <h5 th:text="${totalProducts} + ' Products'"></h5>
+<!--                                <h5>999 Products</h5>-->
+                            </div>
+                            <div class="col-3 col-md-1 d-flex">
+                                <div class="me-2">
+                                    <a href="#" class="btn btn-outline-success btn-add-new" id="btn-add-more" title="Add new product" onclick="showProductAddModal(event)">
+                                        <i class='bx bx-add-to-queue'></i>
+                                    </a>
+                                </div>
+                                <div>
+                                    <a id="btn-request-category" class="btn btn-outline-info btn-request-category" href="#" title="Request a new category" onclick="showRequestCategoryForm(event)">
+                                        <i class='bx bx-git-pull-request'></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row bg-light py-2 px-2" th:if="${products}" th:each="product : ${products}">
+                            <!-- Image -->
+                            <div class="col-3 col-md-1">
+                                <label for="product-management-img" class="form-label">Img</label>
+                                <img width="50px" height="50px" id="product-management-img" class="product-management-image" th:data-product-id="${product.id}" th:data-file-name="${product.productImg}">
+                            </div>
+
+                            <!-- Name -->
+                            <div class="col-9 col-md-3">
+                                <label for="productName" class="form-label">Name</label>
+                                <p id="productName" th:text="${product.name}"></p>
+                            </div>
+
+                            <!-- Type/Category -->
+                            <div class="col-6 col-md-2">
+                                <label for="productType" class="col-3 form-label">Type</label>
+                                <p class="col-9" id="productType" th:text="${product.category.name}"></p>
+                            </div>
+
+                            <!-- Brand -->
+                            <div class="col-6 col-md-1">
+                                <label for="productBrand" class="form-label">Brand</label>
+                                <p id="productBrand" th:text="${product.brand}"></p>
+                            </div>
+
+                            <!-- Price -->
+                            <div class="col-12 col-md-1">
+                                <label for="productPrice" class="form-label">Price</label>
+                                <p id="productPrice" th:text="'$' + ${product.price}"></p>
+                            </div>
+
+                            <!-- Stock -->
+                            <div class="col-6 col-md-1">
+                                <label th:for="'productStock-' + ${product.id}" class="form-label">Qty</label>
+                                <p th:id="'productStock-' + ${product.id}" th:text="'x'+${product.stock}"></p>
+                                <input th:id="'stock-update-product-' + ${product.id}" type="number" value="1" min="1" max="1000" style="display: none">
+                            </div>
+
+                            <!-- Create At -->
+                            <div class="col-6 col-md-2">
+                                <label for="productCreateAt" class="form-label">Created At</label>
+                                <p id="productCreateAt" th:text="${product.createAt}"></p>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="col-8 col-md-1 d-flex flex-column align-items-start">
+                                <div class="mb-2">
+                                    <a class="btn btn-outline-primary" th:id="'show-update-stock-product-' + ${product.id}" href="javascript:void(0);" th:onclick="|updateStock(${product.id});|" title="Update stock">
+                                        <i class='bx bxs-data' ></i>
+                                    </a>
+                                </div>
+
+                                <div class="mb-2">
+                                    <a class="btn btn-outline-primary" th:id="'save-stock-product-' + ${product.id}" href="javascript:void(0);" th:onclick="|saveUpdateStock(${product.id});|" title="Save stock" style="display: none">
+                                        <i class='bx bx-save' ></i>
+                                    </a>
+                                </div>
+                                <div class="mb-2">
+                                    <a class="btn btn-outline-primary" href="javascript:void(0);" th:onclick="|showFormUpdate(${product.id});|" title="Edit this product">
+                                        <i class='bx bxs-edit'></i>
+                                    </a>
+                                </div>
+
+                                <div>
+                                    <a class="btn btn-outline-danger" href="javascript:void(0);" th:onclick="|showDeleteConfirmation(${product.id});|" title="Delete this product">
+                                        <i class='bx bx-trash'></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </section>
+        </div>
 
         <!-- popup section -->
         <section>
-            <div id="myModal" class="modal">
+            <div id="addAndEditModal" class="addAndEditModal">
                 <div class="modal-content">
                     <!-- <span class="close">&times;</span> -->
                     <h5>Add New</h5>
@@ -117,8 +257,6 @@
                                 <div class="form-group">
                                     <!-- <label for="">Product Description</label> -->
                                     <input name="" id="product-description" placeholder="Product Description">
-
-                                    </input>
                                 </div>
                             </div>
 
@@ -129,7 +267,44 @@
 
                         <div class="form-btn">
                             <button id="btn-save" type="button" onclick="saveProduct(event)">Save</button>
-                            <button class="btn-done" type="button">Done</button>
+                            <button class="btn-done" id="btn-done-add-new" type="button">Done</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- popup section -->
+        <section>
+            <div id="requestCategoryModal" class="requestCategoryModal">
+                <div class="modal-content">
+
+                    <h5>Request a new category</h5>
+                    <form id="category-form" action="#" method="post">
+                        <div class="row">
+                            <div class="form-group row col-md-12">
+                                <div class="form-group">
+                                    <input type="text" id="category-name" placeholder="Category Name">
+                                </div>
+                            </div>
+
+                            <div class="category-message">
+                                <p id="category-message" class="message"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-btn">
+                            <button type="button" href="javascript:void(0);" th:onclick="|categoryRequest(${user.id}, event);|">Send request</button>
+                            <button class="btn-done-request-category" id="btn-done-request-category" type="button">Done</button>
+                        </div>
+
+                        <div class="loader" style="display: none" id="loader">
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                            <div class="circle"></div>
                         </div>
 
                     </form>
@@ -145,55 +320,43 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var addButton = document.getElementById("add-new-btn");
-        var editButtons = document.querySelectorAll(".btn-edit");
-        var modal = document.getElementById("myModal");
-        var done = document.getElementsByClassName("btn-done")[0];
-        const messageElement = document.getElementById('product-message');
-        // var studentForm = document.getElementById("studentForm");
+    //seller dashboard navbar
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.seller-dashboard-tab-link');
+        const contents = document.querySelectorAll('.seller-dashboard-tab-content');
 
-        if (addButton) {
-            // Hiển thị modal khi click vào nút "Add New"
-            addButton.addEventListener("click", function () {
-                console.log("Add New button clicked");
-                modal.style.display = "block";
-                setTimeout(function () {
-                    modal.classList.add("show");
-                }, 10); // Đảm bảo rằng lớp 'show' được thêm sau khi display được áp dụng
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding content
+                const target = document.getElementById(tab.dataset.tab);
+                tab.classList.add('active');
+                target.classList.add('active');
+
+                // Hiển thị bảng và biểu đồ tương ứng khi chọn tab
+                if (tab.dataset.tab === 'product-sold') {
+                    console.log("product sold")
+                }
+                else if (tab.dataset.tab === 'product-management') {
+                    console.log("product management")
+                    getAllProductManagement().then(r => {})
+                    // getVoucherByStatus('Published').then(r => {});
+                }
             });
-        } else {
-            console.error("Add New button not found");
-        }
-
-        // Ẩn modal khi click vào nút "done"
-        done.addEventListener("click", function () {
-            modal.classList.remove("show");
-            modal.style.display = "none";
-            setTimeout(function () {
-                messageElement.textContent = '';
-                // studentForm.reset();
-            }, 500); // Khớp với thời gian của transition
         });
-
-        // // Ẩn modal khi click ra ngoài modal
-        // window.addEventListener("click", function (event) {
-        //     if (event.target == modal) {
-        //         modal.classList.remove("show");
-        //         setTimeout(function () {
-        //             modal.style.display = "none";
-        //             // studentForm.reset();
-        //         }, 500); // Khớp với thời gian của transition
-        //     }
-        // });
     });
 </script>
 
 <!--<footer th:include="fragments/footer :: footer"></footer>-->
-
+<script src="/js/fetchMangeProduct.js"></script>
+<script src="/js/fetchManageCategory.js"></script>
 <!--Image (Product and Avatar)-->
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>
+
 <!--Header and Navbar-->
 <script src="/js/searchAnimation.js"></script>
 <script src="/js/fetchCategoryInNavbar.js"></script>

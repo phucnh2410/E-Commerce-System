@@ -18,7 +18,6 @@ import java.util.List;
 @Entity
 @Table(name = "payment_methods")
 public class PaymentMethod {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,8 +26,8 @@ public class PaymentMethod {
     private String name;
 
     //One to One
-    @OneToMany(mappedBy = "paymentMethod", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH})
+    @OneToMany(mappedBy = "paymentMethod", fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonBackReference("payment-orders")
     private List<Order> orders;
 

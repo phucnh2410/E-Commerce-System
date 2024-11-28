@@ -1,6 +1,3 @@
-// import ChartDataLabels from 'chartjs-plugin-datalabels';
-// import Chart from 'chart.js/auto'; // Đảm bảo rằng bạn đã nhập Chart.js
-// import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 $(document).ready(function() {
 

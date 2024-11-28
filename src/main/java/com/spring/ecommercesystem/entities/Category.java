@@ -22,7 +22,6 @@ public class Category implements Serializable {
         Pending
     }
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

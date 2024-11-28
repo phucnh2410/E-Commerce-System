@@ -7,31 +7,31 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//@Data
-//@Builder
-//@NoArgsConstructor
-//@AllArgsConstructor
-
 @Entity
 @Table(name = "order_detail")
 public class OrderDetail {
+    public enum ProductStatus{
+        Pending,
+        Confirmed
+    }
 
     @EmbeddedId
-    private OrderDetailKey id;
-
-
+    private OrderDetailKey id; //set both orderId and productId are a primary key
     @ManyToOne
     @MapsId("orderId")
     @JoinColumn(name = "order_id")
     @JsonBackReference("order-order_details")
     private Order order;
 
-
     @ManyToOne
     @MapsId("productId")
     @JoinColumn(name = "product_id")
     @JsonBackReference("product-order_details")
     private Product product;
+
+    @Column(name = "product_status")
+    @Enumerated(EnumType.STRING)
+    private ProductStatus productStatus;
 
     @Column(name = "product_quantity")
     private int productQuantity;
@@ -70,6 +70,15 @@ public class OrderDetail {
 
     public OrderDetail setProduct(Product product) {
         this.product = product;
+        return this;
+    }
+
+    public ProductStatus getProductStatus() {
+        return productStatus;
+    }
+
+    public OrderDetail setProductStatus(ProductStatus productStatus) {
+        this.productStatus = productStatus;
         return this;
     }
 

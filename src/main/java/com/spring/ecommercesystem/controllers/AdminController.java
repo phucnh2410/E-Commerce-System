@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -54,6 +51,7 @@ public class AdminController {
         List<Order> ordersSorted = orders.stream().sorted(Comparator.comparing(Order::getId).reversed()).collect(Collectors.toList());//descending order
 
         model.addAttribute("orders", ordersSorted);
+        model.addAttribute("totalOrder", orders.size());
         return "Admin/adminDashboard :: orderManagementFrag";
     }
 
@@ -80,11 +78,13 @@ public class AdminController {
 
         if (status.equalsIgnoreCase("New")){
             model.addAttribute("vouchers", vouchersFiltered);
+            model.addAttribute("totalVoucher", vouchersFiltered.size());
             returning = "Admin/adminDashboard :: newVoucherFrag";
         }
 
         if (status.equalsIgnoreCase("Published")){
             model.addAttribute("vouchers", vouchersFiltered);
+            model.addAttribute("totalVoucher", vouchersFiltered.size());
             returning = "Admin/adminDashboard :: publishedVoucherFrag";
         }
 
@@ -97,6 +97,7 @@ public class AdminController {
         List<User> users = this.userService.findAll();
 
         model.addAttribute("users", users);
+        model.addAttribute("totalUser", users.size());
         return "Admin/adminDashboard :: accountManagementFrag";
     }
 
@@ -116,16 +117,21 @@ public class AdminController {
     public String sellerFrag(Model model){
         List<User> users = this.userService.findAll();
 
-        List<User> sellers = new ArrayList<>();
+        List<User> sellers = users.stream().filter(user -> user.getRole().getName().equalsIgnoreCase("ROLE_SELLER")).collect(Collectors.toList());
 
-        users.forEach(user -> {
-            boolean isSeller = user.getRole().getName().equals("ROLE_SELLER");
-            if (isSeller){
-                sellers.add(user);
-            }
+        List<Map<String, Object>> profilesData = new ArrayList<>();
+
+        sellers.forEach(user -> {
+            Map<String, Object> profileData = this.userService.getProfileData(user);
+            profilesData.add(profileData);
         });
 
-        model.addAttribute("sellers", sellers);
+        int totalUnitsSoldAllSeller = profilesData.stream().mapToInt(data -> (int) data.get("totalUnitsSold")).sum();
+
+        model.addAttribute("totalUnitsSoldAllSeller", totalUnitsSoldAllSeller);
+//        model.addAttribute("totalRevenueAllSeller", profilesData);
+        model.addAttribute("profilesData", profilesData);
+//        model.addAttribute("sellers", sellers);
         return "Admin/adminDashboard :: sellerFrag";
     }
 
@@ -133,16 +139,17 @@ public class AdminController {
     public String customerFrag(Model model){
         List<User> users = this.userService.findAll();
 
-        List<User> customers = new ArrayList<>();
+        List<User> customers = users.stream().filter(user -> user.getRole().getName().equalsIgnoreCase("ROLE_CUSTOMER")).collect(Collectors.toList());
 
-        users.forEach(user -> {
-            boolean isCustomer = user.getRole().getName().equals("ROLE_CUSTOMER");
-            if (isCustomer){
-                customers.add(user);
-            }
+        List<Map<String, Object>> profilesData = new ArrayList<>();
+
+        customers.forEach(user -> {
+            Map<String, Object> profileData = this.userService.getProfileData(user);
+            profilesData.add(profileData);
         });
 
-        model.addAttribute("customers", customers);
+//        model.addAttribute("customers", customers);
+        model.addAttribute("profilesData", profilesData);
         return "Admin/adminDashboard :: customerFrag";
     }
 

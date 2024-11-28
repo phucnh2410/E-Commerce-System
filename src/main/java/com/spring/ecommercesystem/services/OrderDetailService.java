@@ -13,4 +13,6 @@ public interface OrderDetailService {
     public List<OrderDetail> findAllItems();
 
     public OrderDetail addProductToOrder(Order order, Product product, int quantity);
+    public OrderDetail findByOrderIdAndProductId(Long orderId, Long productId);
+    public OrderDetail updateStatusForEachProduct(Long orderId, Long productId);
 }

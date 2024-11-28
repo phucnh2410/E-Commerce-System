@@ -1,15 +1,5 @@
 $(document).ready(function() {
 
-    // $('#btn-register').click(function (event){
-    //     event.preventDefault();
-    //     register().then(r => {});
-    // })
-
-    getRole().then(r => {})
-
-
-
-
 });
 
 async function getCsrfToken(){
@@ -24,31 +14,31 @@ async function getCsrfToken(){
     }
 }
 
-async function getRole(event){
-    try{
-        const response = await fetch("/api/register", {
-            method: "GET"
-            });
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-
-        const roles = await response.json();
-        const selectElement = document.getElementById('role');
-        selectElement.innerHTML = '';
-        // console.log(roles);
-
-        roles.forEach(role => {
-            const option = document.createElement('option');
-            option.value = role.id; // Assuming role has an 'id' property
-            option.textContent = role.name; // Assuming role has a 'name' property
-            selectElement.appendChild(option);
-        });
-
-    }catch (error){
-        console.error('There was a problem with the fetch operation:', error);
-    }
-}
+// async function getRole(event){
+//     try{
+//         const response = await fetch("/api/register", {
+//             method: "GET"
+//             });
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok ' + response.statusText);
+//         }
+//
+//         const roles = await response.json();
+//         const selectElement = document.getElementById('role');
+//         selectElement.innerHTML = '';
+//         // console.log(roles);
+//
+//         roles.forEach(role => {
+//             const option = document.createElement('option');
+//             option.value = role.id; // Assuming role has an 'id' property
+//             option.textContent = role.name; // Assuming role has a 'name' property
+//             selectElement.appendChild(option);
+//         });
+//
+//     }catch (error){
+//         console.error('There was a problem with the fetch operation:', error);
+//     }
+// }
 
 async function register(event){
     event.preventDefault();
@@ -118,7 +108,7 @@ async function register(event){
         fullName: fullName.value,
         email: email.value,
         password: password.value,
-        role: { id: roleId.value}
+        role: { id: 2}
     };
 
     try{
@@ -155,4 +145,8 @@ async function register(event){
     }catch (error){
         console.error('There was a problem with the fetch operation!!!:', error);
     }
+}
+
+async function forgotPassword(){
+
 }

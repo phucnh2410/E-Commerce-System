@@ -2,6 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.85">
+    <title>Sherlock Store | Buy and Sell</title>
+    <link rel="icon" th:href="@{/images/SherlockBackgroundLogoBigSize.png}" type="image/x-icon">
+
     <link rel="stylesheet" th:href="@{/css/loginAndRegister.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script th:src="@{/js/fetchRegister.js}"></script>
@@ -9,127 +13,157 @@
 
 
 <body class="bg-dark text-white">
+    <div class="container left-panel-active" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#" method="post" >
+                <h1>Sign up</h1>
+                <div class="social-container">
+                    <a href="#" class="social">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
 
-<div class="container" id="container">
-    <div class="form-container sign-up-container">
-        <form action="#" method="post" >
-            <h1>Create Account</h1>
-            <div class="social-container">
-                <a href="#" class="social">
-                    <i class="fa-brands fa-facebook-f"></i>
-                </a>
+                    <a th:href="@{/oauth2/authorization/google}" class="social">
+                        <i class="fa-brands fa-google-plus-g"></i>
+                    </a>
 
-                <a th:href="@{/oauth2/authorization/google}" class="social">
-                    <i class="fa-brands fa-google-plus-g"></i>
-                </a>
+                    <a href="#" class="social">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+                </div>
 
-                <a href="#" class="social">
-                    <i class="fa-brands fa-linkedin-in"></i>
-                </a>
-            </div>
+                <span>or use your email registration</span>
+                <div>
+                    <input type="text" id="name"  placeholder="Full name">
+                </div>
+                <div>
+                    <input type="text" id="email"  placeholder="Email">
+                </div>
+                <div class="password-container">
+                    <input type="password" id="password"  placeholder="Password">
+                    <button type="button" id="togglePasswordRegister" class="toggle-password">
+                        <i class="fa-regular fa-eye" id="eye-icon-register"></i>
+                    </button>
+                </div>
 
-            <span>or use your email registration</span>
-            <div>
-                <input type="text" id="name"  placeholder="Full name">
-            </div>
-            <div>
-                <input type="text" id="email"  placeholder="Email">
-            </div>
-            <div>
-                <input type="password" id="password"  placeholder="Password">
-            </div>
+                <div>
+                    <p id="register-message" class="message"></p>
+                </div>
 
-            <div>
-                <select id="role">
-<!--                    <option value="ROLE_ADMIN">Admin</option>-->
-<!--                    <option value="ROLE_CUSTOMER">Customer</option>-->
-<!--                    <option value="ROLE_SELLER">Seller</option>-->
-                </select>
-            </div>
+                <button class="button-action" id="btn-register" onclick="register(event)">Sign up</button>
 
-            <div>
-                <p id="register-message" class="message"></p>
-            </div>
+                <a href="#" class="ghost" id="signIn">Have you already an account? </a>
+            </form>
 
-            <button id="btn-register" onclick="register(event)">Sign up</button>
+        </div>
 
-        </form>
+        <!--                                  Login form -->
+        <div class="form-container sign-in-container">
+            <form action="#" th:action="@{/authenticateTheUser}" method="post">
+                <h1>Sign in</h1>
+                <div class="social-container">
+                    <a href="#" class="social">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
 
-    </div>
+                    <a th:href="@{/oauth2/authorization/google}" class="social">
+                        <i class="fa-brands fa-google-plus-g"></i>
+                    </a>
 
-    <!--                                  Login form -->
-    <div class="form-container sign-in-container">
-        <form action="#" th:action="@{/authenticateTheUser}" method="post">
-            <h1>Sign in</h1>
-            <div class="social-container">
-                <a href="#" class="social">
-                    <i class="fa-brands fa-facebook-f"></i>
-                </a>
+                    <a href="#" class="social">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+                </div>
 
-                <a th:href="@{/oauth2/authorization/google}" class="social">
-                    <i class="fa-brands fa-google-plus-g"></i>
-                </a>
+                <span>or use your account</span>
 
-                <a href="#" class="social">
-                    <i class="fa-brands fa-linkedin-in"></i>
-                </a>
-            </div>
+                <div>
+                    <input type="text" name="username" placeholder="Email">
+                </div>
 
-            <span>or use your account</span>
+                <div class="password-container">
+                    <input type="password" id="password-login" name="password" placeholder="Password">
+                    <button type="button" id="togglePasswordLogin" class="toggle-password">
+                        <i class="fa-regular fa-eye" id="eye-icon-login"></i>
+                    </button>
+                </div>
 
-            <input type="text" name="username" placeholder="Email">
-            <input type="text" name="password" placeholder="Password">
-
-            <div th:if="${param.error}">
-                <span style="color: red">Email or password incorrect!!!</span>
-            </div>
+                <div th:if="${param.error}">
+                    <span style="color: red">Email or password incorrect!!!</span>
+                </div>
 
 
-            <a href="#">Forgot your password? </a>
+                <a href="#" class="ghost" id="forgot-password">Forgot your password? </a>
 
-            <button>Sign in</button>
-        </form>
-    </div>
-    <div class="overlay-container">
-        <div class="overlay">
-            <div class="overlay-panel overlay-left">
-                <h1>Welcome back!</h1>
-                <p>To keep connected with us please login with your personal info</p>
-                <button class="ghost" id="signIn">Sign In</button>
-            </div>
-            <div class="overlay-panel overlay-right">
-                <h1>Hello, Friend!</h1>
-                <p>Enter your details and start journey with us</p>
-                <button class="ghost" id="signUp">Sign Up</button>
-            </div>
+                <button class="button-action">Sign in</button>
+
+                <a href="#" class="ghost" id="signUp">Do you have an account? </a>
+            </form>
+        </div>
+
+    <!--    Forgot Password-->
+
+        <div class="form-container forgot-password-container">
+            <form action="#">
+                <h1>Forgot Password</h1>
+
+                <div>
+                    <input type="text" name="email" id="email-to-verify" placeholder="Enter your email">
+                </div>
+
+                <div>
+                    <input type="hidden" name="code" id="code-to-verify" placeholder="Enter your code">
+                </div>
+
+                <div class="loader" style="display: none" id="loader">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+
+                <button class="button-action" id="btn-verify-email">Verify this email</button>
+
+                <button class="button-action" id="btn-verify-email-and-code" style="display: none" onclick="verifyEmailAndOTP(event)">Verify OTP</button>
+
+                <div>
+                    <p id="forgot-password-message" class="message"></p>
+                </div>
+
+                <a href="#" class="ghost" id="return-login">Return login</a>
+            </form>
         </div>
     </div>
-</div>
 
-<script>
-    const byId = (id) =>{
-        return document.getElementById(id)
-    }
+    <script>
+        const togglePasswordLogin = document.getElementById('togglePasswordLogin');
+        const passwordInputLogin = document.getElementById('password-login');
+        const eyeIconLogin = document.getElementById('eye-icon-login');
 
-    const $signUpButton = byId('signUp');
-    const $signInButton = byId('signIn');
+        const passwordInputRegister = document.getElementById('password');
+        const togglePasswordRegister = document.getElementById('togglePasswordRegister');
+        const eyeIconRegister = document.getElementById('eye-icon-register');
 
-    const $container = byId('container');
+        togglePasswordLogin.addEventListener('click', () => {
+            // Toggle the type attribute
+            const type = passwordInputLogin.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInputLogin.setAttribute('type', type);
 
+            // Toggle the eye icon
+            eyeIconLogin.classList.toggle('fa-eye');          // Chuyển sang icon mắt mở
+            eyeIconLogin.classList.toggle('fa-eye-slash');    // Chuyển sang icon mắt nhắm có dấu gạch xéo
+        });
 
-    $signUpButton.addEventListener(
-        'click',
-        ()=> {
-            $container.classList.add('right-panel-active');
-        },
-    );
+        togglePasswordRegister.addEventListener('click', () => {
+            // Toggle the type attribute
+            const type = passwordInputRegister.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInputRegister.setAttribute('type', type);
 
-    $signInButton.addEventListener(
-        'click',
-        ()=> {
-            $container.classList.remove('right-panel-active');
-        },
-    );
-</script>
+            // Toggle the eye icon
+            eyeIconRegister.classList.toggle('fa-eye');          // Chuyển sang icon mắt mở
+            eyeIconRegister.classList.toggle('fa-eye-slash');    // Chuyển sang icon mắt nhắm có dấu gạch xéo
+        });
+    </script>
+
+    <script src="/js/loginPageAction.js"></script>
 </body>
 </html>

@@ -37,6 +37,9 @@ public class DownloadFile {
 
     private final ProductExtraImageService productExtraImageService;
 
+    //    private String DIRECTORY = "src/main/resources/static/";//local
+//    private String DIRECTORY = "/app/images/";//Docker
+
     @Autowired
     public DownloadFile(UserService userService, ProductService productService, ProductExtraImageService productExtraImageService) {
         this.userService = userService;
@@ -46,8 +49,8 @@ public class DownloadFile {
 
     @GetMapping("/{object}/{id}/{fileName}")
     public ResponseEntity<Resource> downloadFiles(@PathVariable("object") String object, @PathVariable("id") Long Id, @PathVariable("fileName") String fileName) throws IOException {
-
-        Path filePath = Paths.get("src/main/resources/static/"+object).resolve(String.valueOf(Id)).resolve(fileName);
+//        Path filePath = Paths.get("src/main/resources/static/"+object).resolve(String.valueOf(Id)).resolve(fileName);//local
+        Path filePath = Paths.get("/app/images/"+object).resolve(String.valueOf(Id)).resolve(fileName);//Docker
         // Chuyển đường dẫn sang dạng tuyệt đối.
         Path absolutePath = filePath.toAbsolutePath().normalize();
 
@@ -66,10 +69,10 @@ public class DownloadFile {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<String>> downloadProductExtraImg(@PathVariable Long id) {
+    @GetMapping("/{productId}")
+    public ResponseEntity<List<String>> downloadProductExtraImg(@PathVariable("productId") Long productId) {
 
-        Product product = this.productService.findById(id);
+        Product product = this.productService.findById(productId);
         if (product == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }

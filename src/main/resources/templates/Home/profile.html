@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<html lang="en" xmlns:th="http://www.thymeleaf.com" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link rel="icon" th:href="@{/images/SherlockBackgroundLogoBigSize.png}" type="image/x-icon">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -13,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <title>Profile Page</title>
+    <title>Sherlock Store | Buy and Sell</title>
     <link rel="stylesheet" th:href="@{/css/profile.css}" />
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
@@ -29,118 +32,6 @@
 <body>
 <header th:replace="fragments/header :: header"></header>
 <main>
-<!--    <section>-->
-<!--        <div class="profile">-->
-<!--            <div class="profile-detail">-->
-<!--                <div class="title">-->
-<!--                    Profile Management-->
-<!--                </div>-->
-<!--                <div class="horizontal-line"></div>-->
-
-<!--                <form action="#" th:action="@{/save/profile}" th:object="${user}" method="post" class="profile-form" enctype="multipart/form-data">-->
-<!--                    <div class="row">-->
-<!--                        <input type="hidden" th:field="*{id}">-->
-
-<!--                        <div class="form-group row col-md-3">-->
-<!--                            <div class="account-info-image">-->
-<!--                                <div class="account-image">-->
-<!--                                    <img id="avatar-profile" th:data-user-id="${user.id}" th:data-file-name="${user.avatar}"  width="100px" height="100px" alt="" onerror="onError(event)">-->
-<!--                                </div>-->
-<!--                                <div class="change-image-btn">-->
-<!--                                    <input type="hidden" th:field="*{avatar}">-->
-<!--                                    <input type="file" id="imageInput" name="avatar-file" >-->
-<!--                                    <label for="imageInput">Choose file</label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--                        <script>-->
-<!--                            const imageProfile = document.getElementById('avatar-profile');-->
-<!--                            const imageHeader = document.getElementById('avatar-header');-->
-<!--                            const fileInput = document.getElementById('imageInput');-->
-
-<!--                            fileInput.addEventListener("change", () => {-->
-<!--                                imageProfile.src = URL.createObjectURL(fileInput.files[0])-->
-<!--                                imageHeader.src = URL.createObjectURL(fileInput.files[0])-->
-<!--                            });-->
-<!--                        </script>-->
-
-<!--                        <div class="form-group row col-md-9">-->
-<!--                            <div class="account-info-detail">-->
-
-<!--                                <div class="col-12 col-md-12">-->
-<!--                                    <div class="row">-->
-<!--                                        <div class="col-12 col-md-2">-->
-<!--                                            <label for="">Full name:</label>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-12 col-md-10">-->
-<!--                                            <input type="text" th:field="*{fullName}" placeholder="">-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-
-<!--                                <div class="col-12 col-md-12">-->
-<!--                                    <div class="row">-->
-<!--                                        <div class="col-12 col-md-2">-->
-<!--                                            <label for="">Email:</label>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-12 col-md-10">-->
-<!--                                            <input type="text" th:field="*{email}" placeholder="" readonly>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-
-<!--                                <div class="col-12 col-md-12">-->
-<!--                                    <div class="row">-->
-<!--                                        <div class="col-12 col-md-2">-->
-<!--                                            <label for="">Phone number:</label>-->
-<!--                                        </div>-->
-
-<!--                                        <div class="col-12 col-md-10">-->
-<!--                                            <input type="text" th:field="*{phoneNumber}" placeholder="">-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-
-<!--                                <div class="col-12 col-md-12">-->
-<!--                                    <div class="row">-->
-<!--                                        <div class="col-12 col-md-2">-->
-<!--                                            <label for="">Gender:</label>-->
-
-<!--                                        </div>-->
-
-<!--                                        <div class="col-12 col-md-10">-->
-<!--                                            &lt;!&ndash; <input type="text" placeholder=""> &ndash;&gt;-->
-<!--                                            <select name="" id="" >-->
-<!--                                                <option value="">Choose your gender</option>-->
-<!--                                                <option value="">Male</option>-->
-<!--                                                <option value="">Female</option>-->
-<!--                                                <option value="">Others</option>-->
-<!--                                            </select>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-
-<!--                                <div class="col-12 col-md-12">-->
-<!--                                    <div class="row">-->
-<!--                                        <div class="col-12 col-md-2">-->
-<!--                                            <label for="">Date of birth:</label>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-12 col-md-10">-->
-<!--                                            <input type="date" th:field="*{dateOfBirth}" placeholder="">-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <button class="save-btn">Save</button>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </section>-->
-
     <section>
         <div class="profile-summary">
             <div class="container">
@@ -179,8 +70,8 @@
                                 </div>
 
                                 <div class="info-item">
-                                    <label for="email">Email:</label>
-                                    <input type="text" th:field="*{email}" id="email" placeholder="" readonly>
+                                    <label for="user-email">Email:</label>
+                                    <input type="text" th:field="*{email}" id="user-email" placeholder="" readonly>
                                 </div>
 
                                 <div class="info-item">
@@ -204,6 +95,10 @@
                                     <label for="dateOfBirth">Date of Birth:</label>
                                     <input type="date" th:field="*{dateOfBirth}" id="dateOfBirth" placeholder="">
                                 </div>
+
+                                <div>
+                                    <a href="#" class="mx-2" id="change-password-btn" style="text-decoration: none">Change your password?</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -221,29 +116,70 @@
         <div class="container">
             <h2>Summary</h2>
             <div class="profile-info">
-                <div class="info-item">
+<!--sec:authorize="hasRole('SELLER')"    sec:authorize="hasRole('CUSTOMER')"-->
+                <div class="info-item" sec:authorize="hasRole('CUSTOMER')">
                     <a th:href="@{/order/list}">
                         <h3>Total Orders</h3>
                         <p id="total-orders" class="total-orders" th:text="${numberOfOrder}"></p>
                     </a>
                 </div>
-                <div class="info-item">
+
+                <div class="info-item" sec:authorize="hasRole('CUSTOMER')">
                     <h3>Total Expenditure</h3>
                     <p id="total-expenditure" th:text="'$'+${user.expenditure}">$0.00</p>
                 </div>
 
-                <div class="info-item">
+                <div class="info-item" sec:authorize="hasRole('CUSTOMER')">
                     <h3>Remaining vouchers</h3>
                     <p id="total-vouchers" th:text="${numberOfVoucher}">0</p>
                 </div>
 
-                <div class="info-item">
+                <div class="info-item" sec:authorize="hasRole('CUSTOMER')">
                     <h3>Account Class</h3>
                     <div id="account-type-container" class="account-type-container">
                         <p id="account-type" class="account-type" th:text="${user.customerType}"></p>
                     </div>
-<!--                th:class="${user.customerType.name == 'GOLD'} ? 'gold-type' : (user.customerType.name == 'SILVER' ? 'silver-type' : (user.customerType.name == 'DIAMOND' ? 'diamond-type' : (user.customerType.name == 'NEW' ? 'new-type' : (user.customerType.name == 'VIP' ? 'vip-type' : ''))))"-->
                 </div>
+
+<!--                Seller-->
+                <div class="info-item" sec:authorize="hasRole('SELLER')">
+                    <a th:href="@{/shop(id=${user.id})}">
+                        <h3>Total Already Products</h3>
+                        <p id="total-products" class="total-orders" th:text="${totalProducts}"></p>
+                    </a>
+                </div>
+
+                <div class="info-item" sec:authorize="hasRole('SELLER')">
+                    <h3>Total Revenue</h3>
+                    <p id="total-revenue" th:text="'$'+${totalRevenue}">$0.00</p>
+                </div>
+
+                <div class="info-item" sec:authorize="hasRole('SELLER')">
+                    <h3>Total units sold</h3>
+                    <p id="total-unit" th:text="${totalUnitsSold}">0</p>
+                </div>
+
+                <div class="info-item" sec:authorize="hasRole('SELLER')">
+                    <a th:href="@{/shop(id=${user.id})}">
+                        <h3>Manage your shop</h3>
+                        <p id="your-shop" th:text="${user.fullName}">0</p>
+                    </a>
+                </div>
+
+                <div class="info-item" sec:authorize="hasRole('SELLER')">
+                    <a th:href="@{/products}">
+                        <h3>Go to dashboard</h3>
+                        <p id="product-sold">Seller Dashboard</p>
+                    </a>
+                </div>
+
+<!--                <div class="info-item" sec:authorize="hasRole('SELLER')"> -->
+<!--                    <h3>Account Class</h3>-->
+<!--                    <div id="account-type-container" class="account-type-container">-->
+<!--                        <p id="account-type" class="account-type" th:text="${user.customerType}"></p>-->
+<!--                    </div>-->
+<!--                </div>-->
+
             </div>
         </div>
     </section>
@@ -281,10 +217,96 @@
         });
     </script>
 
+
+    <section>
+        <div id="verify-email-modal" class="verify-email-modal">
+            <div class="modal-content">
+                <form class="form-container verify-email-container" id="" action="#" method="">
+                    <h3>Verify your email</h3>
+                    <div>
+                        <input type="text" name="email" id="email-to-verify" placeholder="Enter your email" readonly>
+                    </div>
+
+                    <div>
+                        <input type="hidden" name="code" id="code-to-verify" placeholder="Enter your code">
+                    </div>
+
+                    <div class="loader" style="display: none" id="loader">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                    </div>
+
+                    <div>
+                        <p id="forgot-password-message" class="message"></p>
+                    </div>
+
+                    <button class="btn btn-outline-primary" id="btn-verify-email-and-code" style="display: none" onclick="verifyEmailAndOTP(event)">Verify OTP</button>
+
+                    <a href="#" class="btn btn-outline-danger" id="cancel-btn">Cancel</a>
+
+                </form>
+
+            </div>
+        </div>
+    </section>
+
+
 </main>
 
-<footer th:include="fragments/footer :: footer"></footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
 
+        const changePasswordBtn = document.getElementById('change-password-btn');
+        let modal = document.getElementById("verify-email-modal");
+        const cancel = document.getElementById("cancel-btn");
+        // var studentForm = document.getElementById("studentForm");
+
+        if (changePasswordBtn) {
+            // Hiển thị modal khi click vào nút "Add New"
+            changePasswordBtn.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                const userEmailElement = document.getElementById('user-email');
+                const emailToVerifyElement = document.getElementById('email-to-verify');
+
+                emailToVerifyElement.value = userEmailElement.value;
+
+                sendEmail(emailToVerifyElement.value);
+
+                modal.style.display = "block";
+
+                setTimeout(function () {
+                    modal.classList.add("show");
+                }, 10); // Đảm bảo rằng lớp 'show' được thêm sau khi display được áp dụng
+            });
+        } else {
+            console.error("Request category button not found");
+        }
+
+        // Ẩn modal khi click vào nút "done"
+        cancel.addEventListener("click", function () {
+            modal.classList.remove("show");
+            const codeInputElement = document.getElementById('code-to-verify');
+            const verifyEmailCodeBtn = document.getElementById('btn-verify-email-and-code');
+            const messageElement = document.getElementById('forgot-password-message');
+
+            messageElement.style.display = 'none';
+            verifyEmailCodeBtn.style.display = 'none';
+            codeInputElement.type = 'hidden';
+
+
+            setTimeout(function () {
+                modal.style.display = "none";
+                // studentForm.reset();
+            }, 500); // Khớp với thời gian của transition
+        });
+    });
+</script>
+
+<footer th:include="fragments/footer :: footer"></footer>
+<script src="/js/loginPageAction.js"></script>
 <!--Image (Product and Avatar)-->
 <script src="/js/getErrorImage.js"></script>
 <script src="/js/fetchImageToView.js"></script>

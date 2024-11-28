@@ -21,7 +21,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-2 logo">
-                    <a th:href="@{/}" ><h4 class="">Sherlock Store</h4> </a>
+                    <a th:href="@{/}" >
+<!--                        width = x4 height-->
+                        <img th:src="@{/images/VerticalSherlockLogo.png}" width="180px" height="45px">
+                    </a>
                 </div>
 
                 <div class="col-md-5">
@@ -30,15 +33,11 @@
                     </div>
                 </div>
 
-                <div class="col-6 col-md-1 shopping-cart" >
-                    <div class="cart-drawer-container" sec:authorize="hasAnyRole('CUSTOMER')">
+                <div class="col-1 col-md-1 shopping-cart" sec:authorize="not hasAnyRole('SELLER', 'ADMIN')">
+                    <div class="cart-drawer-container">
                         <a th:href="@{/shopping_cart}">
-                            <div id="cart-number-badge" class="cart-number-badge" aria-hidden="true"></div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                                 class="bi bi-cart2" viewBox="0 0 16 16">
-                                <path
-                                        d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
-                            </svg>
+                            <div id="cart-number-badge" class="cart-number-badge" aria-hidden="true">0</div>
+                            <i class='bx bx-cart'></i>
                         </a>
                     </div>
                 </div>
@@ -59,33 +58,19 @@
                             <a th:href="@{/profile}" th:text="${currentUser.fullName}"> </a>
                         </li>
 
-                        <li class="logout">
-                            <a th:href="@{/logout}">Logout</a>
-                        </li>
+<!--                        <li class="logout">-->
+<!--                            <a th:href="@{/logout}">Logout</a>-->
+<!--                        </li>-->
                     </ul>
                 </div>
             </div>
-
-
-
         </div>
         <!-- side bar -->
         <div class="sidebar">
-<!--            <div class="close-menu">-->
-<!--                <ul>-->
-<!--                    <li onclick="hideSidebar()">-->
-<!--                        <a href="#"><i class="bx bx-x"></i></a>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </div>-->
 
             <div class="sidebar-search">
                 <input class="sidebar-search-input" type="text" placeholder="" />
             </div>
-
-<!--            <div class="menu">-->
-<!--                <p>Menu</p>-->
-<!--            </div>-->
 
             <div class="icon_item">
                 <!-- li*10>a -->
@@ -94,44 +79,38 @@
                         <i class="bx bxs-home"></i>
                         <a th:href="@{/}">Home</a>
                     </li>
+
                     <li class="category-item">
-                        <i class="bx bxs-category"></i>
-                        <a href="#">Categories</a>
-                        <i class="bx bx-chevron-right"></i>
-
-                        <div class="submenu">
+                        <details>
+                            <summary>
+                                <i class="bx bxs-category"></i>
+                                <p href="#">Categories</p>
+                                <i class="bx bx-chevron-right"></i>
+                            </summary>
                             <ul id="category-list">
-                            </ul>
-                        </div>
-                    </li>
-<!--                    <li sec:authorize="hasRole('CUSTOMER')">-->
-<!--                        <i class='bx bx-package'></i>-->
-<!--                        <a th:href="@{/order/list}">Your orders</a>-->
-<!--                    </li>-->
 
-                    <li sec:authorize="hasRole('SELLER')">
-                        <i class='bx bx-store'></i>
-                        <a th:href="@{/shop(id=${currentUser.id}) }">Your shop</a>
+                            </ul>
+                        </details>
                     </li>
+
+<!--                    <li sec:authorize="hasRole('SELLER')">-->
+<!--                        <i class='bx bx-store'></i>-->
+<!--                        <a th:href="@{/shop(id=${currentUser.id}) }">Your shop</a>-->
+<!--                    </li>-->
 
                     <li sec:authorize="hasRole('ADMIN')">
                         <i class='bx bxs-user-rectangle'></i>
                         <a th:href="@{/admin}">Admin Page</a>
                     </li>
 
+
+
                     <li>
                         <i class="bx bxs-contact"></i>
                         <a href="#">Contact</a>
                     </li>
-                    <!-- <li>
-                        <i class='bx bxs-contact' ></i>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <i class='bx bxs-contact' ></i>
-                        <a href="#">Contact</a>
-                    </li> -->
-                    <li>
+
+                    <li sec:authorize="isAuthenticated()">
                         <i class="bx bx-log-out"></i>
                         <a th:href="@{/logout}">Logout</a>
                     </li>

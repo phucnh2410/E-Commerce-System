@@ -72,7 +72,6 @@ $(document).ready(function() {
     const productCheckoutImg = document.querySelectorAll(".product-checkout-image");
     const productOrderImg = document.querySelectorAll(".product-order-img");
 
-
     if (productInShop){
         productInShop.forEach(async (productImg) =>{
             const productId = productImg.getAttribute("data-product-id");
@@ -137,6 +136,7 @@ $(document).ready(function() {
     }else {
         console.log("class 'product-cart-image' does not exist!!!");
     }
+
 
 
 

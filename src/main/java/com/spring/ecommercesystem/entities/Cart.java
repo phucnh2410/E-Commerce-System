@@ -18,7 +18,6 @@ public class Cart implements Serializable {
         return 0.0;
     }
 
-
     public Product getProduct() {
         return product;
     }

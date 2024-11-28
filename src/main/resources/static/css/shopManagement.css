@@ -342,6 +342,20 @@ font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     }
 }
 
+@media (max-width: 768px) {
+    .shop-name{
+        margin-top: 20px;
+    }
+
+    .btn-request-category{
+        width: 150px;
+    }
+
+    .total-product{
+        margin-left: 25px;
+    }
+}
+
 
 
 

@@ -1,0 +1,88 @@
+version: "3.8"
+services:
+  mysql_db:
+    image: mysql:8.0.31
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
+        reservations:
+          memory: 500M
+    container_name: mysql-container
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: e_commerce_system
+    volumes:
+#      - /Users/phucngo/Documents/mysql_data:/var/lib/mysql   local
+      - /var/lib/mysql:/var/lib/mysql
+    networks:
+      - e-commerce-system_spring_boot_app_net
+
+  redis_db:
+    image: redis:7.2.6-alpine
+    deploy:
+      resources:
+        limits:
+          memory: 500MB
+        reservations:
+          memory: 100M
+    container_name: redis-container
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+#      - /Users/phucngo/Documents/redis_data:/data  local
+      - /var/redis_data:/data
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    networks:
+      - e-commerce-system_spring_boot_app_net
+
+  server:
+    image: phucngohuynhdocker/sherlock-store:1.0
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
+        reservations:
+          memory: 500M
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/e_commerce_system
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 12345678
+
+      SPRING_DATA_REDIS_HOST: redis-container
+      SPRING_DATA_REDIS_PORT: 6379
+    volumes:
+      - /var/www/images:/app/images
+    networks:
+      - e-commerce-system_spring_boot_app_net
+    depends_on:
+      - mysql_db
+      - redis_db
+
+networks:
+  e-commerce-system_spring_boot_app_net:
+    driver: bridge
+
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+
+
+
+

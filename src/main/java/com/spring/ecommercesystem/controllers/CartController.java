@@ -40,7 +40,8 @@ public class CartController {
     }
 
     @GetMapping
-    public String showShoppingCart(Model model){
+    public String showShoppingCart(HttpSession session, Model model){
+        session.removeAttribute("userCarts");
         List<Cart> cartItems = this.cartService.getCart();
         //Transfer data object
         List<CartTemp> cartTempList = new ArrayList<>();
@@ -130,6 +131,7 @@ public class CartController {
 
     @GetMapping("/checkout")
     public String showCheckout(HttpSession session, Model model) {
+        session.removeAttribute("orderTemp");
         //get all UserCart from session
         List<UserCart> userCarts = (List<UserCart>) session.getAttribute("userCarts");
 
@@ -138,7 +140,7 @@ public class CartController {
                 .mapToDouble(CartTemp::getTotal).sum();//get total value for each cartTemp and sum them.
 
 
-            model.addAttribute("addresses", this.addressService.findAll());
+            model.addAttribute("addresses", this.userService.getCurrentUser().getAddresses());
             model.addAttribute("vouchers", this.userService.getCurrentUser().getVoucherDetails().stream().filter(vc -> vc.getStatus().equals(VoucherDetail.Status.Unused)));
             model.addAttribute("paymentMethods", this.paymentService.findAll());
             model.addAttribute("default_address", this.addressService.findAll().stream().filter(Address::isStatus).findFirst().get() );
@@ -151,7 +153,7 @@ public class CartController {
     public String showAddressById(@PathVariable Long id, Model model){
         model.addAttribute("default_address", this.addressService.findById(id));
 
-        return  "Checkout/checkoutPage :: addressFrag";
+        return  "Checkout/checkoutPage :: currentAddressFrag";
     }
 
 }

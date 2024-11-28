@@ -17,7 +17,6 @@ import java.util.List;
 @Entity
 @Table(name = "discounts")
 public class Discount {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

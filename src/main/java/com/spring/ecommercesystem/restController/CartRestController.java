@@ -52,6 +52,16 @@ public class CartRestController {
 
     @GetMapping("/number")
     public ResponseEntity<Long> showNumberOfProduct(){
+        boolean isAuth = this.userService.isAuth();
+        if (!isAuth){
+            return ResponseEntity.ok().body(0L);
+        }
+
+        boolean isCustomer = this.userService.isCustomer();
+        if (!isCustomer){
+            System.out.println("User is not a customer");
+            return ResponseEntity.ok().body(0L);
+        }
         Long totalNumberOfProduct = this.cartService.getTotalItemsInCart();
         if (totalNumberOfProduct == null){
             return ResponseEntity.badRequest().body(null);
@@ -89,6 +99,17 @@ public class CartRestController {
     @PostMapping("/add/{id}")
     public ResponseEntity<Map<String, Object>> addProductToCart(@PathVariable("id") Long productIdRequest, @RequestParam("quantity") int quantityRequest){
         Map<String, Object> response = new HashMap<>();
+
+        boolean isAuth = this.userService.isAuth();
+        if (!isAuth){
+            response.put("error", "The user is not Login");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        boolean isCustomer = this.userService.isCustomer();
+        if (!isCustomer){
+            response.put("error", "The user is not a customer");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
 
         try {
             int productStock = this.productService.findById(productIdRequest).getStock();
@@ -145,6 +166,14 @@ public class CartRestController {
 
     @PostMapping("/store_checkout_info")
     public ResponseEntity<String> storeDataToCheckout(@RequestBody String data, HttpSession session) {
+        boolean isAuth = this.userService.isAuth();
+        if (!isAuth){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("The user is not Login");
+        }
+        boolean isCustomer = this.userService.isCustomer();
+        if (!isCustomer){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("The user is not Login");
+        }
         ObjectMapper mapper = new ObjectMapper();
         try{
             List<UserCart> userCartsResponse = mapper.readValue(data, new TypeReference<List<UserCart>>() {});
@@ -178,6 +207,7 @@ public class CartRestController {
             });
 
             //Store the checkout info data into Session
+            session.removeAttribute("userCarts");
             session.setAttribute("userCarts", userCarts);
 
             return ResponseEntity.ok().body("Checkout info stored successful!!!");

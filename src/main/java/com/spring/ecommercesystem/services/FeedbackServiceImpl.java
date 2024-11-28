@@ -63,7 +63,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             if (feedback.getProduct().getId().equals(productRequest.getId())) {
                 if (feedback.getUser().getId().equals(this.userService.getCurrentUser().getId())) {
 
-                    if (feedback.getProduct().getId().equals(productRequest.getId()) && feedback.getUser().getId().equals(this.userService.getCurrentUser().getId()) && feedbacksInOrder.contains(feedback)){
+                    if (feedback.getProduct().getId().equals(productRequest.getId()) && feedback.getUser().getId().equals(this.userService.getCurrentUser().getId()) && feedbacksInOrder.contains(feedback)){//User này đã feedback cho product nay trong đơn hàng này rồi
                         return true;
                     }
 //                    if (feedbacksInOrder.contains(feedback)) {//User này đã feedback cho product nay trong đơn hàng này rồi

@@ -21,21 +21,41 @@ function toggleSidebar() {
 }
 
 
+// function showSidebar() {
+//     const sidebar = document.querySelector(".sidebar");
+//     sidebar.style.display = "block";
+//     setTimeout(() => {
+//         sidebar.classList.add("visible");
+//     }, 10);
+// }
+//
+// function hideSidebar() {
+//     const sidebar = document.querySelector(".sidebar");
+//     sidebar.classList.remove("visible");
+//     sidebar.addEventListener(
+//         "transitionend",
+//         function handleTransitionEnd() {
+//             sidebar.style.display = "none";
+//             sidebar.removeEventListener("transitionend", handleTransitionEnd);
+//         }
+//     );
+// }
+
 function showSidebar() {
     const sidebar = document.querySelector(".sidebar");
-    sidebar.style.display = "block";
+    sidebar.style.display = "block"; // Hiển thị sidebar
     setTimeout(() => {
-        sidebar.classList.add("visible");
-    }, 10);
+        sidebar.classList.add("visible"); // Thêm lớp để bật hiệu ứng
+    }, 10); // Đợi một chút để đảm bảo transition được kích hoạt
 }
 
 function hideSidebar() {
     const sidebar = document.querySelector(".sidebar");
-    sidebar.classList.remove("visible");
+    sidebar.classList.remove("visible"); // Xóa lớp để bắt đầu ẩn sidebar
     sidebar.addEventListener(
         "transitionend",
         function handleTransitionEnd() {
-            sidebar.style.display = "none";
+            sidebar.style.display = "none"; // Ẩn sidebar sau khi kết thúc transition
             sidebar.removeEventListener("transitionend", handleTransitionEnd);
         }
     );

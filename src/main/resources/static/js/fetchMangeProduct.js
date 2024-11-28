@@ -6,27 +6,24 @@ $(document).ready(function() {
     // })
 
     getCategory().then(r => {})
-    getAllProduct().then(r => {})
-
-
-
+    getAllProductSold().then(r => {});
 
 });
 
-async function getCsrfToken(){
-    try {
-        const response = await fetch("/get-csrf-token");
-        if (!response.ok){
-            throw new Error(response.statusText);
-        }
-        const csrfToken = await response.json();
-
-        return csrfToken.token;
-
-    }catch (error){
-        console.error('There was a problem with the fetch operation:', error);
-    }
-}
+// async function getCsrfToken(){
+//     try {
+//         const response = await fetch("/get-csrf-token");
+//         if (!response.ok){
+//             throw new Error(response.statusText);
+//         }
+//         const csrfToken = await response.json();
+//
+//         return csrfToken.token;
+//
+//     }catch (error){
+//         console.error('There was a problem with the fetch operation:', error);
+//     }
+// }
 
 async function getCategory(){
     try{
@@ -51,25 +48,239 @@ async function getCategory(){
     }
 }
 
-async function getAllProduct(){
-    const tbody = document.querySelector("#productTable")
+async function getAllProductSold(){
+    const ProductSoldTable = document.querySelector("#product-sold-table")
     try {
-        const response = await fetch("/products/fragment");
+        const response = await fetch("/products/sold-fragment");
         if (!response.ok) {
             throw new Error(response.statusText);
         }
 
         const products = await response.text();
-        if (!tbody) {
+        if (!ProductSoldTable) {
             console.log('Element #productTable not found in the response');
         }
 
-        tbody.innerHTML = "";
-        tbody.innerHTML = products;
+        ProductSoldTable.innerHTML = "";
+        ProductSoldTable.innerHTML = products;
+
+        const productSoldImg = document.querySelectorAll(".product-sold-image");
+        if (productSoldImg){
+            for (const productSoldElement of productSoldImg) {
+                const productId = productSoldElement.getAttribute("data-product-id");
+                const fileName = productSoldElement.getAttribute("data-file-name");
+                // console.log("productID: "+productId);
+                // console.log("productImg: "+fileName);
+                try {
+                    await getProductImage(productId, fileName, productSoldElement);
+                } catch (error) {
+                    console.error(`There was a problem with the get product cart image operation for product ID ${productId}:`, error);
+                }
+            }
+        }else {
+            console.log("class 'product-cart-image' does not exist!!!");
+        }
     }catch (error){
         console.error('There was a problem with the fetch operation:', error);
     }
 
+}
+
+async function getAllProductManagement(){
+    const productManagementTable = document.querySelector("#product-management-table");
+
+
+    try {
+        const response = await fetch("/products/management-fragment");
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+
+        const products = await response.text();
+        if (!productManagementTable) {
+            console.log('Element #productTable not found in the response');
+        }
+
+        productManagementTable.innerHTML = "";
+        productManagementTable.innerHTML = products;
+
+        const productManagementImg = document.querySelectorAll(".product-management-image");
+        if (productManagementImg){
+            for (const productElement of productManagementImg) {
+                const productId = productElement.getAttribute("data-product-id");
+                const fileName = productElement.getAttribute("data-file-name");
+                // console.log("productID: "+productId);
+                // console.log("productImg: "+fileName);
+                try {
+                    await getProductImage(productId, fileName, productElement);
+                } catch (error) {
+                    console.error(`There was a problem with the get product cart image operation for product ID ${productId}:`, error);
+                }
+            }
+        }else {
+            console.log("class 'product-cart-image' does not exist!!!");
+        }
+
+    }catch (error){
+        console.error('There was a problem with the fetch operation:', error);
+    }
+
+}
+
+
+function updateStock(productId){
+    const productStockInput = document.getElementById('stock-update-product-'+productId);
+    const btnShowUpdate = document.getElementById('show-update-stock-product-'+productId);
+    const btnSaveStock = document.getElementById('save-stock-product-'+productId);
+
+    productStockInput.style.display = 'block';
+    btnSaveStock.style.display = 'block';
+    btnShowUpdate.style.display = 'none';
+
+    // console.log("product stock: "+productStock.value);
+}
+
+async function saveUpdateStock(productId){
+    const productStockInput = document.getElementById('stock-update-product-'+productId);
+    const btnShowUpdate = document.getElementById('show-update-stock-product-'+productId);
+    const btnSaveStock = document.getElementById('save-stock-product-'+productId);
+
+    const currentStock = document.getElementById('productStock-'+productId);
+
+    console.log("stock: "+productStockInput.value);
+    if (isNaN(productStockInput.value) || productStockInput.value <= 0) {
+        alert("Please enter a valid stock value greater than 0.");
+        return;
+    }
+
+    try{
+        const response = await fetch('/api/product/update_stock/'+productId+'/'+productStockInput.value, {
+            method: 'PUT'
+        });
+
+        if (!response.ok){
+            const error = await response.json();
+            console.error(error.error)
+        }
+
+        const result = await response.json();
+
+        // result.currentStock;
+
+        if (currentStock){
+            currentStock.innerText = 'x'+result.currentStock;
+        }
+
+
+        productStockInput.style.display = 'none';
+        btnSaveStock.style.display = 'none';
+        btnShowUpdate.style.display = 'block';
+
+
+    }catch (error){
+        console.error('There was a problem with the Add product operation:', error);
+    }
+
+}
+
+async function confirmProductForOrder(orderId, productId){
+    const orderStatusElement = document.getElementById('order-status-'+orderId+'-'+productId);
+    // const isConfirm = Swal.fire({
+    //     title: 'Are you sure?',
+    //     text: 'Do you really want to confirm this product? This action cannot be undone.',
+    //     icon: 'warning',
+    //     showCancelButton: true,
+    //     confirmButtonColor: '#d33',
+    //     cancelButtonColor: '#3085d6',
+    //     confirmButtonText: 'Yes, confirm it!'
+    // });
+
+
+    // if (isConfirm.isConfirmed) {
+        try {
+            const response = await fetch('/api/product/update_product_status/'+orderId+'/'+productId, {
+                method: 'PUT'
+            });
+
+            const result = await response.json();
+            if (!response.ok){
+                console.error(result.error);
+                throw new Error(result.statusText);
+            }
+
+            Swal.fire({
+                title: 'Confirmed!',
+                text: result.message || 'Product status confirmed successfully!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+
+            if (orderStatusElement){
+                if (result.orderStatus) {
+                    orderStatusElement.innerText = result.orderStatus;
+                }
+            }
+
+        }catch (error){
+            console.error('There was a problem with the update order status in the order management page operation:', error);
+            Swal.fire({
+                title: 'Error!',
+                text: 'Something went wrong, please try again!',
+                icon: 'error',
+                confirmButtonText: 'Try Again'
+            });
+        }
+    // }
+
+}
+
+
+function showProductAddModal(event){
+    event.preventDefault();
+
+    let modal = document.getElementById('addAndEditModal');
+    const done = document.getElementById("btn-done-add-new");
+    const messageElement = document.getElementById('product-message');
+
+    console.log("Add New button clicked");
+    modal.style.display = "block";
+    setTimeout(function () {
+        modal.classList.add("show");
+    }, 10); // Đảm bảo rằng lớp 'show' được thêm sau khi display được áp dụng
+
+
+    // Ẩn modal khi click vào nút "done"
+    done.addEventListener("click", function () {
+        modal.classList.remove("show");
+        modal.style.display = "none";
+        setTimeout(function () {
+            messageElement.textContent = '';
+            // studentForm.reset();
+        }, 500); // Khớp với thời gian của transition
+    });
+}
+
+function showRequestCategoryForm(event){
+    let modal = document.getElementById("requestCategoryModal");
+    const done = document.getElementById("btn-done-request-category");
+    // var studentForm = document.getElementById("studentForm");
+
+    event.preventDefault();
+    console.log("Request New Category button clicked");
+    modal.style.display = "block";
+    setTimeout(function () {
+        modal.classList.add("show");
+    }, 10); // Đảm bảo rằng lớp 'show' được thêm sau khi display được áp dụng
+
+
+    // Ẩn modal khi click vào nút "done"
+    done.addEventListener("click", function () {
+        modal.classList.remove("show");
+        setTimeout(function () {
+            modal.style.display = "none";
+            // studentForm.reset();
+        }, 500); // Khớp với thời gian của transition
+    });
 }
 
 
@@ -210,7 +421,7 @@ async function saveProduct(event){
                 productStock.value = '';
                 productDescription.value = '';
 
-                await getAllProduct();
+                await getAllProductManagement();
             } else {
                 messageElement.textContent = result.message;
                 messageElement.style.color = 'red';
@@ -227,11 +438,8 @@ async function saveProduct(event){
 
 async function showFormUpdate(id){
     //Modals
-    const modal = document.getElementById("myModal");
-    const done = document.getElementsByClassName("btn-done")[0];
-    const studentForm = document.getElementById("studentForm");
-
-    const editButtons = document.querySelectorAll(".btn-edit");
+    const modal = document.getElementById("addAndEditModal");
+    const done = document.getElementById('btn-done-add-new');
 
     //Input tags
     const productId = document.getElementById("product-id");
@@ -250,15 +458,10 @@ async function showFormUpdate(id){
 
         const productResponse = await response.json();
 
-        //Show data just have fetched to input tags
-        // editButtons.forEach(function (editButton){
-        //     editButton.addEventListener("click", function (){
-                modal.style.display = "block";
-                setTimeout(function () {
-                    modal.classList.add("show");
-                }, 10);
-        //     });
-        // });
+        modal.style.display = "block";
+        setTimeout(function () {
+            modal.classList.add("show");
+        }, 10);
 
         productId.value = productResponse.id;
         productName.value = productResponse.name;
@@ -286,7 +489,7 @@ async function deleteProduct(productId){
             'Deleted successful!'
         );
 
-        await getAllProduct();
+        await getAllProductManagement();
     }catch (error){
         console.error('There was a problem with the Delete Product operation:', error);
         Swal.fire(

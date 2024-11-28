@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+}
+
 body {
     margin: 0;
     background-color: #f4f4f4;
@@ -9,119 +17,120 @@ main {
     /* background-color: #fff; */
     background-color: #f4f4f4;
     color: rgb(32, 32, 31);
-    padding: 20px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 200;
-    font-style: normal;
+    /*padding: 20px;*/
 }
 
-.title {
-    font-weight: 600;
-    text-align: center;
+h2 {
     color: #415a80;
-    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.horizontal-line {
-    margin-top: 10px;
-    bottom: 0px;
-    left: 0px;
+/* Dashboard styles */
+.seller-dashboard {
     width: 100%;
-    height: 0.25rem;
-    background-color: #415a80;
-    transition: opacity 0.3s ease 0s;
-}
-
-.btn-nav{
-    margin: 20px;
-    /*padding-top: 80px;*/
-}
-
-.btn-nav a {
-    color: #415a80;
-}
-.btn-nav a i {
-    font-size: 26px;
-}
-.btn-nav a i:hover {
-    color: #0056b3;
-}
-
-.btn-add{
-    width: 80px;
-    border: 1px solid #808080; /* Màu viền xám */
+    margin: 20px auto;
     background-color: #fff;
-    border-radius: 2px;
-    text-align: center;
-    font-weight: 400;
-    margin-top: 5px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
-.btn-add a {
-    color: rgb(110, 107, 107);
-    text-align: center;
-    text-decoration: none;
-}
-.btn-add a i {
-    font-size: 26px;
-    text-align: center;
-}
-.btn-add:hover {
-    background-color: rgb(248, 240, 230);
+.seller-dashboard-navbar {
+    margin: 1rem 0;
 }
 
-td a {
-    color: rgba(0, 0, 0, .54);
-}
-td a i{
-    font-size: 26px;
-}
-td a:hover{
-    color: #ff445c;
+.seller-dashboard-navbar .tabs {
+    list-style: none;
+    padding: 0;
+    display: flex;
 }
 
-table {
+.seller-dashboard-navbar .tabs .seller-dashboard-tab-link {
+    flex: 1;
+    padding: 1rem;
+    text-align: center;
+    background-color: #f4f4f4;
+    cursor: pointer;
+}
+
+.seller-dashboard-navbar .tabs .seller-dashboard-tab-link.active {
+    background-color: #ddd;
+}
+
+.seller-dashboard-tab-content {
+    display: none;
+    padding: 1rem;
+    /*border: 1px solid #ddd;*/
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.seller-dashboard-tab-content.active {
+    display: block;
+    opacity: 1;
+}
+
+
+/***************** Product Sold *********************/
+.product-sold-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
+    font-weight: 300;
+    font-size: 15px;
 }
 
-
-th, td {
-    width: 16.66%;
-    /* 100% chia cho 7 cột - vì cột đầu tiên sẽ chiếm 2 cột */
-    text-align: left;
-    padding: 8px;
-    word-wrap: break-word;
-    border: none;
-    /* Đảm bảo rằng nội dung sẽ được ngắt dòng */
+.product-sold-table .row{
+    border-bottom: 1px solid #000;
+    padding: 10px 0;
 }
 
-th:first-child, td:first-child {
-    width: 50%;
-    /* Cột đầu tiên chiếm 2 phần của 7 phần */
-}
-
-th:last-child, td:last-child {
-    width: 8.33%;
-    /* Cột đầu tiên chiếm 2 phần của 7 phần */
-}
-
-thead {
+.product-sold-table label{
     font-weight: 400;
-
-}
-tbody tr{
-    border-bottom: 1px solid #ddd;
+    font-size: 16px;
 }
 
-/* tr:nth-child(even) {
-    background-color: #f2f2f2;
+.product-management-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-weight: 300;
+    font-size: 15px;
+}
 
-} */
+.product-management-table .row{
+    border-bottom: 1px solid #000;
+    padding: 10px 0;
+}
+
+.product-management-table label{
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.product-management-table .title-total-product{
+    margin-right: -7px;
+}
+
+.me-2.mb-2 {
+    margin-bottom: 10px; /* Khoảng cách giữa các nút */
+}
 
 
-.modal {
+/*.product-management-table .btn-add-new{*/
+/*    margin-left: -80px;*/
+/*}*/
+
+/*.product-management-table .btn-request-category{*/
+/*    margin-left: -50px;*/
+/*}*/
+
+
+
+
+
+/***************** Modal *********************/
+.addAndEditModal{
     font-weight: 400;
     display: none;
     position: fixed;
@@ -134,16 +143,16 @@ tbody tr{
     background-color: rgb(0, 0, 0);
     background-color: rgba(0, 0, 0, 0.4);
     padding-top: 60px;
-    opacity: 0; /* Bắt đầu với độ mờ */
+    opacity: 0;
     transition: opacity 0.5s ease;
 }
 
-.modal.show {
+.addAndEditModal.show {
     display: block;
     opacity: 1; /* Hiển thị modal với độ mờ 1 */
 }
 
-.modal-content {
+.addAndEditModal .modal-content {
     background-color: #fefefe;
     margin: 5% auto;
     padding: 20px;
@@ -156,33 +165,33 @@ tbody tr{
     transition: transform 0.3s ease;
 }
 
-.modal.show .modal-content {
+.addAndEditModal .show .modal-content {
     transform: translateY(0); /* Đưa modal về vị trí bình thường */
 }
 
-.modal-content .row .form-group input{
+.addAndEditModal .modal-content .row .form-group input{
     width: 100%;
     margin-bottom: 10px;
 }
 
-.modal-content .row .form-group input{
-    width: 100%;
-    height: 75%;
-    margin-bottom: 10px;
-}
-
-.modal-content .row .form-group select{
+.addAndEditModal .modal-content .row .form-group input{
     width: 100%;
     height: 75%;
     margin-bottom: 10px;
 }
 
-.modal-content .form-btn{
+.addAndEditModal .modal-content .row .form-group select{
+    width: 100%;
+    height: 75%;
+    margin-bottom: 10px;
+}
+
+.addAndEditModal .modal-content .form-btn{
 
     margin-top: 20px;
 }
 
-.modal-content .form-btn button{
+.addAndEditModal .modal-content .form-btn button{
     font-weight: 300;
     margin-right: 13px;
     width: 100px;
@@ -192,31 +201,158 @@ tbody tr{
     color: rgb(110, 107, 107);
 }
 
-.modal-content .form-btn button:hover{
+.addAndEditModal .modal-content .form-btn button:hover{
     background-color: rgb(248, 240, 230);;
 }
 
-@media screen and (max-width: 768px) {
-    th, td {
-        padding: 12px 8px; /* Tăng khoảng đệm cho các thiết bị nhỏ */
+
+
+/******************************/
+.requestCategoryModal{
+    font-weight: 400;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.requestCategoryModal.show {
+    display: block;
+    opacity: 1; /* Hiển thị modal với độ mờ 1 */
+}
+
+.requestCategoryModal .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    /* border: 1px solid #888; */
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    /*width: 80%;*/
+    width: 400px;
+    border-radius: 5px;
+    transform: translateY(-20px); /* Di chuyển modal lên trên một chút */
+    transition: transform 0.3s ease;
+}
+
+.requestCategoryModal .show .modal-content {
+    transform: translateY(0); /* Đưa modal về vị trí bình thường */
+}
+
+.requestCategoryModal .modal-content .row .form-group input{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.requestCategoryModal .modal-content .row .form-group input{
+    width: 100%;
+    height: 75%;
+    margin-bottom: 10px;
+}
+
+.requestCategoryModal .modal-content .row .form-group select{
+    width: 100%;
+    height: 75%;
+    margin-bottom: 10px;
+}
+
+.requestCategoryModal .modal-content .form-btn{
+
+    margin-top: 20px;
+}
+
+.requestCategoryModal .modal-content .form-btn button{
+    font-weight: 300;
+    margin-right: 13px;
+    width: 120px;
+    border: 1px solid #808080;
+    background-color: #fff;
+    border-radius: 2px;
+    color: rgb(110, 107, 107);
+}
+
+.requestCategoryModal .modal-content .form-btn button:hover{
+    background-color: rgb(248, 240, 230);;
+}
+
+
+/*Loader*/
+
+.requestCategoryModal .modal-content .loader {
+    margin-top: -60px;
+    margin-left: 170px;
+    --dim: 1rem;
+    width: var(--dim);
+    height: var(--dim);
+    position: absolute;
+    animation: spin988 2s linear infinite;
+}
+
+.requestCategoryModal .modal-content .loader .circle {
+    --color: #333;
+    --dim: 0.3rem;
+    width: var(--dim);
+    height: var(--dim);
+    background-color: var(--color);
+    border-radius: 50%;
+    position: absolute;
+}
+
+.requestCategoryModal .modal-content .loader .circle:nth-child(1) {
+    top: 0;
+    left: 0;
+}
+
+.requestCategoryModal .modal-content .loader .circle:nth-child(2) {
+    top: 0;
+    right: 0;
+}
+
+.requestCategoryModal .modal-content .loader .circle:nth-child(3) {
+    bottom: 0;
+    left: 0;
+}
+
+.requestCategoryModal .modal-content .loader .circle:nth-child(4) {
+    bottom: 0;
+    right: 0;
+}
+
+@keyframes spin988 {
+    0% {
+        transform: scale(1) rotate(0);
     }
 
-    button{
-        scale: 0.75;
-        margin-left: -10px;
-        width: 90px;
+    20%, 25% {
+        transform: scale(1.3) rotate(90deg);
+    }
+
+    45%, 50% {
+        transform: scale(1) rotate(180deg);
+    }
+
+    70%, 75% {
+        transform: scale(1.3) rotate(270deg);
+    }
+
+    95%, 100% {
+        transform: scale(1) rotate(360deg);
     }
 }
 
-@media screen and (max-width: 480px) {
-    th, td {
-        padding: 12px 8px; /* Tăng khoảng đệm cho các thiết bị nhỏ */
+/* Responsive for mobile */
+@media (max-width: 768px) {
+    .seller-dashboard {
+        width: 100%; /* Điều chỉnh chiều rộng cho thiết bị nhỏ */
+        margin: 0; /* Xóa khoảng trống thừa */
+    }
 
-    }
-    th {
-        display: none; /* Ẩn các tiêu đề cột trên thiết bị nhỏ */
-    }
-    .table-container {
-        overflow-x: scroll; /* Thêm thanh cuộn ngang */
-    }
 }

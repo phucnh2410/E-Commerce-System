@@ -164,7 +164,7 @@ public class OrderRestController {
         ObjectMapper mapper = new ObjectMapper();
         try{
             OrderTemp orderTempResponse = mapper.readValue(data, new TypeReference<OrderTemp>() {});
-
+            session.removeAttribute("orderTemp");
             session.setAttribute("orderTemp", orderTempResponse);
             return ResponseEntity.status(HttpStatus.OK).body("Order info stored successfully!!!");
         }catch (Exception e){
@@ -191,6 +191,8 @@ public class OrderRestController {
             this.orderService.saveAndUpdate(order);
             response.put("message", "This order has been cancelled successfully");
         }else if (status.equals("confirm")){
+            List<OrderDetail> orderDetails = order.getOrderDetails();
+
             order.setStatus(Order.Status.Confirmed);
             order.setConfirmedDate(new Date(System.currentTimeMillis()));
             this.orderService.saveAndUpdate(order);
